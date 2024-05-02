@@ -1,0 +1,228 @@
+<%- include('../admin/layouts/header.ejs') %>
+    <div class="main-panel">
+        <div class="content-wrapper">
+
+            <div class="row ">
+
+                <div class="col-12 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-5 ">
+                                <ul class="navbar-nav w-100">
+                                    <li class="nav-item w-100">
+
+                                    </li>
+                                </ul>
+                            </div>
+                            <h3 class="card-title text-center">Order Managment</h3>
+
+                            <div class="table-responsive">
+                                 
+                                <% data.products.forEach(product => { %>
+                                 
+                                
+                                <!-- order details start -->
+                                <div class="container-fluid d-flex flex-column justify-content-center ">
+
+                                    <div class="card  col-12 my-3 mx-auto p-2"
+                                        style="border: 0.2px solid #494949; border-radius: 10px; ">
+                                        <div class="card-header d-flex justify-content-between w-100">
+                                            <dir class="d-flex flex-column ">
+                                                <p></p>
+                                                <h6>
+                                                    <%= product.createdAt %>
+                                                </h6>
+
+                                            </dir>
+
+
+                                        </div>
+                                        <hr class="m-0 mb-1">
+                                        <div>
+                                            <!-- <h6 class="mx-5 mb-2">Delivery Expect on : <b>date</b></h6> -->
+                                        </div>
+                                        <div class="card-body row col-12 d-flex ">
+                                            <div class="col-md-4 col-12 mx-auto">
+                                                <img src="/products/images/<%=product.product.imageUrl[0]  %>"
+                                                    style="width: 250px; height: 250px; border-radius: 7px;" alt="">
+        
+                                                <p class="card-text">
+                                                </p>
+                                                <!-- <a href="#" class="btn btn-dark">Go somewhere</a> -->
+                                            </div>
+                                            <div class="col-md-7 col-12">
+                                                <h4 class="card-title">
+                                                    <%= product.product.name %>
+                                                </h4>
+                                                <p class="card-text">
+                                                <p>Quantity : <b>
+                                                        <%= product.quantity  %>
+                                                    </b></p><i class="fa-solid fa-file-invoice-dollar"></i> Payment
+                                                Method : <%= data.paymentType %>
+                                                    </p>
+                                                    <h5 class="card-title mb-2">₹  <%= product.quantity * product.product.price %>
+                                                        
+                                                    </h5>
+                                                    <hr class="  " style="background:#555555">
+                                                    <h5 class="card-title" style="font-size: 15px;">
+                                                        shipping Address
+                                                    </h5>
+                                                    <p class="card-text">
+                                                        <%= data.address.address1  %>,
+                                                            <%= data.address.city  %>
+                                                    </p>
+                                                    <p class="card-text">Contanct Number :
+                                                        <%= data.contact.phone  %>
+                                                    </p>
+                                                    <p class="card-text">Pincode :
+                                                        <%= data.address.pin  %>,
+                                                        <%= data.address.country  %>
+                                                    </p>
+                                                    <hr class="m-0 p-0 my-3">
+                                                    <% if (product.product.individulOrderStatus != "cancel") { %>
+                                                     
+                                                    
+                                                        <button 
+                                                            class="btn btn-inverse-danger p-3"><select class="form-select" id="<%= product._id %>" aria-label="Default select example" onchange="changeStatusConfirm('<%= product._id %>','<%=data._id %>')">
+                                                                <option  value="Placed" <%= product.individulOrderStatus == "Placed"? "selected" :" " %> >Placed</option>
+                                                                <option value="Cancel" <%= product.individulOrderStatus == "Cancel"? "selected" :" " %>>Cancel</option>
+                                                                <option value="Confirmed" <%= product.individulOrderStatus == "Confirmed"? "selected" :" " %>>Confirmed</option>
+                                                                <option value="Delivered" <%= product.individulOrderStatus == "Delivered"? "selected" :" " %>>Delivered</option>
+                                                              </select></button>
+                                                              <p> status = <%= product.individulOrderStatus  %></p>
+                                                    <% } %> 
+
+                                                            <div class="col-12">
+                                                                <div class="col-12 text-light">
+
+
+                                                                </div>
+                                                            </div>
+                                                            <!-- <div class="col-12 row d-flex justify-content-around">
+                                                    <a href="#" class="btn btn-dark col-2 mb-1">Track your Order</a>
+                                                    <a href="#" class="btn btn-dark col-2 mb-1">Cancel Order </a>
+                    
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <!-- order details end  -->
+                                
+
+                                <!-- order status display and change start  -->
+                                
+                                    
+                                <!-- order status display and change end  -->
+                                <% }) %>    
+                            
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modCancel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- <h1 class="modal-title fs-5" id="exampleModalLabel">
+                            Modal title</h1> -->
+                        <p class="modal-title "> <b class="mdi mdi-comment-alert text-warning"></b>
+                            Are you sure you want to
+                            Cancel this order</p>
+                        <button type="button" class=" btn mdi mdi-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="card mb-3 bg-dark" style="max-width: 540px;">
+                            <div class="row g-0 ">
+                                <div class="col-md-3 d-flex align-items-center">
+                                    <img style="width: 100px; height: 100px; border-radius: 7px;"
+                                        src="/products/images/ product.product.images.image1 "
+                                        class="card-img-start" alt="...">
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            product.product.product_name
+                                        </h5>
+
+                                        </p>
+                                        <p class="card-text"><small class="text-body-secondary"> Quantity :
+                                                 product.orderDetails.quantity
+                                            </small></p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Not Now</button>
+                            <a type="button" class="btn btn-inverse-danger"
+                                onclick="cancelOrder(' orderId',' productId')">Cancel
+                                Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content-wrapper ends -->
+            <!-- partial:partials/_footer.html -->
+            <footer class="footer">
+
+            </footer>
+            <!-- partial -->
+        </div>
+        <script>
+            function changeStatusConfirm(a,b){
+  if(confirm('Are you sure to change the Order status?')){
+    changeStatus(a,b)
+    window.location.reload()
+  }
+  else{
+    window.location.reload()
+  }
+}
+
+  function changeStatus(id,order_id){
+    console.log(1,id);
+    console.log(2,order_id);
+
+    console.log("function called");
+    let selectedOption = document.getElementById(id)
+    let selectedStatus = selectedOption.value
+  
+    fetch("/admin/order/details/"+order_id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ status: selectedStatus, productsId:id })
+    })
+      .then(response => {
+        if (!response.ok) {
+          console.log("response not ok");
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Status updated successfully:', data);
+      })
+      .catch(error => {
+        console.error('Error updating status:', error);
+      });
+      window.location.reload()
+  }
+        </script>
+        <%- include('../admin/layouts/footer.ejs') %>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Admin Login</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="/admin/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/admin/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <!-- endinject -->
+
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="/admin/css/style.css">
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="/admin/images/favicon.ico" />
+    
+</head>
+
+<body>
+
+  <div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="row w-100 m-0">
+        <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+          <div class="card col-lg-4 mx-auto">
+            <div class="card-body px-5 py-5">
+              <h6 class=".text-danger"><%= locals.message || "" %></h6>
+              <h3 class="card-title text-center mb-3 ">Admin Login</h3>
+              <form method="post" action="/admin">
+                <div class="form-group">
+                  <label>Email </label>
+                  <input type="text" name="email" class="form-control p_input text-light" required>
+                </div>
+                <div class="form-group">
+                  <label>Password *</label>
+                  <input type="password" name="password" class="form-control p_input text-light" required>
+                </div>
+                <div class="form-group d-flex align-items-center justify-content-between">
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary btn-block enter-btn">Login</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+      </div>
+      <!-- row ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <% if(adminloginErr){ %>
+    <div id="myAlert" data-aos="fade-down"
+      class="alert alert-secondary alert-dismissible fade show fs-6 fixed-top alt text-center text-danger" role="alert">
+      <strong>Uh-oh!</strong> invalid User-Name or Password.
+
+      <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+      <% }%>
+  
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>
+          AOS.init();
+          setTimeout(function () {
+            document.getElementById('myAlert').style.display = 'none';
+          }, 5000);
+
+        </script>
+
+        <%- include('../admin/layouts/footer.ejs') %>

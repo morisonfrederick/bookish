@@ -1,0 +1,213 @@
+<%- include('../user/layouts/header.ejs') %>
+    <%- include('../user/layouts/navbar.ejs') %>
+
+
+        <main class="main">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+                <div class="container d-flex align-items-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Products</a></li>
+                    </ol>
+
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <div class="page-content">
+                <div class="container">
+                    <div class="product-details-top">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="product-gallery product-gallery-vertical">
+                                    <div class="row">
+                                        <figure class="product-main-image">
+                                            <img id="product-zoom"
+                                                src="/products/images/<%= product.imageUrl[0] %>"
+                                                data-zoom-image="/products/images/<%= product.imageUrl[0] %>"
+                                                alt="product image">
+
+                                            <!-- <a href="#" id="btn-product-gallery" class="btn-product-gallery">
+                                        <i class="icon-arrows"></i>
+                                    </a> -->
+                                        </figure><!-- End .product-main-image -->
+
+                                        <div id="product-zoom-gallery" class="product-image-gallery">
+                                            <a class="product-gallery-item active" href="#"
+                                                data-image="/products/crop/<%= product.imageUrl[0] %>"
+                                                data-zoom-image="/products/images/<%= product.imageUrl[0] %>">
+                                                <img src="/products/crop/<%= product.imageUrl[0] %>"
+                                                    alt="product side">
+                                            </a>
+
+                                            <a class="product-gallery-item" href="#"
+                                                data-image="/products/crop/<%= product.imageUrl[1] %>"
+                                                data-zoom-image="/products/images/<%= product.imageUrl[1] %>">
+                                                <img src="/products/crop/<%= product.imageUrl[1] %>"
+                                                    alt="product cross">
+                                            </a>
+
+                                            <a class="product-gallery-item" href="#"
+                                                data-image="/products/images/<%= product.imageUrl[2] %>"
+                                                data-zoom-image="/products/images/<%= product.imageUrl[2] %>">
+                                                <img src="/products/images/<%= product.imageUrl[2] %>"
+                                                    alt="product with model">
+                                            </a>
+
+                                            <a class="product-gallery-item" href="#"
+                                                data-image="/products/images/<%= product.imageUrl[3] %>"
+                                                data-zoom-image="/products/images/<%= product.imageUrl[3] %>">
+                                                <img src="/products/images/<%= product.imageUrl[3] %>"
+                                                    alt="product back">
+                                            </a>
+                                        </div><!-- End .product-image-gallery -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .product-gallery -->
+                            </div><!-- End .col-md-6 -->
+
+                            <div class="col-md-6">
+                                <div class="product-details">
+                                    <h1 class="product-title">
+                                        <%= product.name %>
+                                    </h1><!-- End .product-title -->
+
+                                    <div class="ratings-container">
+                                        <div class="ratings">
+                                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                        </div><!-- End .ratings -->
+                                        <a class="ratings-text" href="#product-review-link" id="review-link"></a>
+                                    </div><!-- End .rating-container -->
+
+                                    <div class="product-price">
+                                        ₹<%= product.price%>
+                                    </div><!-- End .product-price -->
+
+                                    <div class="product-content">
+                                        <p>
+                                            <%= product.description%>
+                                        </p>
+                                    </div><!-- End .product-content -->
+
+                                    <div class="details-filter-row details-row-size">
+                                       
+
+                                        <div class="product-nav product-nav-thumbs">
+                                            <p></p>
+
+                                        </div><!-- End .product-nav -->
+                                    </div><!-- End .details-filter-row -->
+
+
+
+
+                                    <div class="product-details-action">
+                                        <%if(product.stock==0){%>
+                                        <button class="btn-product btn-cart text-danger" disabled><span>No Stock</span></button>
+                                        <%}else{%>
+                                            <button onclick="addtocart('<%= product._id %>')"
+                                                class="btn-product btn-cart"><span>add to cart</span></button>
+                                                <!-- <p><%= product._id %></p> -->
+                                        <%}%>    
+                                        <div class="details-action-wrapper">
+                                            <a style="cursor: pointer;" onclick="addWishlist('<%= product._id %>')" class="btn-product btn-wishlist" title="Wishlist"  ><span>Add to
+                                                    Wishlist</span></a>
+                                        </div><!-- End .details-action-wrapper -->
+                                    </div><!-- End .product-details-action -->
+
+                                    <div class="product-details-footer">
+                                        <div class="product-cat">
+                                            <span>Category:</span>
+                                            <a><%= product.category %></a>
+                                        </div><!-- End .product-cat -->
+
+                                        <div class="social-icons social-icons-sm">
+                                            <span class="social-label">Share:</span>
+                                            <a href="#" class="social-icon" title="Facebook" target="_blank"><i
+                                                    class="icon-facebook-f"></i></a>
+                                            <a href="#" class="social-icon" title="Twitter" target="_blank"><i
+                                                    class="icon-twitter"></i></a>
+                                            <a href="#" class="social-icon" title="Instagram" target="_blank"><i
+                                                    class="icon-instagram"></i></a>
+                                            <a href="#" class="social-icon" title="Pinterest" target="_blank"><i
+                                                    class="icon-pinterest"></i></a>
+                                        </div>
+                                    </div><!-- End .product-details-footer -->
+                                </div><!-- End .product-details -->
+                            </div><!-- End .col-md-6 -->
+                        </div><!-- End .row -->
+                    </div><!-- End .product-details-top -->
+
+
+                    <hr>
+                    <!-- <h2 class="title text-center mb-4">You May Also Like</h2>End .title text-center -->
+                    <h2 class="title text-center mb-4">Related Products</h2><!-- End .title text-center -->
+
+
+                    <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
+                        data-owl-options='{
+                    "nav": false, 
+                    "dots": true,
+                    "margin": 20,
+                    "loop": false,
+                    "responsive": {
+                        "0": {
+                            "items":1
+                        },
+                        "480": {
+                            "items":2
+                        },
+                        "768": {
+                            "items":3
+                        },
+                        "992": {
+                            "items":4
+                        },
+                        "1200": {
+                            "items":4,
+                            "nav": true,
+                            "dots": false
+                        }
+                    }
+                }'>
+
+                        
+
+
+
+                    </div><!-- End .owl-carousel -->
+                </div><!-- End .container -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+
+        <script>
+
+            const addtocart =  function(id,user) {
+                console.log("add to cart");
+                fetch('/home/cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        bookId: id
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the result of the request here
+                    console.log(data);
+                    // Redirect to the home page
+                    window.location.href = '/home/books';
+                })
+                .catch((error) => {
+                    // Handle error here
+                    console.error('Error:', error);
+                });
+            };
+            
+      
+      
+        </script>
+
+        <%- include('../user/layouts/footer.ejs') %>
+
+           

@@ -1,0 +1,275 @@
+<%- include('../user/layouts/header.ejs') %>
+    <%- include('../user/layouts/navbar.ejs') %>
+
+
+        <main class="main">
+            <div class="page-header text-center " style="background-image: url('/user/images/background.png')">
+                <div class="container">
+                    <h1 class="page-title text-white">My Account</h1>
+                </div><!-- End .container -->
+            </div><!-- End .page-header -->
+            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/home">Home</a></li>
+                        <li class="breadcrumb-item " aria-current="page">My Account</li>
+
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <div class="page-content">
+                <div class="dashboard">
+                    <div class="container">
+                        <div class="row  p-5" style="border-radius: 7px; background: #F3F3F9; ">
+                            <aside class="col-md-4 col-lg-3">
+                                <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                                    <li class="nav-item profile-nav-tabs">
+                                        <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab"
+                                            href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
+                                            aria-selected="true">My Profile</a>
+                                    </li>
+                                    <!-- <li class="nav-item">
+                                    <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+                                </li> -->
+                                    <!-- <li class="nav-item">
+                                    <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a>
+                                </li> -->
+
+                                    <li class="nav-item profile-nav-tabs">
+                                        <a class="nav-link"  href="/home/account/password"
+                                         aria-controls="tab-account" aria-selected="false">change password
+                                            </a>
+                                    </li>
+                                    <li class="nav-item profile-nav-tabs">
+                                        <a class="nav-link" id="tab-order-link" data-toggle="tab" href="#tab-order"
+                                            role="tab" aria-controls="tab-order" aria-selected="false">My Orders</a>
+                                    </li>
+                                    <li class="nav-item profile-nav-tabs">
+                                        <a class="nav-link"   href="#"
+                                           >Offers</a>
+                                    </li>
+                                    <li class="nav-item profile-nav-tabs">
+                                        <a class="nav-link"   href="#"
+                                           >Wallet</a>
+                                    </li>
+                                    <li class="nav-item profile-nav-tabs">
+                                        <a class="nav-link" href="/home/logout">Sign Out</a>
+                                    </li>
+                                </ul>
+                            </aside><!-- End .col-lg-3 -->
+
+                            <div class="col-md-8 col-lg-9">
+                                <div class="tab-content " >
+                                    <div class="tab-pane fade show active p-5" id="tab-dashboard" role="tabpanel"
+                                        aria-labelledby="tab-dashboard-link" style="  border-radius: 7px;">
+                                        <h6 class="text-center fs-1 font-monospace text-decoration-underline ">My
+                                            Profile</h6>
+
+                                        <!-- display the user data on profile page -->
+                                        <form action="#">
+                                            <div class="form-group">
+                                                <!-- Hidden file input -->
+
+
+                                                <!-- Dummy user profile image, which is also a clickable link to trigger file input -->
+                                                <label class="image-label">
+                                                    
+                                                </label>
+                                            </div>
+                                            <!-- <p><%= currentUser %>  dfd</p> -->
+
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <label>First Name </label>
+                                                    <input  type="text" class="form-control profile-inputs" value="<%= currentUser.firstname %>"
+                                                        disabled>
+
+                                                </div><!-- End .col-sm-6 -->
+
+                                                <div class="col-sm-6">
+                                                    <label>Last Name </label>
+                                                    <input type="text" class="form-control profile-inputs" value="<%= currentUser.lastname %>"
+                                                        disabled>
+                                                </div><!-- End .col-sm-6 -->
+                                            </div><!-- End .row -->
+
+                                            <label>Email address </label>
+                                            <input type="email" class="form-control profile-inputs" value="<%= currentUser.email %>" disabled>
+                                            <% if (userAddress) { %>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label>Shipping Address *</label>
+                                                        <input type="text" class="form-control profile-inputs"
+                                                            value="<%= userAddress.address1 %> <%= userAddress.address2 %> <%= userAddress.city %>"
+                                                            name="shippingAddress" disabled>
+                                                    </div><!-- End .col-sm-6 -->
+    
+                                                    <div class="col-sm-6">
+                                                        <label>County </label>
+                                                        <input type="text" class="form-control profile-inputs" name="state"
+                                                            value="<%= userAddress.county %> " disabled>
+                                                    </div><!-- End .col-sm-6 -->
+                                                </div><!-- End .row -->
+                                                <div class="row">
+                                                    <div class="col-sm-6 profile-inputs-div">
+                                                        <label>Pin Code </label>
+                                                        <input class="form-control profile-inputs"
+                                                            value=" <%= userAddress.pin %>" name="pincode" disabled>
+                                                    </div><!-- End .col-sm-6 -->
+    
+                                                </div>
+                                            <% } %>
+                                            
+
+
+
+
+                                        </form>
+                                    </div><!-- .End .tab-pane -->
+
+
+
+                                    <!-- this you can use new fieldhhhhhh -->
+
+                                    <div class="tab-pane fade" id="tab-orders" role="tabpanel"
+                                        aria-labelledby="tab-orders-link">
+                                        <p>No order has been made yet.</p>
+                                        <a href="#" class="btn btn-outline-primary-2"><span>GO
+                                                SHOP</span><i class="icon-long-arrow-right"></i></a>
+                                    </div><!-- .End .tab-pane -->
+                                    <!-- this you can use new fieldhhhhhh   END-->
+
+
+
+                                    <!-- orders page -->
+                                    <div class="tab-pane fade" id="tab-order" role="tabpanel"
+                                        aria-labelledby="tab-order-link">
+                                        <div class=" row mx-auto ">
+
+                                            <div class="card col-md-5 col-10 m-2 shadow-sm" id="allorder"
+                                                style="border-radius: 7px; background: #F3F3F9; cursor: pointer;">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-center mt-1 py-4">
+                                                        <i class="fa-solid fa-box-open mx-3"
+                                                            style="font-size: 35px;"></i>
+                                                        <h5 class=" m-0 align-self-center" style="font-weight: 300;">All
+                                                            Orders</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="card col-md-5 col-10 m-2 shadow-sm" id="addressDiv"
+                                                style="border-radius: 7px; background: #F3F3F9; cursor: pointer;">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-center mt-1 py-4">
+
+                                                        <i class="fa-solid fa-map-location-dot  mx-3"
+                                                            style="font-size: 35px;"></i>
+                                                        <h5 class=" m-0 align-self-center" style="font-weight: 300;">Your Addresses</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+                                        </div>
+
+                                    </div><!-- .End .tab-pane -->
+                                    <!-- orders page END -->
+
+
+                                    <!-- change password area -->
+
+
+                                    <!-- account tab details -->
+                                    <div class="tab-pane fade" id="tab-account" role="tabpanel"
+                                        aria-labelledby="tab-account-link">
+                            
+
+                                        
+                                        
+                                        <h6 class=" fs-1 font-monospace  ">Change Password</h6>
+
+                                        <!-- display the user data on profile page -->
+                                        <form action="/account/password" method="post">
+                                            <div class="form-group">
+                                                <!-- Hidden file input -->
+
+
+                                                <!-- Dummy user profile image, which is also a clickable link to trigger file input -->
+
+
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label>Current Password </label>
+                                                        <input type="password" name="oldPassword" class="profile-inputs form-control"
+                                                            required>
+
+                                                    </div><!-- End .col-sm-6 -->
+
+                                                    <div class="col-sm-6">
+                                                        <label>Create New Password </label>
+                                                        <input type="password" name="newPassword" class="form-control profile-inputs"
+                                                            required>
+                                                    </div><!-- End .col-sm-6 -->
+                                                </div><!-- End .row -->
+
+                                                <button type="submit" class="btn btn-outline-primary-login">
+                                                    <span>CHANGE PASSWORD</span>
+                                                    <i class="icon-long-arrow-right"></i>
+                                                </button>
+
+
+
+
+                                        </form>
+                                    </div><!-- .End .tab-pane -->
+
+
+
+
+                                </div>
+                            </div><!-- End .col-lg-9 -->
+                        </div><!-- End .row -->
+                    </div><!-- End .container -->
+                </div><!-- End .dashboard -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+
+        <!-- <div class="content-wrapper ">
+            <div id="FormAlert" data-aos="fade-down" class="alert alert-danger col-md-4 col-8 mx-auto fixed-top "
+            style=" display: none; top:30px; border-radius: 7px; opacity: 0.9; z-index: 1000000;" role="alert">
+            <h6 class="alert-heading text-center ">Please provide only valid data.</h6>
+            <hr>
+            <span class="row "><i class="fa-sharp fa-light fa-circle-xmark fa-shake" style="color: #ff0505; font-size: 18px;"></i> &nbsp;&nbsp;&nbsp; <p id="ValidErrMess" class=" text-white"></p></span>
+             
+         </div> -->
+
+
+        <%- include('../user/layouts/footer.ejs') %>
+
+          
+            
+                      
+
+                    
+                        
+                    
+
+
+                        <script>
+                                let orderBTN = document.getElementById("allorder");
+                                orderBTN.addEventListener("click", function () {
+                                    window.location.href = "/home/account/orders";
+                                });
+
+                                let addressDiv = document.getElementById("addressDiv");
+                                addressDiv.addEventListener("click", function () {
+                                    window.location.href = "/home/account/address";
+                                });
+
+                        </script>

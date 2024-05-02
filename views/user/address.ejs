@@ -1,0 +1,301 @@
+<%- include('../user/layouts/header.ejs') %>
+    <%- include('../user/layouts/navbar.ejs') %>
+
+        <main class="main">
+            <div class="page-header text-center " style="background-image: url('/user/images/page-header-bg.jpg')">
+                <div class="container">
+                    <h1 class="page-title text-white">My Account</h1>
+                </div><!-- End .container -->
+            </div><!-- End .page-header -->
+            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/home">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/home/account">My Account</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Address</li>
+
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <div class="container-fluid d-flex flex-column justify-content-center py-5">
+
+
+                <div class="row p-2 col-12 d-flex justify-content-center" >
+
+                    <div class="card  m-2 col-md-3 col-10 " data-bs-toggle="modal"
+                    data-bs-target="#exampleModal" id="addAddressBtn"
+                        style="background: #f9f9fc; border-radius: 10px; border: 1px dashed #777777; cursor: pointer; ">
+                        <div class="card-body p-0 d-flex justify-content-around align-items-center">
+                            <div class="row d-flex flex-column pt-2">
+                                <i class="fa-solid fa-plus text-center mb-2" style="font-size: 40px;"></i>
+                                <h4 class="text-light">Add-Address</h4>
+                                <button id="addBTN" data-bs-toggle="modal" data-bs-target="#addModal" type="button" hidden>add</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <%for(i in address){%>
+                        <div class="card  m-2 col-md-3 col-10 p-4" style="background: #F3F3F9; border-radius: 10px;">
+                            <div class="card-body ">
+                                <h6 class="card-title" style="font-size: 15px;">
+                                    <%=address[i].address1%>
+                                </h6>
+                                <p class="card-text">
+                                    <%=address[i].city%>, <%=address[i].state%>
+                                </p>
+                                
+                                <p class="card-text">Pincode : <%=address[i].pin%>, <%=address[i].country%>
+                                </p>
+                                <hr class="m-0 p-0 my-3">
+                                <div class="d-flex justify-content-end ">
+                                    <p class="text-dark" type="button" id="editBTN" data-bs-toggle="modal" data-bs-target="#editModal<%=address[i]._id%>">Edit </p>
+                                    <p class="mx-3">|</p>
+                                    <p class="text-danger" type="button" onclick="if(confirm('Are you sure you want to delete this address?')) deleteAddress('<%= address[i]._id %>')"   >Remove</p>
+                                    <p class="mx-3">|</p>
+                                    <div class="form-check mx-2 d-flex align-items-center" >
+                                        <input class="form-check-input" type="radio" name="DefaultAddress" onclick="setDefaultAddress('<%= address[i]._id %>')" value="<%= address[i]._id %>" <%= address[i].default_address == true ? 'checked' : '' %> >
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                          Default
+                                        </label>
+                                      </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- model for edit address  -->
+                        <!-- address adding model  -->
+
+                        <div class="modal fade" id="editModal<%=address[i]._id%>" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content p-4">
+                                    <div class="modal-header">
+                                        <h5 class="" id="editModal">Edit Address</h5>
+                                        <button type="button" class=" btn-dark " data-bs-dismiss="modal"
+                                            aria-label="Close">x</button>
+                                    </div>
+                                    <form action="/profile/user_address/edit" method="post" onsubmit="return validateUserAddressFormUpdate()">
+                                        <div class="modal-body p-4">
+                                            <div class="mb-1">
+                                                <label for="Countryedit"
+                                                    class="form-label m-0">Country/Region
+                                                </label>
+                                                <input type="text" class="form-control address-input"
+                                                    id="Countryedit" name="country" value="<%=address[i].country%>" >
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="fullNameedit" class="form-label m-0">Full name
+                                                    (First and Last
+                                                    name)
+                                                </label>
+                                                <input type="text" class="form-control address-input"
+                                                    id="fullNameedit" value="<%=address[i].fullName%>" name="fullName"  >
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="mobileNumberedit" class="form-label m-0">Mobile
+                                                    number
+                                                </label>
+                                                <input type="number" class="form-control address-input"
+                                                    id="mobileNumberedit" value="<%=address[i].mobileNumber%>"  name="mobileNumber" >
+                                            </div>
+                                            
+                                            <div class="mb-1">
+                                                <label for="cityedit" class="form-label m-0">Area,
+                                                    Street, Sector,
+                                                    Village
+                                                </label>
+                                                <input type="text" class="form-control address-input"
+                                                    id="cityedit" value="<%=address[i].city%>" name="city" >
+                                            </div>
+
+                                            <div class=" row ">
+                                                <div class=" col-6">
+                                                    <label for="stateedit" class="form-label m-0">State
+                                                    </label>
+                                                    <input type="text" class="form-control address-input"
+                                                        id="stateedit" name="state" value="<%=address[i].state%>" >
+                                                </div>
+                                                <div class=" col-6">
+                                                    <label for="pincodeedit" class="form-label m-0">Pincode
+                                                    </label>
+                                                    <input type="number" value="<%=address[i].pincode%>" class="form-control address-input"
+                                                        id="pincodeedit" name="pincode" >
+                                                </div>
+                                                <input value="<%=address[i]._id%>" class="form-control address-input"
+                                                        id="exampleFormControlInput1" name="adressId" hidden required>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a class="btn btn-outline-primary-2" style="border-radius: 7px;"
+                                                data-bs-dismiss="modal">Close</a>
+                                            <button type="submit" class="btn btn-outline-primary-2"
+                                                style="border-radius: 7px; background: #000; color: #fff;">Update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- model end -->
+                        <!-- end edit model -->
+
+                        <!-- delete address model -->
+                        <div class="modal fade" id="deleteModal<%=address[i]._id%>" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content p-4">
+                                    <div class="modal-header">
+                                        <h5 class="" id="editModal">Are you sure to delete this</h5>
+                                        <button type="button" class=" btn-dark " data-bs-dismiss="modal"
+                                            aria-label="Close">x</button>
+                                    </div>
+                                    
+                                        <div class="card  m-2 col-md-12 col-12 p-4" style="background: #F3F3F9; border-radius: 10px;">
+                                            <div class="card-body ">
+                                                <h6 class="card-title" style="font-size: 15px;">
+                                                    <%=address[i].fullName%>
+                                                </h6>
+                                                <p class="card-text">
+                                                    <%=address[i].city%>, <%=address[i].state%>
+                                                </p>
+                                                <p class="card-text">Contanct Number : <%=address[i].mobileNumber%>
+                                                </p>
+                                                <p class="card-text">Pincode : <%=address[i].pincode%>, <%=address[i].country%>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a class="btn btn-outline-primary-2" style="border-radius: 7px;"
+                                                data-bs-dismiss="modal">Close</a>
+                                            <a onclick="removeAddress('<%=address[i]._id%>')" class="btn btn-outline-primary-2"
+                                                style="border-radius: 7px; background: #000; color: #fff;">Remove</a>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <delete address model end> -->
+
+                        <%}%>
+
+
+
+
+
+                </div>
+
+
+
+
+            </div>
+
+
+        </main>
+
+        <!-- address adding model  -->
+
+
+
+        <div class="modal fade" id="addModal" tabindex="-1"  aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content p-4">
+                    <div class="modal-header">
+                        <h5 class="" id="exampleModalLabel">Add New Address</h5>
+                        <button type="button" class=" btn-dark " data-bs-dismiss="modal" aria-label="Close">x</button>
+                    </div>
+                    <form method="post" action="/home/account/address" onsubmit="return validateUserAddressForm()">
+                        <div class="modal-body p-4">
+                            <div class="mb-1">
+                                <label for="Countryadd" class="form-label m-0">Address line one</label>
+                                <input type="text" class="form-control address-input" id="Countryadd" name="address1">
+                            </div>
+                            <div class="mb-1">
+                                <label for="fullNameadd" class="form-label m-0">Address line two</label>
+                                <input type="text" class="form-control address-input" id="fullNameadd" name="address2">
+                            </div>
+                            <div class="mb-1">
+                                <label for="mobileNumberadd" class="form-label m-0">Address line three</label>
+                                <input type="text" class="form-control address-input" id="mobileNumberadd" name="address3">
+                            </div>
+                            <div class="mb-1">
+                                <label for="cityadd" class="form-label m-0">Country</label>
+                                <input type="text" class="form-control address-input" id="cityadd" name="country">
+                            </div>
+                            <div class="mb-1">
+                                <label for="cityadd" class="form-label m-0">City</label>
+                                <input type="text" class="form-control address-input" id="cityadd" name="city">
+                            </div>
+                            <div class=" row ">
+                                <div class=" col-6">
+                                    <label for="stateadd" class="form-label m-0">County</label>
+                                    <input type="text" class="form-control address-input" id="stateadd" name="county">
+                                </div>
+                                <div class=" col-6">
+                                    <label for="pincodeadd" class="form-label m-0">Pin</label>
+                                    <input type="number" class="form-control address-input" id="pincodeadd" name="pin">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-outline-primary-2" style="border-radius: 7px;" data-bs-dismiss="modal">Close</a>
+                            <button type="submit" class="btn btn-outline-primary-2" style="border-radius: 7px; background: #000; color: #fff;">Add now</button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- model end -->
+       
+        
+        
+        
+
+        <script>
+            let addressBTN = document.getElementById("addAddressBtn")
+            let modelBTN = document.getElementById("addBTN")
+
+            addressBTN.addEventListener("click", function () {
+                modelBTN.click()
+            })
+
+            async function deleteAddress(ID){
+        try{
+            const response =await fetch("/home/account/address/delete/"+ID,{
+            method : "DELETE",
+            headers : {
+                "content-type":"application/json"
+            },
+            body: JSON.stringify({_id:ID})
+        })
+        const data = await response.json()
+            console.log(data)
+                window.location.reload();
+
+            let note = document.getElementById("notification")
+            note.innerText=data.message
+            
+        }
+        catch(err){
+            console.log(err);
+        }
+        
+
+    }
+
+            async function setDefaultAddress(id){
+      console.log("set");
+      const response = await fetch("/home/account/address/edit/"+id,{
+        method: "PATCH",
+        headers: {
+          "content-type":"application/json",
+        }
+      })
+      const data = await response.json()
+      console.log(data);
+      window.location.reload()
+    }
+        </script>
+
+        <%- include('../user/layouts/footer.ejs') %>

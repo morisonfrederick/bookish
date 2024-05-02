@@ -1,0 +1,106 @@
+<%- include('../admin/layouts/header.ejs') %>
+    <div class="main-panel">
+        <div class="content-wrapper">
+
+            <div class="row ">
+
+                <div class="col-12 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-5 ">
+                                <ul class="navbar-nav w-100">
+                                    <li class="nav-item w-100">
+                                        <div class="container mb-3">
+                                            <button id="confirmedOrders" class="btn btn-outline-secondary">Confirmed Orders</button>
+                                            <button id="deliveredOrders" class="btn btn-outline-secondary">Delivered Orders</button>
+                                            <button id="placedOrders" class="btn btn-outline-secondary">Placed Orders</button>
+                                            <button id="allOrders" class="btn btn-outline-secondary">All Orders</button>
+                                          </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <h4 class="card-title">All Orders</h4>
+                            <div class="table-responsive">
+                                <table class="table" id="user-table">
+                                    <thead>
+                                        <tr>
+
+                                            <th >Order Number</th>
+                                            <th scope="col">Customer</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Date </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% data.forEach(order => { %>
+                                            <tr>
+                                                <!-- list start -->
+                                                <td>
+                                                    <span>
+                                                        <%= order.orderNumber %>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <%= order.user_id.firstname %>
+                                                </td>
+                                                <td>
+                                                    € <%= order.totalPrice %>
+
+                                                </td>
+
+                                                <td>
+                                                    <%= order.orderStatus %>                                                </td>
+                                                <td>
+                                                   Date 
+                                                </td>
+
+                                                <td>
+                                                    <a href="/admin/order/details/<%= order._id  %>" class="btn btn-inverse-info">Manage</a>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                                <!-- list end -->
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+
+        </footer>
+        <!-- partial -->
+    </div>
+    <script>
+        // Get the buttons
+  var confirmedOrdersButton = document.getElementById('confirmedOrders');
+  var deliveredOrdersButton = document.getElementById('deliveredOrders');
+  var placedOrdersButton = document.getElementById('placedOrders');
+  var allOrdersButton = document.getElementById('allOrders');
+
+  // Add event listeners to the buttons
+  confirmedOrdersButton.addEventListener('click', function() {
+    window.location.href = '/admin/orders?status=Confirmed';
+  });
+
+  deliveredOrdersButton.addEventListener('click', function() {
+    window.location.href = '/admin/orders?status=Delivered';
+  });
+
+  placedOrdersButton.addEventListener('click', function() {
+    window.location.href = '/admin/orders?status=Placed';
+  });
+
+  allOrdersButton.addEventListener('click', function() {
+    window.location.href = '/admin/orders';
+  });
+    </script>
+    <%- include('../admin/layouts/footer.ejs') %>

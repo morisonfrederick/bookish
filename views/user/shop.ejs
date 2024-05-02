@@ -1,0 +1,372 @@
+<%- include('../user/layouts/header.ejs') %>
+    <%- include('../user/layouts/navbar.ejs') %>
+
+
+
+
+        <main class="main">
+            <div class="page-header text-center" style="background-image: url('/user/images/background.png')">
+                <div class="container">
+                    <h1 class="page-title text-white">Books</h1>
+                </div>
+            </div>
+            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/home">Home</a></li>
+                        <li class="breadcrumb-item active"><a href="#">Books</a></li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <!-- page-content start -->
+            <div class="page-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="toolbox">
+                                <div class="toolbox-left">
+                                    <!-- <div class="toolbox-info">
+                                Showing <span>9 of 56</span> Products
+                            </div>End .toolbox-info -->
+                                </div><!-- End .toolbox-left -->
+
+                                <div class="toolbox-right">
+                                    <!-- <div class="toolbox-sort">
+                                        <label for="sortby">Sort by:</label>
+                                        <div class="select-custom">
+                                            <select name="sortby" id="sortby" class="form-control">
+                                                <option value="popularity" selected="selected">Most Popular</option>
+                                                <option value="rating">Most Rated</option>
+                                                <option value="date">Date</option>
+                                            </select>
+                                        </div>
+                                    </div>End .toolbox-sort -->
+
+                                </div><!-- End .toolbox-right -->
+                            </div><!-- End .toolbox -->
+
+                            <!-- Start .products -->
+                            <div class="products mb-3">
+                                <div class="row justify-content-center">
+
+
+
+
+                                    <%for(i=0;i<products.length;i++){%>
+                                        <div class="col-6 col-md-4 col-lg-4" style="border: 0.1px solid #f5f5f5 ;">
+                                            <div class="product product-7 text-center">
+                                                <figure class="product-media">
+                                                    <a href="/home/books/<%= products[i]._id %>">
+                                                        <img src="/products/images/<%= products[i].imageUrl[0] %>" alt="Product image"
+                                                                                                                                                                                                                                                                                                                       class="product-image">
+                                                    </a>
+
+                                                    <div class="product-action-vertical">
+                                                        <a style="cursor: pointer;" onclick="addWishlist('<%= products[i]._id %>')"
+                                                                                                                                                                                                                                                                                                                       class="btn-product-icon btn-wishlist btn-expandable"><span>add
+                                                                to wishlist</span></a>
+                                                    </div>
+
+                                                    <div class="product-action">
+                                                        <%if(products[i].stock==0){%>
+                                                            <a style="cursor: pointer;"
+                                                                                                                                                                                                                                                                                                                           class="btn-product btn-cart text-danger"><span>No
+                                                                    Stock</span></a>
+
+                                                            <%}else{%>
+                                                                <a style="cursor: pointer;" onclick="addtocart('<%= products[i]._id %>')"
+                                                                                                                                                                                                                                                                                                                               class="btn-product btn-cart"><span>add
+                                                                        to cart</span></a>
+
+                                                                <%}%>
+                                                    </div><!-- End .product-action -->
+                                                </figure><!-- End .product-media -->
+
+                                                <div class="product-body">
+                                                    <div class="product-cat">
+                                                        <a>
+                                                            <%= products[i].category %>
+                                                        </a>
+                                                    </div><!-- End .product-cat -->
+                                                    <h3 class="product-title"><a
+                                                                                                                                                                                                                                                                                                                       href="/product?id=<%= products[i]._id %>">
+                                                            <%= products[i].name %>
+                                                        </a></h3><!-- End .product-title -->
+                                                    <div class="product-price">
+                                                        ₹ <%= products[i].price %>
+                                                    </div><!-- End .product-price -->
+                                                    <div class="ratings-container">
+                                                        <div class="ratings">
+                                                            <div class="ratings-val" style="width: 20%;"></div>
+                                                           
+                                                        </div>
+                                                        <span class="ratings-text">( 2 Reviews )</span>
+                                                    </div>
+                                                </div>
+                                            </div><!-- End .product -->
+                                        </div><!-- End .col-sm-6 col-lg-4 -->
+                                        <%}%>
+
+
+
+
+                                </div><!-- End .row -->
+
+                            </div><!-- End .products -->
+
+                            <!-- <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item <%if(curentPage==1){%> disabled<%}%>">
+                                        <a class="page-link page-link-prev" href="/shop?page=<%= Number(curentPage) - 1 %>" aria-label="Previous" tabindex="-1"
+                                                                                                                                                                                                                                                                                                       aria-disabled="true">
+                                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                                        </a>
+                                    </li>
+
+                                    <%for(let i=Math.max(1, curentPage - 1); i <=Math.min(totalPage, curentPage + 2); i++){%>
+                                        <%if(i===curentPage){%>
+                                            <li class="page-item active" aria-current="page">
+                                                <a class="page-link">
+                                                    <%= i %>
+                                                </a>
+                                            </li>
+                                            <%}else{%>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="/shop?page=<%= i %>">
+                                                        <%= i %>
+                                                    </a>
+                                                </li>
+                                                <%}%>
+                                                    <%}%>
+
+                                                        <li class="page-item-total">of <%= totalPage %>
+                                                        </li>
+                                                        <li class="page-item <%if(curentPage === totalPage){%> disabled<%}%>">
+                                                            <a class="page-link page-link-next" href="/shop?page=<%= Number(curentPage) + 1 %>"
+                                                                                                                                                                                                                                                                                                                           aria-label="Next">
+                                                                Next <span aria-hidden="true"><i
+                                                                                                                                                                                                                                                                                                                                   class="icon-long-arrow-right"></i></span>
+                                                            </a>
+                                                        </li>
+                                </ul>
+                            </nav> -->
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
+                                  <li class="page-item"><a class="page-link" href="?page=<%= Math.max(1, curentPage-1) %>">Previous</a></li>
+                                  <% for(let i = 1; i <= totalPage; i++) { %>
+                                    <li class="page-item <%= i === curentPage ? 'active' : '' %>"><a class="page-link" href="?page=<%= i %>"><%= i %></a></li>
+                                  <% } %>
+                                  <li class="page-item"><a class="page-link" href="?page=<%= Math.min(totalPage, curentPage+1) %>">Next</a></li>
+                                </ul>
+                              </nav>
+
+                        </div><!-- End .col-lg-9 -->
+                        <aside class="col-lg-3 order-lg-first">
+                            <div class="sidebar sidebar-shop">
+                                <div class="widget widget-clean">
+                                    <label>Filters:</label>
+                                    <!-- <a href="#" class="sidebar-filter-clear">Clean All</a> -->
+                                </div><!-- End .widget widget-clean -->
+
+                                <div class="widget widget-collapsible">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true"
+                                                                                                                                                                                                                                                                                                       aria-controls="widget-1">
+                                            Category
+                                        </a>
+                                    </h3><!-- End .widget-title -->
+
+                                    <div class="collapse show" id="widget-1">
+                                        <div class="widget-body">
+                                            <div class="filter-items filter-items-count">
+
+                                                <% categories.forEach(category => { %>
+                                                 
+                                                    <div class="filter-item">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" onclick="selectCategory('<%= category.categoryName %>')" id="<%= category.categoryName %>">
+                                                            <label class="custom-control-label" for="<%= category.categoryName %>">
+                                                                <%= category.categoryName %>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <% }) %>
+
+
+                                            </div><!-- End .filter-items -->
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget -->
+
+
+
+
+
+                                <div class="widget widget-collapsible">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-4" role="button" aria-expanded="true" aria-controls="widget-4">
+                                            Price
+                                        </a>
+                                    </h3><!-- End .widget-title -->
+
+                                    <div class="collapse show" id="widget-4">
+                                        <div class="widget-body">
+                                            <div class="filter-items">
+                                                <div class="filter-item">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" onclick="selectPrice(5,10)" id="C500">
+                                                        <label class="custom-control-label" for="C500">&euro;5-&euro;10</label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                </div><!-- End .filter-item -->
+
+                                                <div class="filter-item">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" onclick="selectPrice(10,15)" id="C1000">
+                                                        <label class="custom-control-label" for="C1000">&euro;10-&euro;15</label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                </div><!-- End .filter-item -->
+
+                                                <div class="filter-item">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" onclick="selectPrice(2000,5000)" id="C2000">
+                                                        <label class="custom-control-label" for="C2000">&euro;15-&euro;20</label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                </div><!-- End .filter-item -->
+
+                                                <button class=" mt-1 filtterClear"  onclick="priceClear()">clear</button>
+
+
+
+
+                                            </div><!-- End .filter-items -->
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget -->
+
+
+                            </div><!-- End .sidebar sidebar-shop -->
+                        </aside><!-- End .col-lg-3 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div>
+            <!-- End .page-content -->
+        </main><!-- End .main -->
+
+
+          
+          
+        
+
+        <script>
+            let selectedCategoryItems = "";
+            let selectedGender = "";
+            let selectedMinPrice = "";
+            let selectedMaxPrice = "";
+            
+            const addtocart =  function(id,user) {
+                console.log("add to cart");
+                fetch('/home/cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        bookId: id
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the result of the request here
+                    console.log(data);
+                    // Redirect to the home page
+                    window.location.href = '/home/books';
+                })
+                .catch((error) => {
+                    // Handle error here
+                    console.error('Error:', error);
+                });
+            };
+
+            function selectCategory(data) {
+                const temp = document.getElementById(data);
+        
+                if (!temp.checked) {
+                    // Deselecting a category
+                    const checkedArray = selectedCategoryItems.split(",").filter(item => item !== data);
+                    selectedCategoryItems = checkedArray.join(',');
+                } else {
+                    // Selecting a category
+                    selectedCategoryItems = selectedCategoryItems ? selectedCategoryItems + "," + data : data;
+                }
+                // Update the URL
+                updateURL();
+            }
+        
+            function updateURL() {
+                if(selectedMinPrice==null){
+                    selectedMinPrice=""
+                    selectedMaxPrice=""
+                }
+                const url = new URL(window.location.href);
+                url.searchParams.set('category', encodeURIComponent(selectedCategoryItems));
+                url.searchParams.set('minPrice', selectedMinPrice);
+                url.searchParams.set('maxPrice', selectedMaxPrice);
+                window.history.pushState(null, '', url);
+                location.reload();
+            }
+            
+            function selectPrice(minPrice, maxPrice) {
+                selectedMinPrice=minPrice
+                selectedMaxPrice=maxPrice
+                updateURL();
+            }
+
+            
+            
+            function priceClear(){
+                selectedMinPrice = "";
+                selectedMaxPrice = "";
+                updateURL();
+            }
+
+            window.onload = function () {
+                const queryString = window.location.search;
+                const urlSearchParams = new URLSearchParams(queryString);
+                const categorySelected = urlSearchParams.get('frame_shape');
+                selectedCategoryItems = categorySelected ? decodeURIComponent(categorySelected) : "";
+        
+                const genderSelected = urlSearchParams.get('gender');
+                selectedGender = genderSelected || "";
+
+                const minSelected = urlSearchParams.get('minPrice');
+                const maxSelected = urlSearchParams.get('maxPrice');
+                selectedMinPrice = minSelected !== "" ? minSelected :"" ;
+                selectedMaxPrice = maxSelected !== "" ? maxSelected :""
+                // alert(selectedMinPrice)
+                if(minSelected !== "" && maxSelected !== "" ){
+                    // alert(`C${selectedMinPrice}`)
+                    document.getElementById(`C${selectedMinPrice}`).checked =true
+                }
+                if(genderSelected!=""){
+                    // alert(genderSelected)
+                    document.getElementById(selectedGender).checked =true
+                }
+        
+                const checkedCategoryItems = selectedCategoryItems.split(",");
+                for (let i = 0; i < checkedCategoryItems.length; i++) {
+                    document.getElementById(checkedCategoryItems[i]).checked = true;
+                }
+        
+                // Handle gender selection here (e.g., selectGender('men') or selectGender('women')).
+            };
+        </script>
+        
+        
+        
+        
+        
+        
+        
+
+        <%- include('../user/layouts/footer.ejs') %>

@@ -1,0 +1,63 @@
+<%- include('../admin/layouts/header.ejs') %>
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+
+
+
+
+            <div class="row ">
+                <div class="col-12 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between">
+                                <h4 class="card-title">
+                                    <p class=""></p>Banner Management
+                                </h4>
+
+                            </div>
+                            <%for(i in banners){%>
+                            <hr class="white-line my-4">
+                            <div class="mb-5 col-12 row d-flex justify-content-between" style="height: auto;">
+                                <div class="col-md-6 col-12  ">
+                                    <!-- <h1>hi</h1> -->
+                                    <img style="width: 100%;" class="mx-auto" src="/products/banner/<%= banners[i].image %>"
+                                                                                                                                                                                                                                                                                                   alt="banner-img">
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <h3>Banner <%= Number(i)+1%></h3>
+                                    <hr class="white-line my-4">
+                                    <h4><%= banners[i].subtext%></h4>
+                                    <h1><%= banners[i].mainHead%></h1>
+                                    <!-- <button class="btn btn-inverse-primary" data-bs-target="#mod" data-bs-toggle="modal" data-bs-target="#mod">
+                                        Change Banner</button> -->
+                                    <a class="btn btn-inverse-primary" href="/admin/banner/edit?banner=<%=banners[i].bannerNumber%>" >
+                                        Change Banner</a>
+
+                                </div>
+                            </div>
+                            <%}%>
+                            
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- content-wrapper ends -->
+
+
+
+            <!-- partial:partials/_footer.html -->
+
+
+
+            <footer class="footer">
+
+            </footer>
+            <!-- partial -->
+        </div>
+        <%- include('../admin/layouts/footer.ejs') %>

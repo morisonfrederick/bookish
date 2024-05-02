@@ -1,0 +1,461 @@
+<%- include('../user/layouts/header.ejs') %>
+<%- include('../user/layouts/navbar.ejs') %>
+
+    <main class="main">
+        <div class="intro-section bg-lighter pt-5 pb-6">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="intro-slider-container slider-container-ratio slider-container-1 mb-2 mb-lg-0">
+                            <div class="intro-slider intro-slider-1 owl-carousel owl-simple owl-light owl-nav-inside" data-toggle="owl" data-owl-options='{
+                                    "nav": false, 
+                                    "responsive": {
+                                        "768": {
+                                            "nav": true
+                                        }
+                                    }
+                                }'>
+                                <div class="intro-slide">
+                                    <figure class="slide-image">
+                                        <picture>
+                                            <source media="(max-width: 480px)" srcset="/products/banner/mobile/image">
+                                            <img src="/products/banner/banner.png" alt="Image Desc">
+                                        </picture>
+                                    </figure><!-- End .slide-image -->
+
+                                    <div class="intro-content">
+                                        <h3 class="intro-subtitle">text</h3>
+                                        <!-- <h1 class="intro-title"><%= banners %></h1> -->
+                                        <!-- <h3 class="intro-subtitle"></h3> -->
+                                        <!-- <h1 class="intro-title"> </h1> -->
+
+                                        <a href="/shop" class="btn btn-outline-white mt-5">
+                                            <span>SHOP NOW</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </a>
+                                    </div><!-- End .intro-content -->
+                                </div><!-- End .intro-slide -->
+
+                                <div class="intro-slide">
+                                    <figure class="slide-image">
+                                        <picture>
+                                            <source media="(max-width: 480px)" srcset="/products/banner/mobile/bannerImage">
+                                            <img src="/products/banner/bannerImage" alt="Image Desc">
+                                            
+                                        </picture>
+                                    </figure><!-- End .slide-image -->
+
+                                    <div class="intro-content">
+                                        <h3 class="intro-subtitle"><%= banners[1] %></h3>
+                                        <h1 class="intro-title"><%= banners[1] %></h1>
+                                        <!-- <h3 class="intro-subtitle">News and Inspiration</h3>
+                                        <h1 class="intro-title">New Arrivals</h1> -->
+
+                                        <a href="/shop" class="btn btn-outline-white">
+                                            <span>SHOP NOW</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </a>
+                                    </div><!-- End .intro-content -->
+                                </div><!-- End .intro-slide -->
+
+                                <div class="intro-slide">
+                                    <figure class="slide-image">
+                                        <picture>
+                                            <source media="(max-width: 480px)" srcset="/products/banner/mobile/<%= banners[2] %>">
+                                            <img src="/products/banner/<%= banners[2] %>" alt="Image Desc">
+                                        </picture>
+                                    </figure><!-- End .slide-image -->
+
+                                    <div class="intro-content">
+                                        <h3 class="intro-subtitle">Top books to read</h3><!-- End .h3 intro-subtitle -->
+                                        <h1 class="intro-title">Explore new <br>Books</h1><!-- End .intro-title -->
+                                        
+
+                                        <a href="/shop" class="btn btn-outline-white">
+                                            <span>SHOP NOW</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </a>
+                                    </div><!-- End .intro-content -->
+                                </div><!-- End .intro-slide -->
+                            </div><!-- End .intro-slider owl-carousel owl-simple -->
+                            
+                            <span class="slider-loader"></span><!-- End .slider-loader -->
+                        </div><!-- End .intro-slider-container -->
+                    </div><!-- End .col-lg-8 -->
+                    
+                    <div class="col-lg-4">
+                        <div class="intro-banners">
+                            <div class="row row-sm">
+                                <div class="col-md-6 col-lg-12">
+                                    <div class="banner banner-display">
+                                        <a href="/home/books">
+                                            <img src="/products/banner/discount.png" alt="Banner">
+                                        </a>
+
+                                        <div class="banner-content">
+                                            <h4 class="banner-subtitle text-darkwhite"><a href="#">Clearence</a></h4><!-- End .banner-subtitle -->
+                                            <h3 class="banner-title text-white"><a href="#">Trending Books<br>Up to 40% off</a></h3><!-- End .banner-title -->
+                                            <a href="#" class="btn btn-outline-white banner-link">Shop Now<i class="icon-long-arrow-right"></i></a>
+                                        </div><!-- End .banner-content -->
+                                    </div><!-- End .banner -->
+                                </div><!-- End .col-md-6 col-lg-12 -->
+
+                                <div class="col-md-6 col-lg-12">
+                                    <div class="banner banner-display mb-0">
+                                        <a href="/home/books">
+                                            <img src="/products/banner/collection.png" alt="Banner">
+                                        </a>
+
+                                        <div class="banner-content">
+                                            <h4 class="banner-subtitle text-darkwhite"><a href="#">New in</a></h4><!-- End .banner-subtitle -->
+                                            <h3 class="banner-title text-white"><a href="#">Trending Books <br>Collection</a></h3><!-- End .banner-title -->
+                                            <a href="/shop" class="btn btn-outline-white banner-link">Discover Now<i class="icon-long-arrow-right"></i></a>
+                                        </div><!-- End .banner-content -->
+                                    </div><!-- End .banner -->
+                                </div><!-- End .col-md-6 col-lg-12 -->
+                            </div><!-- End .row row-sm -->
+                        </div><!-- End .intro-banners -->
+                    </div><!-- End .col-lg-4 -->
+                </div><!-- End .row -->
+
+                <div class="mb-6"></div><!-- End .mb-6 -->
+
+                <div class="owl-carousel owl-simple" data-toggle="owl" 
+                    data-owl-options='{
+                        "nav": false, 
+                        "dots": false,
+                        "margin": 30,
+                        "loop": false,
+                        "responsive": {
+                            "0": {
+                                "items":2
+                            },
+                            "420": {
+                                "items":3
+                            },
+                            "600": {
+                                "items":4
+                            },
+                            "900": {
+                                "items":5
+                            },
+                            "1024": {
+                                "items":6
+                            }
+                        }
+                    }'>
+                    <a href="#" class="brand">
+                        <img src="user/images/brands/1.png" alt="Brand Name">
+                    </a>
+
+                    <a href="#" class="brand">
+                        <img src="user/images/brands/2.png" alt="Brand Name">
+                    </a>
+
+                    <a href="#" class="brand">
+                        <img src="user/images/brands/3.png" alt="Brand Name">
+                    </a>
+
+                    <a href="#" class="brand">
+                        <img src="user/images/brands/4.png" alt="Brand Name">
+                    </a>
+
+                    <a href="#" class="brand">
+                        <img src="user/images/brands/5.png" alt="Brand Name">
+                    </a>
+
+                    <a href="#" class="brand">
+                        <img src="user/images/brands/6.png" alt="Brand Name">
+                    </a>
+                </div><!-- End .owl-carousel -->
+            </div><!-- End .container -->
+        </div><!-- End .bg-lighter -->
+
+        <div class="mb-6"></div><!-- End .mb-6 -->
+
+        <div class="container">
+            <div class="heading heading-center mb-3">
+                <h2 class="title-lg">Trendy Products</h2><!-- End .title -->
+
+                <ul class="nav nav-pills justify-content-center" role="tablist">
+                    <li class="nav-item">
+                        <p class="sub-txt">Must read books </p>
+                    </li>
+                    
+                </ul>
+            </div><!-- End .heading -->
+
+            <div class="tab-content tab-content-carousel">
+                <div class="tab-pane p-0 fade show active" id="trendy-all-tab" role="tabpanel" aria-labelledby="trendy-all-link">
+                    <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+                        data-owl-options='{
+                            "nav": false, 
+                            "dots": true,
+                            "margin": 20,
+                            "loop": false,
+                            "responsive": {
+                                "0": {
+                                    "items":2
+                                },
+                                "480": {
+                                    "items":2
+                                },
+                                "768": {
+                                    "items":3
+                                },
+                                "992": {
+                                    "items":4
+                                },
+                                "1200": {
+                                    "items":4,
+                                    "nav": true,
+                                    "dots": false
+                                }
+                            }
+                        }'>
+                        <%if(products.length!=0){%>
+                        <% for(i=0;i<6;i++) {%>
+                            <p><%=products[i].name  %></p>
+                        <div class="product product-11 text-center border">
+                            <figure class="product-media">
+                                <a href="/product?id=<%= products[i]._id %>" >
+                                    <img src="/products/images/<%= products[i].imageUrl[0]  %>" alt="Product image" class="product-image">
+                                    <img src="/products/images/<%= products[i].imageUrl[0]  %>" alt="Product image" class="product-image-hover">
+                                </a>
+
+                                <div class="product-action-vertical">
+                                    <a style="cursor: pointer;" onclick="addWishlist('<%= products[i]._id %>')" class="btn-product-icon btn-wishlist"><span>add to wishlist</span></a>
+                                </div>
+                            </figure>
+
+                            <div class="product-body">
+                                <h3 class="product-title"><a href="/product?id=<%= products[i]._id %>"><%= products[i].product_name %></a></h3>
+                                <div class="product-price">
+                                    ₹<%= products[i].price %>
+                                </div>
+                            </div>
+                            <div class="product-action">
+                                <%if(products[i].stock==0){%>
+                                    <a  class="btn-product text-danger" >No Stock</a>
+                                 <%}else{%>
+                                    <a  class="btn-product btn-cart" onclick="addCart('<%= products[i]._id %>','<%= currentUser %>')"><span>add to cart</span></a>
+                                <%}%>
+                            </div><!-- End .product-action -->
+                        </div><!-- End .product -->
+                        <%}%>
+                        <%}else{%>
+                            <div  class=" d-flex justify-content-center" style="width: 100%;">
+                                <h5 >No Products</h5>
+                            </div>
+                         <%}%>   
+
+                       
+                    </div>
+                </div>
+                
+                
+                
+            </div><!-- End .tab-content -->
+        </div><!-- End .container -->
+
+        <div class="container categories pt-6">
+            <h2 class="title-lg text-center mb-4">Shop by Categories</h2><!-- End .title-lg text-center -->
+
+            <div class="row">
+                <div class="col-6 col-lg-4">
+                    <div class="banner banner-display banner-link-anim">
+                        <a href="#">
+                            <img src="user/images/banners/home/bg-3.png" alt="Banner">
+                        </a>
+
+                        <div class="banner-content banner-content-center">
+                            <h3 class="banner-title text-white"><a href="#">Crime</a></h3><!-- End .banner-title -->
+                            <a href="/home/books" class="btn btn-outline-white banner-link">Shop Now<i class="icon-long-arrow-right"></i></a>
+                        </div><!-- End .banner-content -->
+                    </div><!-- End .banner -->
+                </div><!-- End .col-sm-6 col-lg-3 -->
+                <div class="col-6 col-lg-4 order-lg-last">
+                    <div class="banner banner-display banner-link-anim">
+                        <a href="#">
+                            <img src="user/images/banners/home/bg-4.png" alt="Banner">
+                        </a>
+
+                        <div class="banner-content banner-content-center">
+                            <h3 class="banner-title text-white"><a href="#">Romance</a></h3><!-- End .banner-title -->
+                            <a href="/home/books" class="btn btn-outline-white banner-link">Shop Now<i class="icon-long-arrow-right"></i></a>
+                        </div><!-- End .banner-content -->
+                    </div><!-- End .banner -->
+                </div><!-- End .col-sm-6 col-lg-3 -->
+                <div class="col-sm-12 col-lg-4 banners-sm">
+                    <div class="row">
+                        <div class="banner banner-display banner-link-anim col-lg-12 col-6">
+                            <a href="#">
+                                <img src="user/images/banners/home/bg-1.png" alt="Banner">
+                            </a>
+
+                            <div class="banner-content banner-content-center">
+                                <h3 class="banner-title text-white"><a href="#">Thriller</a></h3><!-- End .banner-title -->
+                                <a href="/shop?frame_shape=Round&gender=&minPrice=&maxPrice=" class="btn btn-outline-white banner-link">Shop Now<i class="icon-long-arrow-right"></i></a>
+                            </div><!-- End .banner-content -->
+                        </div><!-- End .banner -->
+
+                        <div class="banner banner-display banner-link-anim col-lg-12 col-6">
+                            <a href="#">
+                                <img src="user/images/banners/home/bg-2.png" alt="Banner">
+                            </a>
+
+                            <div class="banner-content banner-content-center">
+                                <h3 class="banner-title text-white"><a href="/home/books">Children</a></h3><!-- End .banner-title -->
+                                <a href="/home/bookd" class="btn btn-outline-white banner-link">Shop Now<i class="icon-long-arrow-right"></i></a>
+                            </div><!-- End .banner-content -->
+                        </div><!-- End .banner -->
+                    </div>
+                </div><!-- End .col-sm-6 col-lg-3 -->
+            </div><!-- End .row -->
+        </div><!-- End .container -->
+
+        <div class="mb-5"></div><!-- End .mb-6 -->
+
+        
+        <div class="container">
+            <div class="heading heading-center mb-6">
+                <h2 class="title">Recent Arrivals</h2><!-- End .title -->
+
+            </div><!-- End .heading -->
+
+            <div class="tab-content">
+                <div class="tab-pane p-0 fade show active" id="top-all-tab" role="tabpanel" aria-labelledby="top-all-link">
+                    <div class="products">
+                        <div class="row justify-content-center">
+                            
+                           <!-- new ariverd products -->
+                           <%if(products!=0){%>
+                           <% for(i=0;i<6;i++) {%>
+                            <div class="col-6 col-md-4 col-lg-3 border m-1 mt-2 pt-3">
+                                <div class="product product-11 mt-v3 text-center">
+                                    <figure class="product-media">
+                                        <a href="/product?id=<%= products[i]._id %>">
+                                            <img src="/products/images/<%= products[i].imageUrl[0] %>" alt="Product image" class="product-image">
+                                            <img src="/products/images/<%= products[i].imageUrl[0] %>" alt="Product image" class="product-image-hover">
+                                        </a>
+
+                                        <div class="product-action-vertical">
+                                            <a style="cursor: pointer;" onclick="addWishlist('<%= products[i]._id %>')" class="btn-product-icon btn-wishlist "><span>add to wishlist</span></a>
+                                        </div><!-- End .product-action-vertical -->
+                                    </figure><!-- End .product-media -->
+
+                                    <div class="product-body">
+                                        <h3 class="product-title"><a><%= products[i].product_name %></a></h3><!-- End .product-title -->
+                                        <div class="product-price">
+                                            ₹<%= products[i].price %>
+                                        </div><!-- End .product-price -->
+                                    </div><!-- End .product-body -->
+                                    <div class="product-action" style="cursor: pointer;">
+                                        <%if(products[i].stock==0){%>
+                                            <a  class="btn-product text-danger" >No Stock</a>
+                                         <%}else{%>
+                                        <a   class="btn-product btn-cart" onclick="addCart('<%= products[i]._id %>','<%= currentUser %>')"><span>add to cart</span></a>
+                                        <%}%>
+                                    </div><!-- End .product-action -->
+                                </div><!-- End .product -->
+                            </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
+
+                        <%}%>
+                        <%}else{%>
+                            <h5>No Products</h5>
+                         <%}%>  
+                           
+
+                            
+                        </div><!-- End .row -->
+                    </div><!-- End .products -->
+                </div><!-- .End .tab-pane -->
+                
+            </div><!-- End .tab-content -->
+            <!-- <div class="more-container text-center">
+                <a href="#" class="btn btn-outline-darker btn-more"><span>Load more products</span><i class="icon-long-arrow-down"></i></a>
+            </div>End .more-container -->
+        </div><!-- End .container -->
+
+        <div class="container">
+            <hr>
+            <div class="row justify-content-center">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="icon-box icon-box-card text-center">
+                        <span class="icon-box-icon">
+                            <i class="icon-rocket"></i>
+                        </span>
+                        <div class="icon-box-content">
+                            <h3 class="icon-box-title">Payment & Delivery</h3><!-- End .icon-box-title -->
+                            <p>Free shipping for orders over $50</p>
+                        </div><!-- End .icon-box-content -->
+                    </div><!-- End .icon-box -->
+                </div><!-- End .col-lg-4 col-sm-6 -->
+
+                <div class="col-lg-4 col-sm-6">
+                    <div class="icon-box icon-box-card text-center">
+                        <span class="icon-box-icon">
+                            <i class="icon-rotate-left"></i>
+                        </span>
+                        <div class="icon-box-content">
+                            <h3 class="icon-box-title">Return & Refund</h3><!-- End .icon-box-title -->
+                            <p>Free 100% money back guarantee</p>
+                        </div><!-- End .icon-box-content -->
+                    </div><!-- End .icon-box -->
+                </div><!-- End .col-lg-4 col-sm-6 -->
+
+                <div class="col-lg-4 col-sm-6">
+                    <div class="icon-box icon-box-card text-center">
+                        <span class="icon-box-icon">
+                            <i class="icon-life-ring"></i>
+                        </span>
+                        <div class="icon-box-content">
+                            <h3 class="icon-box-title">Quality Support</h3><!-- End .icon-box-title -->
+                            <p>Alway online feedback 24/7</p>
+                        </div><!-- End .icon-box-content -->
+                    </div><!-- End .icon-box -->
+                </div><!-- End .col-lg-4 col-sm-6 -->
+            </div><!-- End .row -->
+
+            <div class="mb-2"></div><!-- End .mb-2 -->
+        </div><!-- End .container -->
+        
+        <div class="cta cta-display bg-image pt-4 pb-4" style="background-image: url(user/images/backgrounds/cta/bg-6.jpg);">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-10 col-lg-9 col-xl-8">
+                        <div class="row no-gutters flex-column flex-sm-row align-items-sm-center">
+                            <div class="col">
+                                <h3 class="cta-title text-white">Sign Up & Get 10% Off</h3><!-- End .cta-title -->
+                                <p class="cta-desc text-white">Best books that can change your life</p><!-- End .cta-desc -->
+                            </div><!-- End .col -->
+
+                            <div class="col-auto">
+                                <a href="/signup" class="btn btn-outline-white"><span>SIGN UP</span><i class="icon-long-arrow-right"></i></a>
+                            </div><!-- End .col-auto -->
+                        </div><!-- End .row no-gutters -->
+                    </div><!-- End .col-md-10 col-lg-9 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .cta -->
+    </main><!-- End .main -->
+    <!-- id="myAlert" -->
+    <%if(SignupMess==1){%>
+    <div id="myAlert"  data-aos="fade-up" class="alert alert-dark col-3 fixed-top font-monospace py-4" style="left: 20px; top:75vh; opacity: 0.9; border-radius: 7px;" role="alert">
+        <h4 class="alert-heading text-success" style="font-size: 15px;">Signup Successful <i class="fa-duotone fa-badge-check fa-bounce" style="--fa-primary-color: #ffffff; --fa-secondary-color: #01e427; --fa-secondary-opacity: 0.8;"></i></h4>
+        <p class=" form-text text-white" style="font-size: 13px;">Congratulations, your new account has been successfully created!</p>
+      </div>
+    <%}%>  
+    <!-- <div  data-aos="fade-down" class="alert alert-success col-3 fixed-top "
+    style="left: 20px; top:20px; border-radius: 7px; opacity: 0.9; z-index: 10000;" role="alert">
+    <h6 class="alert-heading">Login Success</h6>
+    </div> -->
+
+<!-- Sign in / Register Modal -->
+
+<%- include('../user/layouts/footer.ejs') %>
+
+<!-- <div id="myAlert"  data-aos="fade-up" class="alert alert-light col-3 fixed-bottom font-monospace" style="left: 20px; bottom:10px" role="alert">
+    <h4 class="alert-heading text-success" style="font-size: 15px;">Signup Successful</h4>
+    <p class=" form-text" style="font-size: 15px;">Congratulations, your new account has been successfully created!</p>
+</div> -->

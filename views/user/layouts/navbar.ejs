@@ -1,0 +1,112 @@
+<div class="page-wrapper">
+    <header class="header">
+       
+
+        <div class="header-middle py-0 sticky-header bg-nav">
+            <div class="container">
+                <div class="header-left">
+                    <button class="mobile-menu-toggler">
+                        <span class="sr-only">Toggle mobile menu</span>
+                        <i class="icon-bars"></i>
+                    </button>
+
+                    <a href="/home" class="logo">
+                        <img src="/user/images/logo/logo-light.png" alt="Book Logo" width="120" height="25">
+                    </a>
+
+                    <nav class="main-nav">
+                        <ul class="menu sf-arrows">
+                    
+                            
+                            
+                        </ul><!-- End .menu -->
+                    </nav><!-- End .main-nav -->
+                </div><!-- End .header-left -->
+
+                <div class="header-right">
+
+                    <!-- search  -->
+                    <div class="header-search">
+                        <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
+                        <form action="/home/books" method="get">
+                            <div class="header-search-wrapper">
+                                <label for="q" class="sr-only">Search</label>
+                                <input type="search" class="form-control" name="key" id="q" placeholder="Search in..." required>
+                            </div><!-- End .header-search-wrapper -->
+                        </form>
+                    </div><!-- End .header-search -->
+
+                    <!-- home  -->
+                    <div class="main-nav">
+                        <div class="menu">
+
+                            <li>
+                                <a href="/home/books" class=""><i class="fa-light fa-bag-shopping" style="font-size: 17px;"></i> </i> Collection</a>
+                            </li>
+                            
+
+                        </div>
+                    </div>
+                    <!-- wish list  -->
+                    <div class="main-nav">
+                        <div class="menu">
+
+                            <li>
+                                <a href="/home/account/wishlist" class=""><i class="fa-light fa-heart" style="font-size: 17px;"></i> </i>My Wishlist</a>
+                            </li>
+                            
+
+                        </div>
+                    </div>
+                    <!-- cart  -->
+                    <div class="main-nav">
+                        <div class="menu">
+
+                            <li>
+                                <a href="/home/cart" class=""><i class="fa-light fa-cart-shopping" style="font-size: 17px;"></i> </i>Cart</a>
+                            </li>
+                            
+
+                        </div>
+                    </div>
+                    
+                    <!-- <div class="dropdown cart-dropdown">
+                        <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                            <i class="icon-shopping-cart"></i>
+                            <a href="#" class="fw-bold text-dark"></i>Cart</a>
+                        </a>
+                    </div> -->
+
+                    <div class="main-nav">
+                        <div class="menu">
+
+                            <% if(currentUser) {%>
+                                <!-- <a href="/account"><p><i class="icon-heart-o"> </i> <i class="icon-user"></i>account</p></a> -->
+                                <li>
+                                    <a href="#" class="sf-with-ul"><i class="fa-light fa-circle-user" style="font-size: 18px;"></i> my Account</a>
+
+                                    <ul>
+                                        <li ><a href="/home/account"> <i class="fa-solid fa-images-user " style="font-size: 15px;"></i> My Profile</li><hr class="m-0">
+                                        <li><a href="/home/account/orders"><i class="fa-duotone fa-box-open" style="font-size: 15px;"></i> My Orders</a></li><hr class="m-0">
+                                        <li><a href="/home/signout"><i class="fa-light fa-arrow-right-from-bracket mt-1"  style="font-size: 15px;"></i> &nbsp; logout  </a></li>
+                                    </ul>
+                                </li>
+                            <% }else{ %>
+                                <li>
+                                    <a href="/home/login" class=""><i class="fa-light fa-circle-user" style="font-size: 17px;"></i> Login</a>
+                                </li>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    
+                    <!-- cart -->
+
+                </div><!-- End .header-right -->
+            </div><!-- End .container -->
+        </div><!-- End .header-middle -->
+        
+    </header><!-- End .header -->
+
+    
+    

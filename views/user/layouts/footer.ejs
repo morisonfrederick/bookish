@@ -1,0 +1,215 @@
+<!-- cart alert  -->
+
+<div id="cartAlert" data-aos="fade-up" class="alert col-md-3 col-4 text-white fixed-bottom" style="display: none; left: 40%; bottom: 80px; border-radius: 7px; opacity: 0.9; background-color: rgb(85, 85, 85);" role="alert">
+    <div class="d-flex justify-content-center">
+        <dotlottie-player src="https://lottie.host/b0e85bf2-581b-4d27-8dd5-0c0e4b495dc2/QjXQ7zZA3T.json" background="transparent" speed="0.7" style="width: 50px; height: 50px;" direction="1" loop autoplay></dotlottie-player>
+        <p class="alert-heading d-flex align-items-center">Product Added to Your Cart</p>
+    </div>
+</div>
+
+<div id="cartAlertAlready" data-aos="fade-up" class="bg-dark alert col-md-3 col-4 text-white fixed-bottom" style="display: none; left: 40%; bottom: 80px; border-radius: 7px; ; " role="alert">
+    <div class="d-flex justify-content-center">
+        <dotlottie-player src="https://lottie.host/675b522a-b663-4399-9a90-0f4800918a0f/JWak9AXJkj.json" background="transparent" speed="1" style="width: 50px; height: 50px;" direction="1" loop autoplay></dotlottie-player>
+        <p class="alert-heading d-flex align-items-center " >This product Already in Your Cart</p>
+    </div>
+</div>
+
+<!-- wishalret -->
+<div id="wishAlert" data-aos="fade-up" class="alert col-md-3 col-4 text-white fixed-bottom" style="display: none; left: 40%; bottom: 80px; border-radius: 7px; opacity: 0.9; background-color: rgb(85, 85, 85);" role="alert">
+    <div class="d-flex justify-content-center">
+        <dotlottie-player src="/user/icon-lot/wishlist3.lottie" background="transparent" speed="0.6" style="width: 80px; height: 80px;" direction="1" loop autoplay></dotlottie-player>
+        <p class="alert-heading d-flex align-items-center">Product Added to Your Wishlist</p>
+    </div>
+</div>
+<div id="wishAlertAlready" data-aos="fade-up" class="bg-dark alert col-md-3 col-4 text-white fixed-bottom" style="display: none; left: 40%; bottom: 80px; border-radius: 7px; ; " role="alert">
+    <div class="d-flex justify-content-center">
+        <dotlottie-player src="/user/icon-lot/alreadyWish.lottie" background="transparent" speed="1" style="width: 80px; height: 80px;" direction="1" loop autoplay></dotlottie-player>
+        <p class="alert-heading d-flex align-items-center " >This product Already in Your Wishlist</p>
+    </div>
+</div>
+<div id="noStockAlert" data-aos="fade-up" class="bg-dark alert col-md-3 col-4 text-white fixed-bottom" style="display: none; left: 40%; bottom: 80px; border-radius: 7px; ; " role="alert">
+    <div class="d-flex justify-content-center">
+        <dotlottie-player src="/user/icon-lot/outofstock.lottie" background="transparent" speed="0.7" style="width: 90px; height: 90px;" direction="1" loop autoplay></dotlottie-player>
+        <p class="alert-heading d-flex align-items-center " >No Stock Avilable</p>
+    </div>
+</div>
+
+<div class="content-wrapper ">
+    <div id="FormAlert" data-aos="fade-down" class="alert alert-danger col-md-4 col-8 mx-auto fixed-top "
+    style=" display: none; top:30px; border-radius: 7px; opacity: 0.9; z-index: 1000000;" role="alert">
+    <h6 class="alert-heading text-center ">Please provide only valid data.</h6>
+    <hr>
+    <span class="row mb-1 m-auto"><i class="fa-sharp fa-light fa-circle-xmark fa-shake" style="color: #ffffff; font-size: 18px;"></i> &nbsp;&nbsp;&nbsp; <p id="ValidErrMess" class=" text-white"></p></span>
+     
+ </div>
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.5/lottie.min.js'></script>
+<script>
+    var animation = bodymovin.loadAnimation({
+        container: document.getElementById('animContainer'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'https://lottie.host/87abf9d2-a834-4f06-b667-26985786b0ba/0vh9JAhgi8.json' // lottie file path
+    })
+</script>
+<footer class="footer footer-dark">
+    <div class="footer-middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="widget widget-about">
+                        <a href="/"><img src="/user/images/logo/logo-dark.png" class="footer-logo" alt="Footer Logo"
+                                width="105" height="25"></a>
+                            <p> We provides a convenient and accessible way for book lovers to discover new titles, explore different genres, and buy books from the comfort of their own home. </p>
+                        <div class="social-icons">
+                            <a href="#" class="social-icon" title="Facebook" target="_blank"><i
+                                    class="icon-facebook-f"></i></a>
+                            <a href="#" class="social-icon" title="Twitter" target="_blank"><i
+                                    class="icon-twitter"></i></a>
+                            <a href="#" class="social-icon" title="Instagram" target="_blank"><i
+                                    class="icon-instagram"></i></a>
+                            <a href="#" class="social-icon" title="Youtube" target="_blank"><i
+                                    class="icon-youtube"></i></a>
+                            <a href="#" class="social-icon" title="Pinterest" target="_blank"><i
+                                    class="icon-pinterest"></i></a>
+                        </div><!-- End .soial-icons -->
+                    </div><!-- End .widget about-widget -->
+                </div><!-- End .col-sm-6 col-lg-3 -->
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="widget">
+                        <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
+
+                        <ul class="widget-list">
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">How to shop on Bookish</a></li>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Contact us</a></li>
+                            <li><a href="/login">Log in</a></li>
+                        </ul><!-- End .widget-list -->
+                    </div><!-- End .widget -->
+                </div><!-- End .col-sm-6 col-lg-3 -->
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="widget">
+                        <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
+
+                        <ul class="widget-list">
+                            <li><a href="#">Payment Methods</a></li>
+                            <li><a href="#">Money-back guarantee!</a></li>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">Shipping</a></li>
+                            <li><a href="#">Terms and conditions</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                        </ul><!-- End .widget-list -->
+                    </div><!-- End .widget -->
+                </div><!-- End .col-sm-6 col-lg-3 -->
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="widget">
+                        <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
+
+                        <ul class="widget-list">
+                            <li><a href="#">Sign In</a></li>
+                            <li><a href="#">View Cart</a></li>
+                            <li><a href="#">My Wishlist</a></li>
+                            <li><a href="#">Track My Order</a></li>
+                            <li><a href="#">Help</a></li>
+                        </ul><!-- End .widget-list -->
+                    </div><!-- End .widget -->
+                </div><!-- End .col-sm-6 col-lg-3 -->
+            </div><!-- End .row -->
+        </div><!-- End .container -->
+    </div><!-- End .footer-middle -->
+
+    <div class="footer-bottom">
+        <div class="container">
+            <p class="footer-copyright">Copyright © 2024 Bookish. All Rights Reserved.</p><!-- End .footer-copyright -->
+            <figure class="footer-payments">
+                <img src="/user/images/payments.png" alt="Payment methods" width="272" height="20">
+            </figure><!-- End .footer-payments -->
+        </div><!-- End .container -->
+    </div><!-- End .footer-bottom -->
+</footer><!-- End .footer -->
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div>
+
+<div class="mobile-menu-container">
+    <div class="mobile-menu-wrapper">
+        <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+        <form action="#" method="get" class="mobile-search">
+            <label for="mobile-search" class="sr-only">Search</label>
+            <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..."
+                required>
+            <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+        </form>
+
+        <nav class="mobile-nav">
+            <ul class="mobile-menu">
+                <li class="active">
+                    <a href="/">Home</a>
+
+
+                </li>
+
+                <% if(currentUser) {%>
+                    <li>
+                        <a href="/profile">My Account</a>
+                    </li>
+                    <li>
+                        <a href="/cart">Cart</a>
+                    </li>
+                    <li>
+                        <a href="/logout">logout</a>
+                    </li>
+                    <% }else{ %>
+                        <li>
+                            <a href="/login">login</a>
+                        </li>
+                        <% } %>
+
+            </ul>
+        </nav><!-- End .mobile-nav -->
+
+        <div class="social-icons">
+            <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+        </div><!-- End .social-icons -->
+    </div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+<script src="/user/js/formValidations.js"></script>
+
+<!-- Plugins JS File -->
+<script src="/user/js/jquery.min.js"></script>
+<script src="/user/js/bootstrap.bundle.min.js"></script>
+<script src="/user/js/jquery.hoverIntent.min.js"></script>
+<script src="/user/js/jquery.waypoints.min.js"></script>
+<script src="/user/js/superfish.min.js"></script>
+<script src="/user/js/jquery.elevateZoom.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+
+<script src="/user/js/owl.carousel.min.js"></script>
+<!-- Main JS File -->
+<script src="/user/js/main.js"></script>
+
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
+
+</body>
+
+
+
+</html>

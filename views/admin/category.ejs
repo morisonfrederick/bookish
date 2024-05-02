@@ -1,0 +1,202 @@
+<%- include('../admin/layouts/header.ejs') %>
+    <div class="main-panel">
+        <div class="content-wrapper">
+
+            <!-- list categories  -->
+            <div class="row ">
+                <div class="col-12 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between">
+                                <h4 class="card-title">Category Management</h4>
+                            </div>
+                            <hr class="white-line my-4">
+                            <!-- search category start  -->
+                            <div class="mb-5 ">
+                                <ul class="navbar-nav w-100">
+                                    <li class="nav-item w-100">
+                                        <!-- d-none -->
+                                        <form action="/admin/category/search" method="get"
+                                            class="nav-link mt-2 mt-md-0 col-12 d-lg-flex search">
+                                            <input type="text" name="key" class="form-control mb-1 text-light"
+                                                placeholder="Search Category">
+                                            <button type="submit" class="btn-inverse-info mb-1"> search </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- search category end  -->
+
+                            <!-- category list start  -->
+                            <div class="table-responsive">
+                                <% if(categories.length==0){ %>
+                                    <p class="text-center ">No Categories found</p>
+                                    <%}else{%>
+                                        <table class="table text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th> Category Name </th>
+                                                    <th> Remove</th>
+                                                    <!-- <th> Action</th> -->
+                                                    <th> Edit</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for(i in categories){ %>
+
+                                                    <tr>
+                                                        <td>
+                                                            <%if(categories[i].categoryName.length>15){%>
+                                                                <%= categories[i].categoryName.substring(0, 15) + "..." %>
+                                                            <%}else{%>
+                                                                <%= categories[i].categoryName %>
+                                                            <%}%>
+                                                        </td>
+                                                        <td>
+                                                            <!-- <a href="/admin/category/delete?id=<%= categories[i]._id %>" class="btn btn-inverse-danger">Delete Item</a> -->
+                                                            <button type="button" class="btn btn-inverse-danger"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#mod<%= categories[i]._id %>">
+                                                                Delete Item
+                                                            </button>
+
+                                                            <!-- Modal -->
+                                                            <div class="modal fade" id="mod<%= categories[i]._id %>"
+                                                                tabindex="-1" aria-labelledby="exampleModalLabel"
+                                                                aria-hidden="true">
+                                                                <div class="modal-dialog modal-dialog-centered">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <!-- <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                                                        Modal title</h1> -->
+                                                                            <p class="modal-title "> <b
+                                                                                    class="mdi mdi-comment-alert text-warning"></b>
+                                                                                Are you sure you want to
+                                                                                delete this Category</p>
+                                                                            <button type="button"
+                                                                                class=" btn mdi mdi-close"
+                                                                                data-bs-dismiss="modal"
+                                                                                aria-label="Close"></button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+
+                                                                            <div class="card mb-3 bg-dark"
+                                                                                style="max-width: 540px;">
+                                                                                <div class="row g-0 ">
+                                                                                    
+                                                                                    <div class="col-md-9 ">
+                                                                                        <div
+                                                                                            class="card-body text-start">
+                                                                                            <h4 class="card-title ">
+                                                                                                <%if(categories[i].categoryName.length>15){%>
+                                                                                                    <%= categories[i].categoryName.substring(0, 15) + "..." %>
+                                                                                                <%}else{%>
+                                                                                                    <%= categories[i].categoryName %>
+                                                                                                <%}%>
+                                                                                            </h4>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="modal-footer">
+                                                                                <button type="button"
+                                                                                    class="btn btn-outline-light"
+                                                                                    data-bs-dismiss="modal">Not
+                                                                                    Now</button>
+                                                                                <a type="button"
+                                                                                    href="/admin/category/delete/<%= categories[i]._id %>"
+                                                                                    class="btn btn-inverse-danger">Delete
+                                                                                    Now</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <!-- <td>
+                                                            <% if (categories[i].isDeleted==1) { %>
+                                                                <button data-id="<%= categories[i]._id %>"
+                                                                    onclick="blockCategory('<%= categories[i]._id %>')"
+                                                                    class="btn btn-inverse-warning">unblock</button>
+                                                                <% } else { %>
+                                                                    <button data-id="<%= categories[i]._id %>"
+                                                                        onclick="blockCategory('<%= categories[i]._id %>')"
+                                                                        class="btn btn-inverse-success">blockeee</button>
+                                                                    <% } %>
+                                                        </td> -->
+                                                        <td>
+                                                            <a type="button" class="btn btn-inverse-info"
+                                                            href="/admin/category/edit/<%= categories[i]._id %>">
+                                                                Edit Item
+                                                        </a>
+                                                        </td>
+
+                                                    </tr>
+                                                    <%}%>
+                                                        <!-- <tr>
+                                        <td>
+                                            <% if(categories.length==0){ %>
+                                                <p class="text-center" >no Categories</p>
+                                                <%}%>
+                                        </td>
+                                    </tr> -->
+
+
+                                            </tbody>
+                                        </table>
+                                        <%}%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- add ne category form  -->
+            <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Add New Category</h4>
+                        <!-- <p class="card-description"> Basic form elements </p> -->
+                        <hr class="white-line">
+                        <form class="forms-sample" action="/admin/category" method="post" onsubmit="return categoryValidation()">
+
+                            <div class="form-group  row">
+                                
+                                <div class="col-12 col-md-9 mt-2">
+                                    <label for="categoryName">Category Name</label>
+                                    <input type="text" class="form-control  text-light" name="name"
+                                        id="categoryName" placeholder="name" >
+                                    <button type="submit" class="btn btn-lg btn-inverse-primary mr-2 mt-5">Add
+                                        Category</button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+            <div class="content-wrapper ">
+                <div id="FormAlert" data-aos="fade-down" class="alert alert-danger col-md-4 col-8 mx-auto fixed-top "
+                style="display: none;  top:30px; border-radius: 7px; opacity: 0.9; " role="alert">
+                <h6 class="alert-heading text-center">Please provide only valid data.</h6>
+                <hr>
+                <span class="row "><i class="fa-sharp fa-light fa-circle-xmark fa-shake" style="color: #ff0505; font-size: 18px;"></i> &nbsp;&nbsp;&nbsp; <p id="ValidErrMess"></p></span>
+                 
+            </div>
+        </footer>
+        <!-- partial -->
+    </div>
+
+    <%- include('../admin/layouts/footer.ejs') %>

@@ -1,0 +1,68 @@
+<%- include('../admin/layouts/header.ejs') %>
+    <div class="main-panel">
+        <div class="content-wrapper">
+
+            <!-- list categories  -->
+            <div class="row ">
+                <div class="col-12 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between">
+                                <h4 class="card-title">Category Management</h4>
+                            </div>
+                            <hr class="white-line my-4">
+                            
+
+                            <!-- category list start  -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit  category form  -->
+            <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Edit  Category</h4>
+                        <!-- <p class="card-description"> Basic form elements </p> -->
+                        <hr class="white-line">
+                        <form class="forms-sample" action="/admin/category/edit/<%= categories._id %>?_method=PUT" method="post" onsubmit="return categoryValidation()">
+
+                            <div class="form-group  row">
+                                
+                                <div class="col-12 col-md-9 mt-2">
+                                    <label for="categoryName">Category Name</label>
+                                    <input type="text" class="form-control  text-light" name="name"
+                                        id="categoryName" placeholder="name" value="<%= categories.categoryName %>" >
+                                    <button type="submit" class="btn btn-lg btn-inverse-primary mr-2 mt-5">Edit
+                                        Category</button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+            <div class="content-wrapper ">
+                <div id="FormAlert" data-aos="fade-down" class="alert alert-danger col-md-4 col-8 mx-auto fixed-top "
+                style="display: none;  top:30px; border-radius: 7px; opacity: 0.9; " role="alert">
+                <h6 class="alert-heading text-center">Please provide only valid data.</h6>
+                <hr>
+                <span class="row "><i class="fa-sharp fa-light fa-circle-xmark fa-shake" style="color: #ff0505; font-size: 18px;"></i> &nbsp;&nbsp;&nbsp; <p id="ValidErrMess"></p></span>
+                 
+            </div>
+        </footer>
+        <!-- partial -->
+    </div>
+
+    <%- include('../admin/layouts/footer.ejs') %>

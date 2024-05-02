@@ -1,0 +1,101 @@
+<%- include('../user/layouts/header.ejs') %>
+    <%- include('../user/layouts/navbar.ejs') %>
+
+        <main class="main">
+            <div class="page-header text-center " style="background-image: url('/user/images/background.png')">
+                <div class="container">
+                    <h1 class="page-title text-white">My Account</h1>
+                </div><!-- End .container -->
+            </div><!-- End .page-header -->
+            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a>Your Account</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">all Orders</li>
+
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            
+                <div class="container-fluid d-flex flex-column justify-content-center py-5">
+                    
+                    <table class="table container">
+                        <thead>
+                          <tr>
+                            <th scope="col" colspan="2">Book name</th>
+                            <th scope="col">Qty</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Cancel</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% order.products.forEach(book => { %>
+                          
+                          <tr>
+                            <td><img class="check-image" src="/images/<%=book.product.imageUrl  %>" alt="">
+                            </td>
+                            <td><%= book.product.name %></td>
+                            <td><%= book.quantity %></td>
+                            <td><%= book.quantity * book.product.price %></td>
+                            <td><%= book.individulOrderStatus %></td>
+                            <td><button onclick="if(confirm('Are you sure you want to cancel this order')) cancelOrder('<%= order._id %>','<%= book._id %>')">Cancel Order</button></td>
+            
+            
+                          </tr>
+                          <% }) %>
+                          
+                          <tr>
+                            <th colspan="3" class="text-end">Total Price</th>
+                            <td><%= order.totalPrice %></td>
+                          </tr>
+                          <tr>
+                            <th colspan="3" class="text-end">Order Status</th>
+                            <td><%= order.orderStatus  %></td>
+                          </tr>
+                          <tr>
+                            <td colspan="4"><button onclick="if(confirm('Are you sure to cancel this order?')) cancelOrder('<%= order._id %>')">Cancel All Orders</button></td>
+                            
+                          </tr>
+                          
+                        </tbody>
+                      </table>
+
+             </div>
+
+
+        </main>
+
+        
+        
+
+
+      
+  <script>
+    async function cancelOrder(ID,productId){
+      try{
+          const response =await fetch("/home/account/orders/details/"+ID,{
+          method : "PATCH",
+          headers : {
+              "content-type":"application/json"
+          },
+          body: JSON.stringify({id:ID,productsId:productId})
+      })
+      const data = await response.json()
+          console.log(data)
+              window.location.reload();
+
+          // let note = document.getElementById("notification")
+          // note.innerText=data.message
+          
+      }
+      catch(err){
+          console.log(err);
+      }
+
+  }
+    
+</script>          
+
+        <%- include('../user/layouts/footer.ejs') %>

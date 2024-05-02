@@ -1,0 +1,90 @@
+<%- include('../admin/layouts/header.ejs') %>
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+
+
+
+
+            <div class="row ">
+                <div class="col-12 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between">
+                                <h4 class="card-title">
+                                    <p class=""></p>Banner Management
+                                </h4>
+
+                            </div>
+                            <hr class="white-line my-4">
+                            <form action="/admin/banner" method="post" enctype="multipart/form-data">
+
+                                <div class="mb-5 col-12 row d-flex justify-content-between" style="height: auto;">
+                                    <div class=" rounded-image-preview mx-auto" style="width: auto; height: auto;">
+                                        <h3>Banner <span id="BannerNumber"></span></h3>
+                                        <label for="imageInput1" class="image-label">
+                                            <div class=" rounded-image-preview"
+                                            style="width: auto; border-radius: 7px; overflow: hidden; position: relative; text-align: center;">
+                                            <img id="imagePreview1" src="/products/banner/<%= banner.image %>"
+                                            alt="Preview" />
+                                        </div>
+                                        <input name="image" type="file" accept="image/*" id="imageInput1" class="imageInput form-control">
+                                       </label>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="mb-1">
+                                            <label for="subhead" class="form-label m-0">Sub Head</label>
+                                            <input type="text" value="<%= banner.subtext%>" class="form-control address-input" id="subhead" name="subhead">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="Titile" class="form-label m-0">Title</label>
+                                            <input type="text" value="<%= banner.mainHead%>" class="form-control address-input" id="Titile" name="Titile">
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="link" class="form-label m-0">Link</label>
+                                            <input type="text" value="<%= banner.link%>" class="form-control address-input" id="link" name="link">
+                                        </div>
+                                        <input type="number" hidden name="bannerTarget" id="bannerTarget">
+                                        <button class="btn btn-inverse-primary mt-2 " type="submit" >
+                                        Update</button>
+                                    </div>    
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- content-wrapper ends -->
+
+
+
+
+
+
+            <footer class="footer">
+
+            </footer>
+            <!-- partial -->
+        </div>
+
+        <script>
+            function autoLoad(){
+              const queryString = window.location.search;
+              const urlSearchParams = new URLSearchParams(queryString);
+              const targetBanner = urlSearchParams.get('banner');
+              if(!targetBanner || targetBanner>=4 || targetBanner<=0){
+                window.location.href="/admin/banner"
+              }
+              document.getElementById("bannerTarget").value = targetBanner
+              document.getElementById("BannerNumber").innerHTML = targetBanner
+              
+            }
+
+            window.onload = autoLoad
+        </script>
+        <%- include('../admin/layouts/footer.ejs') %>

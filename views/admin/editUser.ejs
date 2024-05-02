@@ -1,0 +1,72 @@
+<%- include('../admin/layouts/header.ejs') %>
+
+<div class="main-panel">
+    <div class="content-wrapper">
+
+
+
+
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Edit user Details</h4>
+                <form class="forms-sample" action="/admin/edituser?id=<%= user[0]._id %>" onsubmit="return validUserEditForm()" method="post">
+
+                  <div class="form-group row">
+                    <div class="col-6">
+                      
+                        <label for="userName">User Name <span class="text-danger">*</span></label>
+                        <input type="text" name="userName" class="form-control text-light" value="<%= user[0].userName %>" id="userName">
+                    </div>
+                    <div class="col-6">
+                        <label for="fullName">Full Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control text-light" name="fullName" value="<%= user[0].fullName %>" id="fullName" placeholder="Name">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="email">Email address <span class="text-danger">*</span></label>
+                    <input type="email" name="email" class="form-control text-light" value="<%= user[0].email %>" id="email" >
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword4">Address</label>
+                    <input type="text" class="form-control text-light" name="shippingAddress" value="<%= user[0].address.shippingAddress %>" id="exampleInputPassword4" >
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-6">
+                      
+                        <label for="exampleInputName1">State</label>
+                        <input type="text" class="form-control text-light" name="state" value="<%= user[0].address.state %>" id="exampleInputName1">
+                    </div>
+                    <div class="col-6">
+                        <label for="exampleInputName1">Pin Code</label>
+                        <input type="number" class="form-control text-light" name="pincode" value="<%= user[0].address.pincode %>" id="exampleInputName1" >
+                    </div>
+                  </div>
+
+                  
+                  <button type="submit" class="btn btn-primary mr-2">Updatet Data</button>
+                  <!-- <button class="btn btn-dark">Cancel</button> -->
+                </form>
+              </div>
+            </div>
+          </div>
+
+
+    </div>
+    <!-- content-wrapper ends -->
+    <!-- partial:partials/_footer.html -->
+    <footer class="footer">
+      <div class="content-wrapper ">
+        <div id="FormAlert" data-aos="fade-down" class="alert alert-danger col-md-4 col-8 mx-auto fixed-top "
+        style="display: none;  top:30px; border-radius: 7px; opacity: 0.9; " role="alert">
+        <h6 class="alert-heading text-center">Please provide only valid data.</h6>
+        <hr>
+        <span class="row "><i class="fa-sharp fa-light fa-circle-xmark fa-shake" style="color: #ff0505; font-size: 18px;"></i> &nbsp;&nbsp;&nbsp; <p id="ValidErrMess"></p></span>
+         
+    </div>
+    </footer>
+    <!-- partial -->
+</div>
+
+<%- include('../admin/layouts/footer.ejs') %>

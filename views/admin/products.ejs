@@ -1,0 +1,163 @@
+<%- include('../admin/layouts/header.ejs') %>
+    <div class="main-panel">
+        <div class="content-wrapper">
+
+
+
+
+            <div class="row ">
+                <div class="col-12 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+                            <% if (locals.errors) { %>
+                                <% locals.errors.forEach(function(error) { %>
+                                    <div class="alert alert-danger" role="alert">
+                                        <%= error.msg %>
+                                    </div>
+                                <% }) %>
+                            <% } %>
+                            <!-- <p>error message</p> -->
+
+                            <div class="d-flex justify-content-between">
+                                
+                                <h4 class="card-title">All Products</h4>
+                                <a href="/admin/books/add"
+                                    class="btn btn-outline-success d-flex align-items-center">&nbsp<b>+ </b> &nbsp add
+                                    product</a>
+                            </div>
+                            <hr class="white-line my-4">
+                            <div class="mb-5 ">
+                                <ul class="navbar-nav w-100">
+                                    <li class="nav-item w-100">
+                                        <!-- d-none -->
+                                        <form method="post" action="/admin/users"
+                                            class="nav-link mt-2 mt-md-0 col-12 d-lg-flex search">
+                                            <input type="text" name="name" class="form-control mb-1 text-light"
+                                                placeholder="Search Products">
+                                            <button type="submit" class="btn-inverse-info mb-1"> search </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th> Image </th>
+                                            <th> Titile </th>
+                                            <th> Category </th>
+                                            <th> Price </th>
+                                            <th> Stock Status</th>
+                                            <!-- <th> Edit</th> -->
+                                            <th> Remove</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <p><%= book.name %></p>
+                                        <% for( let i = 0; i < book.length; i++ ) { %>
+                                            <p><%= book.name %></p>
+                                            <tr>
+                                                <!-- list -->
+                                                <td>
+                                                    <img class="rounded product-img-preview"
+                                                        src="/products/images/<%= book[i].imageUrl[0]  %>"
+                                                        alt="image" />
+                                                    
+                                                </td>
+                                                <td >
+                                                    <%= book[i].name  %>
+                                                </td>
+                                                <td>
+                                                    <%= book[i].category  %>
+                                                </td>
+                                                <td>
+                                                    <%= book[i].price  %>
+                                                </td>
+                                                <td>
+                                                    <% if (book[i].stock<1) { %>
+                                                        <span class="text-danger text-center">Out Of Stock </span>
+
+                                                    <% } else { %>
+                                                        <span class="text-success text-center">In Stock </span>
+
+                                                    <% } %>
+                                                        
+                                                            
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/books/edit/<%= book[i]._id  %>"
+                                                        class="btn btn-inverse-info">Edit Product</a>
+                                                </td>
+                                                <td>
+                                                         
+                                                            <button  onclick="if(confirm('Are you sure you want to delete  <%= book[i].name %>?')) deleteNow('<%= book[i]._id %>')"  class="btn btn-inverse-success">Delete</button>
+                     
+                                                </td>
+                                            </tr>
+                                            <% } %>
+
+                                                <!-- list -->
+
+                                    </tbody>
+                                </table>
+                            </div>
+                         <!-- pagination  -->
+          <!-- pagination  -->
+<nav aria-label="Page navigation example" class="mt-3 d-flex justify-content-center">
+    <ul class="pagination ">
+      <li class="page-item"><a class="page-link text-light" href="?page=<%= Math.max(1, page-1) %>">Previous</a></li>
+      <% for(let i = 1; i <= totalPages; i++) { %>
+        <li class="page-item <%= i === page ? 'active bg-secondary' : '' %>"><a class="page-link text-white" href="?page=<%= i %>"><%= i %></a></li>
+      <% } %>
+      <li class="page-item text-light"><a class="page-link text-light" href="?page=<%= Math.min(totalPages, page+1) %>">Next</a></li>
+    </ul>
+  </nav>
+  
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+           
+            <!-- <div id="myAlert" data-aos="fade-down" class="alert alert-success col-3 fixed-top "
+            style="left: 20px; top:20px; border-radius: 7px; opacity: 0.9; z-index: 10000;" role="alert">
+            <h6 class="alert-heading text-center">New Product Added <i class="fa-duotone fa-box-open-full fa-bounce"></i></h6>
+         </div> -->
+         
+         <!-- <div id="myAlert" data-aos="fade-down" class="alert alert-success col-3 fixed-top "
+            style="left: 20px; top:20px; border-radius: 7px; opacity: 0.9; z-index: 10000;" role="alert">
+            <h6 class="alert-heading text-center">Product Details Edited <i class="fa-duotone fa-box-open-full fa-shake"></i></h6>
+         </div> -->
+        
+        </footer>
+        <!-- partial -->
+    </div>
+    <script>
+       async function deleteNow(ID){
+        try{
+            const response =await fetch("/admin/books/delete/"+ID,{
+            method : "DELETE",
+            headers : {
+                "content-type":"application/json"
+            },
+            body: JSON.stringify({_id:ID})
+        })
+        const data = await response.json()
+            console.log(data)
+            window.location.reload()
+        }
+        catch(err){
+            console.log(err);
+        }
+
+    }
+
+    </script>
+    <%- include('../admin/layouts/footer.ejs') %>

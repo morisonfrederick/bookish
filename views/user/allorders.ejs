@@ -1,0 +1,97 @@
+<%- include('../user/layouts/header.ejs') %>
+    <%- include('../user/layouts/navbar.ejs') %>
+
+        <main class="main">
+            <div class="page-header text-center " style="background-image: url('/user/images/background.png')">
+                <div class="container">
+                    <h1 class="page-title text-white">My Account</h1>
+                </div><!-- End .container -->
+            </div><!-- End .page-header -->
+            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a>Your Account</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">all Orders</li>
+
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            
+                <div class="container-fluid d-flex flex-column justify-content-center py-5">
+                    <div class="table-responsive"></div>
+                    <table class="table container">
+                        <% order.forEach(selectedOrder => { %>
+                        <thead>
+                          <tr>
+                            <th scope="col">order ID</th>
+                            <th scope="col">Book name</th>
+                            <th scope="col">Qty</th>
+                            <th scope="col">amount</th>
+                            <th scope="col">status</th>
+                          </tr>
+                        </thead>
+            
+                        <tbody>
+                          <% selectedOrder.products.forEach(book => { %>
+                            <% if (book.individulOrderStatus!="Cancel") { %>
+                              <tr>
+                                <td onclick="orderDetails('<%=selectedOrder._id %>')"><%= selectedOrder.orderNumber %></td>
+                                <td><%= book.product.name %></td>
+                                <td><%= book.quantity %></td>
+                                <td><%= book.quantity * book.product.price %></td>
+                                <td><%= book.individulOrderStatus %></td>
+                              </tr>
+                            <% } %>
+                          
+                          
+                          
+                          <% }) %>
+                          <tr class="red-line">
+                            <td colspan="5" class="profile-line"></td>
+                          </tr>
+                          <% }) %>
+                          
+                        </tbody>
+                      </table>
+
+             </div>
+
+
+        </main>
+
+        
+        
+
+
+        <script>
+            async function cancelOrder(ID){
+              try{
+                  const response =await fetch("/home/account/orders/"+ID,{
+                  method : "PATCH",
+                  headers : {
+                      "content-type":"application/json"
+                  },
+                  body: JSON.stringify({_id:ID})
+              })
+              const data = await response.json()
+                  console.log(data)
+                      window.location.reload();
+      
+                  // let note = document.getElementById("notification")
+                  // note.innerText=data.message
+                  
+              }
+              catch(err){
+                  console.log(err);
+              }
+      
+          }
+      
+          function orderDetails(id){
+            window.location.href = "/home/account/orders/details/"+id
+          }
+            
+        </script>          
+
+        <%- include('../user/layouts/footer.ejs') %>

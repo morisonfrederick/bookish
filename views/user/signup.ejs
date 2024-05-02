@@ -1,0 +1,231 @@
+<%- include('../user/layouts/header.ejs') %>
+<%- include('../user/layouts/header.ejs') %>
+<%- include('../user/layouts/navbar.ejs') %>
+
+	<main class="main"  ;>
+
+
+		<div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
+			>
+			<div class="container">
+				<div class="form-box">
+					<div class="form-tab">
+						<ul class="nav nav-pills nav-fill" role="tablist">
+
+							<li class="nav-item">
+								<a class="nav-link active" id="register-tab-2" data-toggle="tab" 
+									role="tab" aria-controls="register-2" aria-selected="true">Register</a>
+							</li>
+						</ul>
+						<div class="tab-content">
+
+							<div class="tab-pane fade show active" id="register-2" role="tabpanel"
+								aria-labelledby="register-tab-2">
+
+								<form action="/home/signup" method="post">
+									<div class="form-group">
+										<label for="register-username">First Name *</label>
+										<input type="text" class="form-control" id="register-username" name="firstname" required>
+									</div>
+									<div class="form-group">
+										<label for="register-fullname">Last Name *</label>
+										<input type="text" class="form-control" id="register-fullname" name="lastname" required>
+									</div>
+									<div class="form-group">
+										<label for="register-email">Your email address *</label>
+										<input type="email" class="form-control" id="register-email" name="email" required>
+									</div>
+									<div class="form-group">
+										<label for="register-email">Your phone number *</label>
+										<input type="text" class="form-control" id="register-phone" name="phone" required>
+									</div>
+									<div class="form-group">
+										<label for="register-password">Password *</label>
+										<input type="password" class="form-control" id="register-password" name="password" required>
+									</div>
+									<div class="form-group">
+										<label for="register-confirm-password">Confirm password *</label>
+										<input type="password" class="form-control" id="register-confirm-password" required>
+										<p id="password-match-error" style="color: red; font-size: 12px;"></p>
+									</div>
+									<div class="form-footer">
+										<button type="submit" class="btn btn-outline-primary-login py-4 w-100">
+											<span>SIGN UP</span>
+											<i class="icon-long-arrow-right"></i>
+										</button>
+									</div>
+								</form>
+								
+								<div class="text-center">
+									<a href="/home/login">Already have an account? login</a>
+								</div>
+								<button><a href='/home/auth/google'>Login With Google</a></button>
+
+
+							</div><!-- .End .tab-pane -->
+						</div><!-- End .tab-content -->
+					</div><!-- End .form-tab -->
+				</div><!-- End .form-box -->
+			</div><!-- End .container -->
+		</div><!-- End .login-page section-bg -->
+	</main><!-- End .main -->
+	<div id="FormAlert" data-aos="fade-down" class="alert alert-danger col-3 fixed-top "
+        style="display: none; left: 20px; top:20px; border-radius: 7px; opacity: 0.9;" role="alert">
+        <h6 class="alert-heading">Registration Validation Failed</h6>
+         <p id="FormErorr" class="fs-6 form-text text-white"></p>
+    </div>
+	<script>
+
+		
+         function showFormValidAlert() {
+            console.log("alert fun called...");
+            $("#FormAlert").fadeIn();
+    
+            setTimeout(function () {
+            $("#FormAlert").fadeOut();
+            }, 5000);
+         }
+
+		
+		const passwordField = document.getElementById("register-password");
+		const confirmPasswordField = document.getElementById("register-confirm-password");
+		const passwordMatchError = document.getElementById("password-match-error");
+
+		// Function to check if passwords match and apply/remove the red border
+		function checkPasswordsMatch() {
+			const password = passwordField.value;
+			const confirmPassword = confirmPasswordField.value;
+
+			if (password === confirmPassword) {
+				passwordMatchError.textContent = ""; // Passwords match, clear the error message
+				confirmPasswordField.style.border = "1px solid #ced4da"; // Remove red border
+			} else {
+				passwordMatchError.textContent = "Passwords do not match!";
+				confirmPasswordField.style.border = "1px solid red"; // Apply red border
+			}
+		}
+
+		// Add an event listener to the confirm password field to check for matching passwords
+		confirmPasswordField.addEventListener("keyup", checkPasswordsMatch)
+	</script>
+	<!-- <script>
+		document.querySelector('form').addEventListener('submit', function(event) {
+			const emailInput = document.querySelector('#register-email');
+			const emailValue = emailInput.value;
+			const emailPattern = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
+	
+			if (!emailPattern.test(emailValue)) {
+				alert('Invalid email address. Please enter a valid email.');
+				emailInput.focus();
+				event.preventDefault();
+			}
+		});
+	</script> -->
+	<!-- FormErorr.innerHTML=""
+				showFormValidAlert() -->
+	<script>
+		document.querySelector('form').addEventListener('submit', function(event) {
+			function resetCountdownStorage() {
+				localStorage.removeItem("timeLeft");
+  			}
+			const FormErorr = document.getElementById("FormErorr")
+			const usernameInput = document.querySelector('#register-username');
+			const fullNameInput = document.querySelector('#register-fullname');
+			const emailInput = document.querySelector('#register-email');
+			const passwordInput = document.querySelector('#register-password');
+			const confirmPasswordInput = document.querySelector('#register-confirm-password');
+			const usernameValue = usernameInput.value;
+			const fullNameValue = fullNameInput.value;
+			const emailValue = emailInput.value;
+			const passwordValue = passwordInput.value;
+			const confirmPasswordValue = confirmPasswordInput.value;
+	
+			if (usernameValue.trim() === "") {
+				// alert('User Name cannot be blank. Please enter a valid User Name.');
+				FormErorr.innerHTML="User Name cannot be blank. Please enter a valid User Name."
+				showFormValidAlert()
+				usernameInput.focus();
+				event.preventDefault();
+			}
+	
+			if (fullNameValue.trim() === "") {
+				// alert('Full Name cannot be blank. Please enter a valid Full Name.');
+				FormErorr.innerHTML="Full Name cannot be blank. Please enter a valid Full Name."
+				showFormValidAlert()
+				fullNameInput.focus();
+				event.preventDefault();
+			}
+	
+			if (emailValue.trim() === "") {
+				// alert('Email cannot be blank. Please enter a valid email address.');
+				FormErorr.innerHTML="Email cannot be blank. Please enter a valid email address."
+				showFormValidAlert()
+				emailInput.focus();
+				event.preventDefault();
+			} else {
+				const emailPattern = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
+				if (!emailPattern.test(emailValue)) {
+					// alert('Invalid email address. Please enter a valid email.');
+					FormErorr.innerHTML="Invalid email address. Please enter a valid email."
+					showFormValidAlert()
+					emailInput.focus();
+					event.preventDefault();
+				}
+			}
+	
+			if (passwordValue.length < 6) {
+				// alert('Password must be at least 6 characters long.');
+				FormErorr.innerHTML="Password must be at least 6 characters long."
+				showFormValidAlert()
+				passwordInput.focus();
+				event.preventDefault();
+			} else if (/^(.)\1+$/.test(passwordValue)) {
+				// alert('Password cannot consist of all the same characters.');
+				FormErorr.innerHTML="Password cannot consist of all the same characters."
+				showFormValidAlert()
+				passwordInput.focus();
+				event.preventDefault();
+			}
+	
+			if (passwordValue !== confirmPasswordValue) {
+				// alert('Passwords do not match. Please confirm your password.');
+				FormErorr.innerHTML="Passwords do not match. Please confirm your password."
+				showFormValidAlert()
+				confirmPasswordInput.focus();
+				event.preventDefault();
+			}
+		});
+
+		
+	</script>
+	
+	
+	
+	
+	
+	
+	<%- include('../user/layouts/footer.ejs') %>
+
+
+
+
+		<% if(userNameExistErr===1){ %>
+			<div id="myAlert" data-aos="fade-down"
+				class="alert alert-secondary alert-dismissible fade show fs-6 fixed-top alt text-center text-danger"
+				role="alert">
+				<strong>Uh-oh!</strong> Username already exists. Please choose a different username.
+
+				<!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+				<% }else if(emailExistErr===1) {%>
+					<div id="myAlert1" data-aos="fade-down"
+						class="alert alert-secondary  py-4	 fade show fs-5 fixed-top alt text-center text-danger"
+						role="alert">
+						<strong>Uh-oh!</strong> This email address is already in use. Please select another email
+						address.
+
+						<%}%>
+
+
+
+
+						
