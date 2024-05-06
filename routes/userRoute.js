@@ -139,6 +139,8 @@ router.get("/account/wishlist",wishlistController.wishlistLoad)
 router.post("/account/wishlist",wishlistController.addWishlist)
 router.delete("/account/wishlist",wishlistController.removeWishlist)
 
+router.get("/check",wishlistController.checkLoad)
+
 
 
 module.exports = router;

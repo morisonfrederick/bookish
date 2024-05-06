@@ -11,16 +11,16 @@
                     <div class="card-body">
                         <h4 class="card-title">Edit Coupon</h4>
                         <!-- <p class="card-description"> Basic form elements </p> -->
-                        <form class="forms-sample " action="/admin/coupon/update?id=<%=coupon._id %>" method="post" onsubmit="return validateCouponForm();">
+                        <form class="forms-sample " action="/admin/coupon/edit/<%=coupon._id %>?_method=PUT" method="post" onsubmit="return validateCouponForm();">
 
                             <div class="form-group  row">
                                 <div class="col-6  text-light">
                                     <label for="exampleInputName1">Coupon Code</label>
-                                    <input type="text" class="form-control  text-light" name="code" id="exampleInputName1" value="<%=coupon.code %>" placeholder="code" onkeyup="this.value = this.value.toUpperCase();" required>
+                                    <input type="text" class="form-control  text-light" name="code" id="exampleInputName1" value="<%=coupon.couponCode %>" placeholder="code" onkeyup="this.value = this.value.toUpperCase();" required>
                                 </div>
                                 <div class="col-6">
                                     <label for="exampleInputName1">Discount Amount</label>
-                                    <input type="number" class="form-control text-light" id="exampleInputName1" name="discount_amount" placeholder="price" value="<%=coupon.discount_amount %>" required>
+                                    <input type="number" class="form-control text-light" id="exampleInputName1" name="discount_amount" placeholder="price" value="<%=coupon.discount %>" required>
                                 </div>
 
                             </div>
@@ -35,7 +35,7 @@
                                         <div class="col-sm-12 ">
                                             <label for="start-date" class="col-sm-22 col-form-label">Valid Date
                                                 From</label>
-                                                <input type="text" value="<%=dateFrom.toISOString().slice(0, 10) %>" autocomplete="off" id="start-date" class="form-control text-light" name="validFrom" placeholder="Select Starting Date" required>
+                                                <input type="text" value="<%= coupon.startDate.toLocaleDateString() %>" autocomplete="off" id="start-date" class="form-control text-light" name="start" placeholder="Select Starting Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -47,7 +47,7 @@
                                     <div class="form-group row mx-2 w-100" >
                                         <div class="col-sm-12  ">
                                             <label for="end-date" class="col-sm-22 col-form-label">Valid Date To</label>
-                                            <input type="text" value="<%=dateTo.toISOString().slice(0, 10) %>" autocomplete="off" id="end-date" class="form-control text-light" name="validTo" placeholder="Select Expiring Date" required>
+                                            <input type="text" value="<%=coupon.endDate.toISOString().slice(0, 10) %>" autocomplete="off" id="end-date" class="form-control text-light" name="validTo" placeholder="Select Expiring Date" required>
                                         </div>
                                     </div>
                                 </div>

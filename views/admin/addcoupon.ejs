@@ -11,16 +11,16 @@
                     <div class="card-body">
                         <h4 class="card-title">Add New Coupon</h4>
                         <!-- <p class="card-description"> Basic form elements </p> -->
-                        <form class="forms-sample " action="/admin/coupon/add" method="post" onsubmit="return validateCouponForm();">
+                        <form class="forms-sample " action="/admin/coupon/add" method="post" >
 
                             <div class="form-group  row">
                                 <div class="col-6  text-light">
                                     <label for="exampleInputName1">Coupon Code</label>
-                                    <input type="text" class="form-control  text-light" name="code" id="exampleInputName1" placeholder="code" onkeyup="this.value = this.value.toUpperCase();" >
+                                    <input type="text" class="form-control  text-light" name="code" id="exampleInputName1" placeholder="code" onkeyup="this.value = this.value.toUpperCase();" required >
                                 </div>
                                 <div class="col-6">
                                     <label for="exampleInputName1">Discount Amount</label>
-                                    <input type="number" class="form-control text-light" id="exampleInputName1" name="discount_amount" placeholder="price" >
+                                    <input type="number" class="form-control text-light"  name="discount" placeholder="price" required>
                                 </div>
 
                             </div>
@@ -35,7 +35,7 @@
                                         <div class="col-sm-12 ">
                                             <label for="start-date" class="col-sm-22 col-form-label">Valid Date
                                                 From</label>
-                                            <input type="text" autocomplete="off" id="start-date" class="form-control text-light" name="validFrom" placeholder="Select Starting Date">
+                                            <input type="text" autocomplete="off" id="start-date" class="form-control text-light" name="start" placeholder="Select Starting Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -47,7 +47,7 @@
                                     <div class="form-group row mx-2 w-100" >
                                         <div class="col-sm-12  ">
                                             <label for="end-date" class="col-sm-22 col-form-label">Valid Date To</label>
-                                            <input type="text" autocomplete="off" id="end-date" class="form-control text-light" name="validTo" placeholder="Select Expiring Date" >
+                                            <input type="text" autocomplete="off" id="end-date" class="form-control text-light" name="end" placeholder="Select Expiring Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -58,7 +58,7 @@
                                     <div class="form-group row">
                                         <div class="col-sm-12">
                                             <label class="col-sm-3 col-form-label">Minimum Spend</label>
-                                            <input type="number" class="form-control text-light" id="exampleInputName1" name="minimumSpend" placeholder="Enter Stock" >
+                                            <input type="number" class="form-control text-light" id="exampleInputName1" name="minimum" placeholder="Minimum Spend" required>
                                         </div>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@
                                     <div class="form-group row">
                                         <div class="col-sm-12">
                                             <label class="col-sm-3 col-form-label">Maxinum Users</label>
-                                            <input type="number" class="form-control text-light" id="exampleInputName1" name="maxUsers" placeholder="Enter Stock" >
+                                            <input type="number" class="form-control text-light" id="exampleInputName1" name="totalUsers" placeholder="Maximum Users" required>
                                         </div>
                                     </div>
                                 </div>
@@ -74,7 +74,7 @@
 
                             <div class="form-group mt-2">
                                 <label for="exampleTextarea1">Description</label>
-                                <textarea name="description" class="form-control text-light" id="exampleTextarea1" rows="4" ></textarea>
+                                <textarea name="description" class="form-control text-light" id="exampleTextarea1" rows="4" required></textarea>
                             </div>
 
                             <button type="submit" class="btn btn-lg btn-primary mr-2 mt-5">Add Coupon</button>

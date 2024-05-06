@@ -128,6 +128,26 @@
                             </div><!-- End .col-lg-9 -->
                             <aside class="col-lg-3">
                                 <div class="summary summary-cart">
+                                    
+
+                     
+                                    <h3 class="summary-title"></h3>
+
+                                    <div class="d-flex justify-content-center">
+                                        <input id="couponid" type="text" class="mb-3 rounded"> 
+                                    </div>
+                                    <% if(address!=0){%>
+                                        <button onclick="applyCoupon()" id="couponSubmit" type="submit" class="btn btn-outline-primary-2  btn-block py-3"
+                                            style="background-color: #000; color: #fff; "
+                                            onMouseOver="this.style.background='#575757'"
+                                            onMouseOut="this.style.background='#000'">Apply coupon
+                                        </button >
+                                            <%}%>
+
+                                    <!-- <button class="btn btn-outline-primary-2 btn-order btn-block ">Use This
+                                        Address</button> -->
+                                </div><!-- End .summary -->
+                                <div class="summary summary-cart">
                                     <% if(address!=0){%>
                                     <button id="addressSubmitBtn" type="submit" class="btn btn-outline-primary-2  btn-block py-3"
                                         style="background-color: #000; color: #fff; "
@@ -271,6 +291,37 @@
                 inputs[i].required = false;
             }
         }
+        async function applyCoupon() {
+    let couponCode = document.getElementById("couponid").value;
+    let applyBtn = document.getElementById("couponSubmit");
+
+    if (applyBtn.innerText !== "Apply coupon") {
+        document.getElementById("couponid").value = ""; // Clear the input field
+        applyBtn.innerText = "Apply coupon";
+    } else {
+        applyBtn.innerText = "Clear coupon";
+        try {
+            let response = await fetch("/home/cart/checkout", {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    couponCode: couponCode
+                })
+            });
+            if (response.ok) {
+                let data = await response.json();
+                console.log(data); // Process the response data as needed
+            } else {
+                console.error('Network response was not ok.');
+            }
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
+    }
+}
+
         </script>
 
         <%- include('../user/layouts/footer.ejs') %>

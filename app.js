@@ -9,6 +9,8 @@ const session = require("express-session")
 require("dotenv").config();
 const methodOverride = require("method-override")
 const expressLayouts = require("express-ejs-layouts")
+const flash = require("connect-flash")
+
 
 
 mongoose.connect(process.env.DATABASE_URL)
@@ -31,6 +33,8 @@ app.use(
       resave: false,
     })
   );
+
+app.use(flash())
 
 app.use(function (req, res, next) {
   res.set(

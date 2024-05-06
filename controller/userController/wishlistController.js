@@ -62,8 +62,13 @@ const removeWishlist = async function(req,res){
     
 }
 
+const checkLoad = async function(req,res){
+    res.render("user/check",{currentUser:0,address:0,total:0,payment:0,cartItems:0,deliveryDate:0})
+}
+
 module.exports = {
     wishlistLoad,
     addWishlist,
     removeWishlist,
+    checkLoad,
 }

@@ -7,7 +7,7 @@ const upload = require("../middlewares/multer")
 const categoryController = require("../controller/adminController/categoryCotroller")
 const auth = require("../middlewares/auth")
 const orderController = require("../controller/adminController/orderController")
-
+const couponController = require("../controller/adminController/coupenController")
 
 
 
@@ -59,6 +59,16 @@ router.put("/order/:id",auth.adminLogin,orderController.changeOrderStatus)
 router.get("/order/details/:id",auth.adminLogin,orderController.orderDetailsView)
 router.put("/order/details/:id",auth.adminLogin,orderController.changeIndividualOrderStatus)
 router.post("/order",auth.adminLogin,orderController.filterOrders)
+
+// admin coupon management 
+router.get("/coupon",couponController.couponLoad)
+router.get("/coupon/add",couponController.couponAddLoad)
+router.post("/coupon/add",couponController.addCoupon)
+router.get("/coupon/delete",couponController.deleteCoupon)
+router.put("/coupon/edit/:id",couponController.editCoupon)
+router.get("/coupon/edit",couponController.editCouponLoad)
+
+
 
 
 

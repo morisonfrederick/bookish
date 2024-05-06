@@ -132,48 +132,51 @@
                                     <!-- <a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a> -->
                                 </div><!-- End .cart-bottom -->
                             </div><!-- End .col-lg-9 -->
-                            <aside class="col-lg-3">
-                                <div class="summary summary-cart">
-                                    <h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
-
-                                    <table class="table table-summary">
-                                        <tbody>
-                                            <tr class="summary-subtotal">
-                                                <td>Subtotal:</td>
-                                                <td>₹<span id="subTotalDisplay">
-                                                        <%= total%>
-                                                    </span></td>
-                                            </tr><!-- End .summary-subtotal -->
-
-
-
-
-                                            <tr class="summary-shipping-row">
-                                                <td>
-                                                    <label class="" for="standart-shipping">Discount:</label>
-                                                </td>
-                                                <td>0.00</td>
-                                            </tr><!-- End .summary-shipping-row -->
-
-
-
-
-
-                                            <tr class="summary-total">
-                                                <td>Total:</td>
-                                                <td>₹<span id="totalDisplay">
-                                                        <%= total%>
-                                                    </span></td>
-                                            </tr><!-- End .summary-total -->
-                                        </tbody>
-                                    </table><!-- End .table table-summary -->
-                                    <% if(total!=0){%>
-                                        <a href="/home/cart/checkout" class="btn btn-outline-primary-2 btn-order btn-block " onmouseover="this.style.color='#fff'" onmouseleave="this.style.color='#000'">PROCEED TO CHECKOUT</a>
-                                    <%}%>
-                                </div><!-- End .summary -->
-
-                                <!-- <a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a> -->
-                            </aside><!-- End .col-lg-3 -->
+                            <% if (cart && cart.products.length) { %>
+                                <aside class="col-lg-3">
+                                    <div class="summary summary-cart">
+                                        <h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
+    
+                                        <table class="table table-summary">
+                                            <tbody>
+                                                <tr class="summary-subtotal">
+                                                    <td>Subtotal:</td>
+                                                    <td>₹<span id="subTotalDisplay">
+                                                            <%= total%>
+                                                        </span></td>
+                                                </tr><!-- End .summary-subtotal -->
+    
+    
+    
+    
+                                                <tr class="summary-shipping-row">
+                                                    <td>
+                                                        <label class="" for="standart-shipping">Discount:</label>
+                                                    </td>
+                                                    <td>0.00</td>
+                                                </tr><!-- End .summary-shipping-row -->
+    
+    
+    
+    
+    
+                                                <tr class="summary-total">
+                                                    <td>Total:</td>
+                                                    <td>₹<span id="totalDisplay">
+                                                            <%= total%>
+                                                        </span></td>
+                                                </tr><!-- End .summary-total -->
+                                            </tbody>
+                                        </table><!-- End .table table-summary -->
+                                        <% if(total!=0){%>
+                                            <a href="/home/cart/checkout" class="btn btn-outline-primary-2 btn-order btn-block " onmouseover="this.style.color='#fff'" onmouseleave="this.style.color='#000'">PROCEED TO CHECKOUT</a>
+                                        <%}%>
+                                    </div><!-- End .summary -->
+    
+                                    <!-- <a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a> -->
+                                </aside><!-- End .col-lg-3 -->
+                            <% } %>
+                            
                         </div><!-- End .row -->
                     </div><!-- End .container -->
                 </div><!-- End .cart -->

@@ -72,8 +72,13 @@ const postOtp = async function(req,res,next){
             await user.insertMany([data])
             req.session.isAuthenticated = true
             delete req.session.data
-            res.render("user/login")
-        }
+            let currentUser = null;
+            let loginErr = null;
+            let verifyErr = null;
+            let blockErr = null;
+            let updatePass = null;
+    console.log("user ");
+    res.render("user/login",{currentUser,loginErr,verifyErr,blockErr,updatePass});        }
         else{            
             res.render("otp",{message:"wrong otp"})
         }
@@ -165,10 +170,12 @@ const failureGoogleLogin = (req , res) => {
 // User home page
 const userHome =async (req, res, next) => {
     let id = req.session.userid
-    let currentUser = await user.findOne({_id:id})
+    let userexist = await user.findOne({_id:id})
+    let currentUser = userexist?user:0
+    console.log(currentUser);
     let banners =0
     let products = await book.find().lean()
-    console.log(products[0].name);
+    // console.log(products[0].name);
     let SignupMess = 0
     res.render("user/home",{banners,products,SignupMess,currentUser});
 };
