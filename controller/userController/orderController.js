@@ -4,6 +4,7 @@ const cart = require("../../models/cartModel")
 let userAddress = require("../../models/addressModel")
 const { v4: uuidv4 } = require('uuid');
 const user = require("../../models/userModel");
+const Coupon = require("../../models/coupenModel")
 
 
 const viewOrders =async function(req,res){
@@ -33,8 +34,22 @@ const postCheckoutOrder = async function(req,res){
             totalPrice += item.product.price * item.quantity;
         });
         console.log(totalPrice);
-        let {email,phone,address,address1,address2,address3,country,city,county,pin,paymentType} = await req.body
+        let {email,phone,address,address1,address2,address3,country,city,county,pin,paymentType,couponCode} = await req.body
         console.log(paymentType);
+        let coupon = null
+
+        if(couponCode){
+            coupon  = await Coupon.findOne({couponCode: couponCode})
+            console.log(couponCode);
+
+        }
+        let discountedPrice = totalPrice
+        if(coupon && totalPrice > coupon.minimumSpend){
+            discountedPrice -= coupon.discount
+        }
+        console.log(1,discountedPrice)
+        console.log(2,totalPrice);
+
         if(address=="newAddress"){
             console.log("new address");
             let data = {
@@ -59,7 +74,7 @@ const postCheckoutOrder = async function(req,res){
                     quantity: product.quantity,
                 })),
                 orderStatus : "Placed",
-                totalPrice : totalPrice,
+                totalPrice : discountedPrice,
                 orderNumber: uuidv4()
                     
             }
@@ -98,7 +113,7 @@ const postCheckoutOrder = async function(req,res){
                     quantity: product.quantity,
                 })),
                 orderStatus : "Placed",
-                totalPrice : totalPrice
+                totalPrice : discountedPrice
                     
             }  
             console.log(data);
@@ -191,6 +206,80 @@ const cancelIndividualOrder = async function(req, res) {
 
 
 
+const applyCoupon = async function(req, res) {
+    try {
+        let action = req.body.action;
+        let userCode = req.body.data;
+        let id = req.session.userid;
+        let userCart = await cart.findOne({ user_id: id }).populate('products.product');
+
+        switch (action) {
+            case "apply":
+                let coupon = await Coupon.findOne({ couponCode: userCode }).lean();
+                let totalPrice = calculateTotalPrice(userCart);
+                if (coupon) {
+                    let totalPrice = calculateTotalPrice(userCart);
+                    let discountedPrice = totalPrice - coupon.discount;
+                    let data = {
+                        valid: true,
+                        totalDisplay: totalPrice,
+                        discountDisplay: coupon.discount,
+                        discountedPrice: discountedPrice
+                    };
+                    res.json(data);
+                } else {
+                    let data = {
+                        valid: false,
+                        message: "Coupon is not valid"
+                    };
+                    res.json(data);
+                }
+                break;
+            case "remove":
+                if (userCart && userCart.products.length > 0) {
+                    let totalPrice = calculateTotalPrice(userCart);
+                    let data = {
+                        valid: true,
+                        totalDisplay: totalPrice,
+                        discountDisplay: 0.0,
+                        discountedPrice: totalPrice
+                    };
+                    res.json(data);
+                } else {
+                    let data = {
+                        valid: false,
+                        message: "Cart is empty or not found"
+                    };
+                    res.json(data);
+                }
+                break;
+            default:
+                throw new Error("Invalid action provided");
+        }
+    } catch (err) {
+        console.error("Error occurred in applyCoupon:", err.message);
+        console.error("Request body:", req.body);
+        console.error("Session user ID:", req.session.userid);
+        let data = {
+            valid: false,
+            message: "An error occurred. Please try again later."
+        };
+        res.status(500).json(data);
+    }
+};
+
+function calculateTotalPrice(userCart) {
+    let totalPrice = 0;
+    userCart.products.forEach(item => {
+        totalPrice += item.product.price * item.quantity;
+    });
+    return totalPrice;
+}
+
+
+
+
+
 
 
 module.exports = {
@@ -199,4 +288,5 @@ module.exports = {
     cancelOrder,
     viewOrdersDetails,
     cancelIndividualOrder,
+    applyCoupon
 }

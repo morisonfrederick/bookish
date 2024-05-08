@@ -4,7 +4,7 @@
 
 
         <main class="main">
-            <div class="page-header text-center" style="background-image: url('user/images/page-header-bg.jpg')">
+            <div class="page-header text-center" style="background-image: url('/user/images/background.png')">
                 <div class="container">
                     <h1 class="page-title text-white">Checkout</h1>
                 </div><!-- End .container -->
@@ -25,7 +25,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-9 cart-item-box">
-                                <h5 class="text-dark mb-3">1. &nbsp; Select a delivery address</h5>
+                                <h5 class="text-dark mb-3">1. &nbsp;  </h5>
 
                                 <% if(address!=0){%>
                                     <form action="/home/cart/orders" method="post">
@@ -134,15 +134,16 @@
                                     <h3 class="summary-title"></h3>
 
                                     <div class="d-flex justify-content-center">
-                                        <input id="couponid" type="text" class="mb-3 rounded"> 
+                                        <input id="couponid" name="couponCode" type="text" class="mb-3 rounded" onkeyup="this.value = this.value.toUpperCase()" > 
                                     </div>
                                     <% if(address!=0){%>
-                                        <button onclick="applyCoupon()" id="couponSubmit" type="submit" class="btn btn-outline-primary-2  btn-block py-3"
+                                        <button onclick="applyCoupon()" id="couponSubmit" type="button" class="btn btn-outline-primary-2  btn-block py-3"
                                             style="background-color: #000; color: #fff; "
                                             onMouseOver="this.style.background='#575757'"
                                             onMouseOut="this.style.background='#000'">Apply coupon
                                         </button >
                                             <%}%>
+                                    <p id="errorMessage" style="color: red;"></p>
 
                                     <!-- <button class="btn btn-outline-primary-2 btn-order btn-block ">Use This
                                         Address</button> -->
@@ -175,7 +176,7 @@
                                                 <td>
                                                     <label class="" for="standart-shipping">Discount:</label>
                                                 </td>
-                                                <td>0.00</td>
+                                                <td id="discountDisplay">0.00</td>
                                             </tr><!-- End .summary-shipping-row -->
 
 
@@ -257,30 +258,7 @@
 
 
         <script>
-            // Add a click event listener to the labels
-            $(".custom-label").click(function () {
-                // Remove the "checked" class from all labels
-                $(".custom-label").removeClass("checked");
-
-                // Add the "checked" class to the clicked label
-                $(this).addClass("checked");
-            });
-
-            // form submit handil
-            document.getElementById("addressSubmitBtn").addEventListener("click",function(){
-                document.getElementById("addressForm").submit();
-            })
-
-            function showAddress(){
-            console.log("show");
-            let card = document.getElementById("addressToggle")
-            card.style.display = "block"
-            let inputs = card.getElementsByTagName('input');
-            // Loop through the inputs and set them as required
-            for(let i = 0; i < inputs.length; i++){
-                inputs[i].required = true;
-            }
-        }
+          
         function hideAddress(){
             console.log("hide");
             let card = document.getElementById("addressToggle");
@@ -291,36 +269,83 @@
                 inputs[i].required = false;
             }
         }
-        async function applyCoupon() {
-    let couponCode = document.getElementById("couponid").value;
-    let applyBtn = document.getElementById("couponSubmit");
+        
 
-    if (applyBtn.innerText !== "Apply coupon") {
-        document.getElementById("couponid").value = ""; // Clear the input field
-        applyBtn.innerText = "Apply coupon";
-    } else {
-        applyBtn.innerText = "Clear coupon";
-        try {
-            let response = await fetch("/home/cart/checkout", {
-                method: "PATCH",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    couponCode: couponCode
-                })
-            });
-            if (response.ok) {
-                let data = await response.json();
-                console.log(data); // Process the response data as needed
-            } else {
-                console.error('Network response was not ok.');
+        async function applyCoupon() {
+            let couponCode = document.getElementById("couponid").value;
+            let applyBtn = document.getElementById("couponSubmit")
+            let totalDisplay = document.getElementById("totalDisplay")
+            let discountDisplay = document.getElementById("discountDisplay")
+            let errorMessage = document.getElementById("errorMessage")
+            console.log(couponCode);
+            console.log(applyBtn.innerText);
+            console.log(totalDisplay.innerText);
+            console.log(discountDisplay.innerText);
+            console.log(errorMessage.innerText);
+
+
+            if(applyBtn.innerText=="Apply coupon"){
+                try {
+                    let response = await fetch("/home/cart/checkout", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            data: couponCode,
+                            action: "apply"
+                        })
+                    });
+                    if (response.ok) {
+                        console.log("response ok");
+                        let data = await response.json();
+                        if(data.valid){
+                            discountDisplay.innerText = data.discountDisplay;
+                            totalDisplay.innerText =  data.discountedPrice
+                            errorMessage.innerHTML = ""
+                        }
+                        else{
+                            console.log("response not ok");
+                            couponCode = ""; 
+                            errorMessage.innerText = data.message
+                        }
+
+                        console.log(data); // Process the response data as needed
+                    } else {
+                        console.error('Network response was not ok.');
+                    }
+                } catch (error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                }
+                applyBtn.innerText = "Clear coupon"
             }
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
+            else if(applyBtn.innerText == "Clear coupon"){
+                    if(discountDisplay.innerText>0){
+                       let response = await fetch("/home/cart/checkout",{
+                            method: "POST",
+                            headers : {
+                                "Content-Type" : "application/json"
+                            },
+                            body: JSON.stringify({
+                                data: couponCode,
+                                action: "remove"
+                            })
+                        });
+                        if(response.ok){
+                            let data = await response.json()
+                            discountDisplay.innerText = data.discountDisplay;
+                            totalDisplay.innerText =  data.discountedPrice
+                            errorMessage.innerHTML = ""
+                        }
+                    }
+                
+                    applyBtn.innerText = "Apply coupon"
+                    errorMessage.innerText = ""
+                    document.getElementById("couponid").value = "";  // Clear input field
+                }            
+            
+        
         }
-    }
-}
 
         </script>
 

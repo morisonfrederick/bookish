@@ -110,6 +110,8 @@ router.patch("/cart/:id",auth.userLogin,cartController.changeQuantity)
 // route to checkout 
 
 router.get("/cart/checkout",auth.userLogin,checkoutCotroller.viewCheckout)
+router.post("/cart/checkout",auth.userLogin,orderController.applyCoupon)
+
 
 
 

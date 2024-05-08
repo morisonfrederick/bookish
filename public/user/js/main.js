@@ -423,19 +423,19 @@ $(document).ready(function () {
     }
 
     // Checkout discount input - toggle label if input is empty etc...
-    $('#checkout-discount-input').on('focus', function () {
-        // Hide label on focus
-        $(this).parent('form').find('label').css('opacity', 0);
-    }).on('blur', function () {
-        // Check if input is empty / toggle label
-        var $this = $(this);
+    // $('#checkout-discount-input').on('focus', function () {
+    //     // Hide label on focus
+    //     $(this).parent('form').find('label').css('opacity', 0);
+    // }).on('blur', function () {
+    //     // Check if input is empty / toggle label
+    //     var $this = $(this);
 
-        if( $this.val().length !== 0 ) {
-            $this.parent('form').find('label').css('opacity', 0);
-        } else {
-            $this.parent('form').find('label').css('opacity', 1);
-        }
-    });
+    //     if( $this.val().length !== 0 ) {
+    //         $this.parent('form').find('label').css('opacity', 0);
+    //     } else {
+    //         $this.parent('form').find('label').css('opacity', 1);
+    //     }
+    // });
 
     // Dashboard Page Tab Trigger
     $('.tab-trigger-link').on('click', function (e) {

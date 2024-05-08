@@ -39,7 +39,7 @@
                                 <td onclick="orderDetails('<%=selectedOrder._id %>')"><%= selectedOrder.orderNumber %></td>
                                 <td><%= book.product.name %></td>
                                 <td><%= book.quantity %></td>
-                                <td><%= book.quantity * book.product.price %></td>
+                                <td><%= selectedOrder.totalPrice %></td>
                                 <td><%= book.individulOrderStatus %></td>
                               </tr>
                             <% } %>
