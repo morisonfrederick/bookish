@@ -64,6 +64,14 @@ const orderSchema = mongoose.Schema({
                 type: Number,
                 default: 1,
             },
+            name: {
+                type: String,
+                require: true,
+            },
+            price: {
+                type: Number,
+                default: 1,
+            },
             individulOrderStatus: {
                 type : String,
                 default: "Placed"
@@ -85,6 +93,11 @@ const orderSchema = mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    coupon : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Coupen",
+        default: null
     }
 })
 const Order =  mongoose.model("Order",orderSchema)

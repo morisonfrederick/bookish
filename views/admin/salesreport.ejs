@@ -13,7 +13,29 @@
 
                         <div class="card-body">
                             <h4 class="card-title">Sales Portfolio</h4>
-                            <canvas id="areaChart" style="height: 250px;"></canvas>
+                            <div class="table-responsive" style="height: 250px;">
+                                <table class="table" >
+                                    <thead>
+                                        <tr>
+                                            <th>Book name  </th>
+                                            <th>Total Products Sold  </th>
+                                            <th>Total Sales amount</th>
+                                            <th>Profit</th>
+                                        </tr>
+                                        <% salesReport.forEach(salesReport => { %>
+                                         
+                                        
+                                        <tr>
+                                            <td><%= salesReport.productName  %></td>
+                                            <td><%= salesReport.totalQuantity  %></td>
+                                            <td>&euro; <%= salesReport.totalPrice  %></td>
+                                            <td>&euro; <%= salesReport.profit  %></td>
+                                        </tr>
+                                        <% }) %>
+                                    </thead>
+                                </table>
+                            </div>
+                            <!-- <canvas id="areaChart" style="height: 250px;"></canvas> -->
                             <div class="col-10 mt-3">
                                 <button onclick="SalesPortfolio('week')" class="btn btn-sm btn-outline-info">Weekly</button>
                                 <button onclick="SalesPortfolio('month')" class="btn btn-sm btn-outline-info">Monthly</button>
@@ -28,28 +50,42 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Most sold products</h4>
-                            <canvas id="barChart" style="height:230px"></canvas>
+                            <!-- <canvas id="barChart" style="height:230px"></canvas>
                             <div style="display: none;">
-                                <%if(Mproducts!==0){%>
-                                <input id="product1" value="<%=Mproducts[0].productData[0].product_name %>">
-                                <input id="product12" value="<%=Mproducts[0].count %>">
+                                <%if(products!==0){%>
+                                <input id="product1" value="<%=products[0].productName %>">
+                                <input id="product12" value="<%=products[0].totalQuantity %>">
 
-                                <input id="product2" value="<%=Mproducts[1].productData[0].product_name %>">
-                                <input id="product22" value="<%=Mproducts[1].count %>">
+                                <input id="product2" value="<%=products[1].productName %>">
+                                <input id="product22" value="<%=products[1].totalQuantity  %>">
 
-                                <input id="product3" value="<%=Mproducts[2].productData[0].product_name %>">
-                                <input id="product32" value="<%=Mproducts[2].count %>">
+                                <input id="product3" value="<%=products[2].productName %>">
+                                <input id="product32" value="<%=products[2].totalQuantity  %>">
 
-                                <input id="product4" value="<%=Mproducts[3].productData[0].product_name %>">
-                                <input id="product42" value="<%=Mproducts[3].count %>">
+                                <input id="product4" value="<%=products[3].productName %>">
+                                <input id="product42" value="<%=products[3].totalQuantity  %>">
 
-                                <input id="product5" value="<%=Mproducts[4].productData[0].product_name %>">
-                                <input id="product52" value="<%=Mproducts[4].count %>">
+                                <input id="product5" value="<%=products[0].productName %>">
+                                <input id="product52" value="<%=products[0].totalQuantity  %>">
 
-                                <input id="product6" value="<%=Mproducts[5].productData[0].product_name %>">
-                                <input id="product62" value="<%=Mproducts[5].count %>">
+                                <input id="product6" value="<%=products[2].productName %>">
+                                <input id="product62" value="<%=products[2].totalQuantity  %>">
                                 <%}%>
 
+                            </div> -->
+                            <div class="table">
+                                <table class="table-responsive">
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Total Sale</th>
+                                    </tr>
+                                    <% products.forEach(product => { %>
+                                     <tr>
+                                        <td><%=product.productName %></td>
+                                        <td><%=product.totalQuantity %></td>
+                                     </tr>
+                                    <% }) %>
+                                </table>
                             </div>
 
                         </div>
@@ -270,211 +306,21 @@
     <script>
         
 
-        // function runLoad() {
            
-            
-            // const week1 = document.getElementById("week1").value
-            // const week12 = document.getElementById("week12").value
-
-            // const week2 = document.getElementById("week2").value
-            // const week22 = document.getElementById("week22").value
-
-            // const week3 = document.getElementById("week3").value
-            // const week32 = document.getElementById("week32").value
-
-            // const week4 = document.getElementById("week4").value
-            // const week42 = document.getElementById("week42").value
-
-            // const week5 = document.getElementById("week4").value
-            // const week52 = document.getElementById("week42").value
-
-            // const week6 = document.getElementById("week5").value
-            // const week62 = document.getElementById("week52").value
-
-            // const week7 = document.getElementById("week6").value
-            // const week72 = document.getElementById("week62").value
-
-            // console.log(week1, week12);
-            // var areaData = {
-            //     labels: [week7, week6, week5, week4, week3, week2, week1,],
-            //     datasets: [{
-            //         label: 'Week Chart',
-            //         data: [week72, week62, week52, week42, week32, week22, week12],
-            //         backgroundColor: [
-            //             'rgba(255, 99, 132, 0.2)',
-            //             'rgba(54, 162, 235, 0.2)',
-            //             'rgba(255, 206, 86, 0.2)',
-            //             'rgba(75, 192, 192, 0.2)',
-            //             'rgba(153, 102, 255, 0.2)'
-            //         ],
-            //         borderColor: [
-            //             'rgba(255, 99, 132, 1)',
-            //             'rgba(54, 162, 235, 1)',
-            //             'rgba(255, 206, 86, 1)',
-            //             'rgba(75, 192, 192, 1)',
-            //             'rgba(153, 102, 255, 1)'
-            //         ],
-            //         borderWidth: 1,
-            //         fill: true,
-            //     }]
-            // };
-
-            // var areaOptions = {
-            //     plugins: {
-            //         filler: {
-            //             propagate: true
-            //         }
-            //     },
-            //     scales: {
-            //         yAxes: [{
-            //             gridLines: {
-            //                 color: "rgba(204, 204, 204, 0.1)"
-            //             }
-            //         }],
-            //         xAxes: [{
-            //             gridLines: {
-            //                 color: "rgba(204, 204, 204, 0.1)"
-            //             }
-            //         }]
-            //     }
-            // };
-            //  products
-
-            const product1 = document.getElementById("product1").value
-            const product12 = document.getElementById("product12").value
-
-            const product2 = document.getElementById("product2").value
-            const product22 = document.getElementById("product22").value
-
-            const product3 = document.getElementById("product3").value
-            const product32 = document.getElementById("product32").value
-
-            const product4 = document.getElementById("product4").value
-            const product42 = document.getElementById("product42").value
-
-            const product5 = document.getElementById("product4").value
-            const product52 = document.getElementById("product42").value
-
-            const product6 = document.getElementById("product5").value
-            const product62 = document.getElementById("product52").value
-
-            const product7 = document.getElementById("product6").value
-            const product72 = document.getElementById("product62").value
-
-            var data = {
-                labels: [product4, product2, product6, product1, product5, product3],
-                datasets: [{
-                    label: 'Sold',
-                    data: [product42, product22, product62, product12, product52, product32,],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1,
-                    fill: false
-                }]
-            };
-
-            var options = {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        },
-                        gridLines: {
-                            color: "rgba(204, 204, 204,0.1)"
-                        }
-                    }],
-                    xAxes: [{
-                        gridLines: {
-                            color: "rgba(204, 204, 204,0.1)"
-                        }
-                    }]
-                },
-                legend: {
-                    display: false
-                },
-                elements: {
-                    point: {
-                        radius: 0
-                    }
-                }
-            };
 
 
-
-
-            // var areaChartCanvas = document.getElementById("areaChart").getContext("2d");
-            // var areaChart = new Chart(areaChartCanvas, {
-            //     type: 'line',
-            //     data: areaData,
-            //     options: areaOptions
-            // });
-
-
-            var barChartCanvas = $("#barChart").get(0).getContext("2d");
-            // This will get the first returned node in the jQuery collection.
-            var barChart = new Chart(barChartCanvas, {
-                type: 'bar',
-                data: data,
-                options: options
-            });
-
+          
 
 
             // fileDownloadPathsettings();
             const excelDownload = document.getElementById("excelDownload");
-            const pdfDownload = document.getElementById("pdfDownload");
-            const queryString = window.location.search;
-            const urlSearchParams = new URLSearchParams(queryString);
-  
-            // Access specific query parameters by name
-            const startDate = urlSearchParams.get('start');
-            const endDate = urlSearchParams.get('end');
-  
-            let today, start, end; // Declare these variables using let
-  
-            if (startDate == null || endDate == null) {
-              today = new Date();
-              start = new Date(today);
-              start.setDate(today.getDate() - 30);
-              end = today.toISOString().split('T')[0];
-              excelDownload.href = `/admin/sales-report/export-report?start=${start}&end=${end}`;
-              pdfDownload.href = `/admin/sales-report/export-PDF-report?start=${start}&end=${end}`;
-            } else {
-              excelDownload.href = `/admin/sales-report/export-report?start=${startDate}&end=${endDate}`;
-              pdfDownload.href = `/admin/sales-report/export-PDF-report?start=${startDate}&end=${endDate}`;
-            }
+           
+              excelDownload.href = `/admin/sales/excel-report`;
+              
 
 
-        // }
-
-        // Don't use parentheses when assigning the function to onload
-
-        $("#start-date").datepicker({
-            dateFormat: 'yy-mm-dd',
-            onSelect: function (selectedDate) {
-                var minDate = new Date(selectedDate);
-                minDate.setDate(minDate.getDate() + 1); // Set the minimum date for the end date picker to the next day
-                $("#end-date").datepicker("option", "minDate", minDate);
-            }
-        });
-
-        $("#end-date").datepicker({
-            dateFormat: 'yy-mm-dd'
-        });
+       
+       
 
 
         

@@ -48,6 +48,8 @@
                                             <th> Category </th>
                                             <th> Price </th>
                                             <th> Stock Status</th>
+                                            <th> Stock</th>
+
                                             <!-- <th> Edit</th> -->
                                             <th> Remove</th>
 
@@ -84,6 +86,9 @@
                                                     <% } %>
                                                         
                                                             
+                                                </td>
+                                                <td>
+                                                    <%= book[i].stock  %>
                                                 </td>
                                                 <td>
                                                     <a href="/admin/books/edit/<%= book[i]._id  %>"

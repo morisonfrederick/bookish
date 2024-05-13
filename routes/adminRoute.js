@@ -8,6 +8,7 @@ const categoryController = require("../controller/adminController/categoryCotrol
 const auth = require("../middlewares/auth")
 const orderController = require("../controller/adminController/orderController")
 const couponController = require("../controller/adminController/coupenController")
+const salesReportController = require("../controller/adminController/salesReportController")
 
 
 
@@ -68,6 +69,10 @@ router.get("/coupon/delete",couponController.deleteCoupon)
 router.put("/coupon/edit/:id",couponController.editCoupon)
 router.get("/coupon/edit",couponController.editCouponLoad)
 
+
+// admin sales report page 
+router.get("/sales",salesReportController.saleReportLoad)
+router.get("/sales/excel-report",salesReportController.excelSheet)
 
 
 

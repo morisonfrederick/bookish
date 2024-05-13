@@ -11,6 +11,7 @@ const orderController = require("../controller/userController/orderController")
 const productController = require("../controller/userController/productController")
 const upload = require("../middlewares/multer");
 const wishlistController = require("../controller/userController/wishlistController")
+const walletController = require("../controller/userController/walletController")
 
 
 
@@ -144,6 +145,14 @@ router.delete("/account/wishlist",wishlistController.removeWishlist)
 router.get("/check",wishlistController.checkLoad)
 
 
+// routes to manage paypal 
 
+router.get("/pay-success",orderController.paymentSuccess)
+
+router.get("/pay-cancel",orderController.failurePayment)
+
+
+// routes for wallet 
+router.get("/account/wallet",walletController.walletLoad)
 
 module.exports = router;

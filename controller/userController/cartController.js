@@ -53,6 +53,8 @@ const postCart = async function(req, res) {
         const id = req.session.userid;
         const selectedBookId = req.body.bookId;
         const currentBook = await book.findOne({_id: selectedBookId});
+        let name = currentBook.name
+        let price = currentBook.price
         const quantity = req.body.quantity;
         let selectedQuantity = 1;
         if(quantity){
@@ -64,7 +66,9 @@ const postCart = async function(req, res) {
                 user_id: id,
                 products: [{
                     product: selectedBookId,
-                    quantity: selectedQuantity
+                    quantity: selectedQuantity,
+                    name: name,
+                    price: price
                 }],
             };
             let newStock = currentBook.stock - selectedQuantity;
@@ -79,7 +83,9 @@ const postCart = async function(req, res) {
             } else {
                 userCart.products.push({
                     product: selectedBookId,
-                    quantity: selectedQuantity
+                    quantity: selectedQuantity,
+                    name: name,
+                    price: price
                 });
             }
             let updatedCart = await userCart.save();

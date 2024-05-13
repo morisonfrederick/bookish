@@ -24,11 +24,12 @@
                         <% order.forEach(selectedOrder => { %>
                         <thead>
                           <tr>
-                            <th scope="col">order ID</th>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Book name</th>
                             <th scope="col">Qty</th>
-                            <th scope="col">amount</th>
-                            <th scope="col">status</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Status</th>
                           </tr>
                         </thead>
             
@@ -37,6 +38,14 @@
                             <% if (book.individulOrderStatus!="Cancel") { %>
                               <tr>
                                 <td onclick="orderDetails('<%=selectedOrder._id %>')"><%= selectedOrder.orderNumber %></td>
+                                <td><%= selectedOrder.createdAt.toLocaleDateString('en-US', { 
+                                  year: 'numeric', 
+                                  month: 'short', 
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                }) %></td>
+                                
                                 <td><%= book.product.name %></td>
                                 <td><%= book.quantity %></td>
                                 <td><%= selectedOrder.totalPrice %></td>

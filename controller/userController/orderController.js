@@ -7,6 +7,7 @@ const user = require("../../models/userModel");
 const Coupon = require("../../models/coupenModel")
 const paypal = require('paypal-rest-sdk');
 require("dotenv").config()
+const Wallet = require("../../models/walletModel")
 
 const { PAYPAL_MODE, PAYPAL_CLIENT_KEY, PAYPAL_SECRET_KEY } = process.env;
 
@@ -25,7 +26,7 @@ const viewOrders =async function(req,res){
     let userOrders = await Order.find({ 
         user_id: id, 
         'orderStatus': { $ne: 'Cancel' } 
-    }).populate('products.product');
+    }).populate('products.product').sort({createdAt:-1})
 
     let currentUser = await user.findOne({_id:id})||null
     
@@ -83,13 +84,17 @@ const postCheckoutOrder = async function(req,res){
                 products: userCart.products.map(product => ({
                     product: product.product._id,
                     quantity: product.quantity,
+                    name: product.name,
+                    price: product.price
                 })),
                 orderStatus : "Placed",
                 totalPrice : discountedPrice,
-                orderNumber: uuidv4()
+                orderNumber: uuidv4(),
+                coupon: coupon
                     
             }
             console.log(data);
+            req.session.data = data;
     
             if(paymentType=="cod"){
                 console.log("going to save");
@@ -122,12 +127,17 @@ const postCheckoutOrder = async function(req,res){
                 products: userCart.products.map(product => ({
                     product: product.product._id,
                     quantity: product.quantity,
+                    name: product.name,
+                    price: product.price
                 })),
                 orderStatus : "Placed",
-                totalPrice : discountedPrice
+                totalPrice : discountedPrice,
+                orderNumber: uuidv4(),
+                coupon: coupon
                     
             }  
             console.log(data);
+            req.session.data = data;
     
             if(paymentType=="cod"){
                 console.log("going to save");
@@ -144,6 +154,16 @@ const postCheckoutOrder = async function(req,res){
             else if(paymentType == "paypal"){
                     // paypal integration 
                     try {
+                        let items = data.products.map(product => ({
+                            name: product.name,  // Assuming product name is available
+                            sku: product.product,    // Using product ID as SKU
+                            price: product.price.toFixed(2),  // Assuming price is a number
+                            currency: "USD",
+                            quantity: product.quantity
+                        }));
+                        console.log("items data to pass to paypal : ",items);
+                        let amountTotal = discountedPrice.toFixed(2);
+                        console.log("total amount pass to paypal: ",amountTotal);
         
                         const create_payment_json = {
                             "intent": "sale",
@@ -151,22 +171,16 @@ const postCheckoutOrder = async function(req,res){
                                 "payment_method": "paypal"
                             },
                             "redirect_urls": {
-                                "return_url": "http://localhost:3000/success",
-                                "cancel_url": "http://localhost:3000/cancel"
+                                "return_url": "http://localhost:3000/home/pay-success",
+                                "cancel_url": "http://localhost:3000/home/pay-cancel"
                             },
                             "transactions": [{
                                 "item_list": {
-                                    "items": [{
-                                        "name": "Book",
-                                        "sku": "001",
-                                        "price": "25.00",
-                                        "currency": "USD",
-                                        "quantity": 1
-                                    }]
+                                    "items": items
                                 },
                                 "amount": {
                                     "currency": "USD",
-                                    "total": "25.00"
+                                    "total": amountTotal
                                 },
                                 "description": "Hat for the best team ever"
                             }]
@@ -198,8 +212,55 @@ const postCheckoutOrder = async function(req,res){
     }
 }
 
+const paymentSuccess = async function(req,res){
+        const payerId = req.query.PayerID;
+        const paymentId = req.query.paymentId;
+        const {data} = req.session
+        let amountTotal = discountedPrice.toFixed(2);
+        console.log("user order details : ",amountTotal);
+        let id = req.session.userid
+        let currentUser = await user.findOne({_id:id})
+      
+        const execute_payment_json = {
+          "payer_id": payerId,
+          "transactions": [{
+              "amount": {
+                  "currency": "USD",
+                  "total": amountTotal
+              }
+          }]
+        };
+      
+        paypal.payment.execute(paymentId, execute_payment_json,async function (error, payment) {
+          if (error) {
+              console.log(error.response);
+              throw error;
+          } else {
+              console.log(JSON.stringify(payment));
+              console.log("going to save");
+                const order = new Order(data);
+                await order.save();
+                await cart.deleteOne({user_id:id})
+                let success = 1
+                // console.log(order);
+                console.log(Order.length);
+                let orderData = await order.populate("products.product")
+                // console.log(orderData);
+                delete req.session.data
+                res.render("user/orderStatus",{selcetedOrder:orderData,currentUser,success})
+              
+          }
+      });
+    
+}
+const failurePayment = async function(req,res){
+    delete req.session.data
+    res.redirect("/home/cart/checkout")
+}
+
 const cancelOrder = async function(req,res){
     let orderId = req.params.id;
+    let id = req.session.userid
     await Order.updateOne({_id:orderId},{$set:{orderStatus:"Cancel"}})
     res.json({message:"succsess"})
     
@@ -221,19 +282,23 @@ const cancelIndividualOrder = async function(req, res) {
         let orderId = req.params.id;
         let newStatus = "Cancel";
         let productsId = req.body.productsId;
+        let id = req.session.userid
 
         // Get the cancelled product details
         let cancelledProduct = await Order.findOne(
             { _id: orderId, 'products._id': productsId },
             { 'products.$': 1 }
         );
+        console.log("cancelled price: ",cancelledProduct);
+        console.log("000",cancelledProduct.products[0]);
 
         if (!cancelledProduct) {
             return res.status(404).json({ message: 'Product not found in order' });
         }
 
         // Calculate the price of the cancelled item
-        let cancelledPrice = cancelledProduct.products[0].product.price * cancelledProduct.products[0].quantity;
+        let cancelledPrice = cancelledProduct.products[0].price * cancelledProduct.products[0].quantity;
+        console.log("cancelled price: ",cancelledPrice);
 
         // Update the order to cancel the product
         await Order.updateOne(
@@ -253,6 +318,25 @@ const cancelIndividualOrder = async function(req, res) {
             { _id: orderId },
             { totalPrice: totalPrice }
         );
+
+        let wallet = await Wallet.findOne({userid: id})
+        let balance = cancelledPrice 
+        console.log("balance",balance);
+        if(!wallet){
+            let userWallet = new Wallet({
+                userid: id,
+                balance: balance,
+                history: [{
+                    amount:cancelledPrice,
+                    method: "Refund "
+                }]
+            })
+            await userWallet.save()
+        }
+        else{
+            wallet.balance += balance
+            await wallet.save()
+        }
 
         // Send a response back to the client with updated order details
         res.status(200).json({ message: 'Order item cancelled successfully', totalPrice: totalPrice });
@@ -346,5 +430,7 @@ module.exports = {
     cancelOrder,
     viewOrdersDetails,
     cancelIndividualOrder,
-    applyCoupon
+    applyCoupon,
+    paymentSuccess,
+    failurePayment
 }

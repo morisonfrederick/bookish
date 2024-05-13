@@ -41,7 +41,7 @@
                                                         >
                                                         <div class="mx-5">
                                                             <p class="text-dark">
-                                                                <%= address[i].address1%> <%= address[i].city%> <%= address[i].pin%>
+                                                                <%= address[i].address1%> <%= address[i].address2%> <%= address[i].city%> <%= address[i].pin%>
                                                                   </p>
                                                             <p>
                                                                 <%=address[i].pincode%>, <%=address[i].country%>
@@ -79,28 +79,28 @@
                                             </label>
                                                 <%}%>
                                                 <div class="newAddress" id="addressToggle" style="display: none;">
-                    <div class="mb-3" >
-                      <label for="floatingInput">address line 1</label>
-                      <input type="text" name="address1" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="floatingInput">address line 2</label>
-                        <input type="text" name="address2" class="form-control" >
-                    </div>
-                    <div class="mb-3">
-                      <label for="floatingInput">address line 3</label>
-                        <input type="text" name="address3" class="form-control" >
-                    </div>
-                    <div class="mb-3">
-                      <label for="floatingInput">country</label>
-                        <input type="text" name="country" class="form-control"  required>
-                    </div>
-                    <div class="mb-3 d-flex flex-row" >
-                        <input type="text" name="city" class="form-control"  placeholder="city" required>
-                        <input type="text" name="county" class="form-control"  placeholder="county" required>
-                        <input type="number" name="pin" class="form-control"  placeholder="pin" required>
-                     </div>
-                  </div>
+                                                    <div class="mb-3" >
+                                                    <label for="floatingInput">address line 1</label>
+                                                    <input type="text" name="address1" class="form-control" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                    <label for="floatingInput">address line 2</label>
+                                                        <input type="text" name="address2" class="form-control" >
+                                                    </div>
+                                                    <div class="mb-3">
+                                                    <label for="floatingInput">address line 3</label>
+                                                        <input type="text" name="address3" class="form-control" >
+                                                    </div>
+                                                    <div class="mb-3">
+                                                    <label for="floatingInput">country</label>
+                                                        <input type="text" name="country" class="form-control"  required>
+                                                    </div>
+                                                    <div class="mb-3 d-flex flex-row" >
+                                                        <input type="text" name="city" class="form-control"  placeholder="city" required>
+                                                        <input type="text" name="county" class="form-control"  placeholder="county" required>
+                                                        <input type="number" name="pin" class="form-control"  placeholder="pin" required>
+                                                    </div>
+                                                </div>
 
 
                                                     <hr>
@@ -111,7 +111,7 @@
                                                             <h5>2. Payment method</h5>
                                                         </div>
                                                         <div class="form-check py-4 mx-5">
-                                                                <input class="form-check-input" type="radio" name="paymentType" value="paypal" onclick="showCard()" id="flexRadioDefault1">
+                                                                <input class="form-check-input" type="radio" name="paymentType" value="paypal"  id="flexRadioDefault1">
                                                                 <label class="form-check-label" for="flexRadioDefault1">
                                                                 PayPal
                                                                 </label>
@@ -258,6 +258,16 @@
 
 
         <script>
+            function showAddress(){
+            console.log("show");
+            let card = document.getElementById("addressToggle")
+            card.style.display = "block"
+            let inputs = card.getElementsByTagName('input');
+            // Loop through the inputs and set them as required
+            for(let i = 0; i < inputs.length; i++){
+                inputs[i].required = true;
+            }
+        }
           
         function hideAddress(){
             console.log("hide");

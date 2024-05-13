@@ -10,11 +10,11 @@ const orderView = async function(req, res) {
   
     // If a status was provided, find orders with that status
     if (status) {
-      let userOrders = await Order.find({ orderStatus: status }).populate("products.product");
+      let userOrders = await Order.find({ orderStatus: status }).populate("products.product").sort({createdAt:-1})
       res.render("admin/orders", { data: userOrders ,layout:"admin/adminLayout"});
     } else {
       // If no status was provided, find all orders
-      let userOrders = await Order.find().populate("user_id");
+      let userOrders = await Order.find().populate("user_id").sort({createdAt:-1})
       res.render("admin/orders", { data:userOrders ,layout:"admin/adminLayout"});
     }
   }
