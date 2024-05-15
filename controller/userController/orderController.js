@@ -44,6 +44,7 @@ const postCheckoutOrder = async function(req,res){
         let userCart = await cart.findOne({ user_id: id }).populate('products.product')
         // total amount calculation 
         let totalPrice = 0;
+        let discount = 0;
         
         userCart.products.forEach(item => {
             totalPrice += item.product.price * item.quantity;
@@ -141,15 +142,28 @@ const postCheckoutOrder = async function(req,res){
             case "paypal":
                 try {
                     let items = data.products.map(product => ({
-                        name: product.name,  // Assuming product name is available
-                        sku: product.product,    // Using product ID as SKU
-                        price: product.price.toFixed(2),  // Assuming price is a number
+                        name: product.name,
+                        sku: product.product,
+                        price: product.price.toFixed(2),
                         currency: "USD",
                         quantity: product.quantity
                     }));
+                    
+                    if (coupon) {
+                        let discountItem = {
+                            name: "Discount", // Assuming you want to label the discount item as "Discount"
+                            sku: coupon.couponCode, // Assuming coupon.name holds the name of the coupon or offer
+                            price: (-coupon.discount).toFixed(2), // Applying negative discount to reduce total
+                            currency: "USD",
+                            quantity: "1"
+                        };
+                        items.push(discountItem);
+                    }
+                    
                     console.log("items data to pass to paypal : ",items);
                     let amountTotal = discountedPrice.toFixed(2);
                     console.log("total amount pass to paypal: ",amountTotal);
+                    req.session.amountTotal = amountTotal;
     
                     const create_payment_json = {
                         "intent": "sale",
@@ -183,7 +197,7 @@ const postCheckoutOrder = async function(req,res){
                             }
                         }
                       });
-                      
+
                     break;
                 } catch (error) {
                     console.log(error.message);
@@ -198,9 +212,8 @@ const postCheckoutOrder = async function(req,res){
 const paymentSuccess = async function(req,res){
         const payerId = req.query.PayerID;
         const paymentId = req.query.paymentId;
-        const {data,discountedPrice} = req.session
-        console.log(data,discountedPrice);
-        let amountTotal = discountedPrice.toFixed(2);
+        const {data,amountTotal} = req.session
+        console.log(data,amountTotal);
         console.log("user order details : ",amountTotal);
         let id = req.session.userid
         let currentUser = await user.findOne({_id:id})
@@ -271,7 +284,7 @@ const cancelIndividualOrder = async function(req, res) {
         // Get the cancelled product details
         let cancelledProduct = await Order.findOne(
             { _id: orderId, 'products._id': productsId },
-            { 'products.$': 1 }
+            // projuct the first matched product
         );
         console.log("cancelled price: ",cancelledProduct);
         console.log("000",cancelledProduct.products[0]);
