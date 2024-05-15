@@ -9,10 +9,22 @@ const walletSchema = mongoose.Schema({
         type:Number,
         default:0
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
+    history: [
+        {
+            amount: {
+                type: Number,
+                require: true
+            },
+            method: {
+                type: String,
+                require: true
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now
+            }
+        }
+    ]
    
 });
 

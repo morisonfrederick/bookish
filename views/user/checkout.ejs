@@ -25,7 +25,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-9 cart-item-box">
-                                <h5 class="text-dark mb-3">1. &nbsp;  </h5>
+                                <h5 class="text-dark mb-3">1.Shipping Address &nbsp;  </h5>
 
                                 <% if(address!=0){%>
                                     <form action="/home/cart/orders" method="post">
@@ -60,7 +60,7 @@
                                                     <p class="">Kindly add a shipping address to proceed.</p>
                                                     <button type="button"
                                                         class="btn btn-outline-primary-2 mx-auto  mt-1 "
-                                                        data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                        onclick="showAddress()" id="flexRadioDefault1"
                                                         style="border-radius: 0px; font-size: 13px; width: 30rem;"> +
                                                         Add a new
                                                         address</button>
@@ -136,25 +136,25 @@
                                     <div class="d-flex justify-content-center">
                                         <input id="couponid" name="couponCode" type="text" class="mb-3 rounded" onkeyup="this.value = this.value.toUpperCase()" > 
                                     </div>
-                                    <% if(address!=0){%>
+                                    
                                         <button onclick="applyCoupon()" id="couponSubmit" type="button" class="btn btn-outline-primary-2  btn-block py-3"
                                             style="background-color: #000; color: #fff; "
                                             onMouseOver="this.style.background='#575757'"
                                             onMouseOut="this.style.background='#000'">Apply coupon
                                         </button >
-                                            <%}%>
+                                            
                                     <p id="errorMessage" style="color: red;"></p>
 
                                     <!-- <button class="btn btn-outline-primary-2 btn-order btn-block ">Use This
                                         Address</button> -->
                                 </div><!-- End .summary -->
                                 <div class="summary summary-cart">
-                                    <% if(address!=0){%>
+                                    
                                     <button id="addressSubmitBtn" type="submit" class="btn btn-outline-primary-2  btn-block py-3"
                                         style="background-color: #000; color: #fff; "
                                         onMouseOver="this.style.background='#575757'"
                                         onMouseOut="this.style.background='#000'">Checkout</button>
-                                        <%}%>
+                                       
 
                                     </form>
                                     <h3 class="summary-title"></h3>

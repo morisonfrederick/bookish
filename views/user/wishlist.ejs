@@ -59,7 +59,7 @@
                                             <button style="color: rgb(107, 107, 107);" disabled class="btn btn-block btn-outline-primary-2"><i
                                                 class="icon-cart-plus"></i>Add to Cart</button>
                                         <%}else{%>    
-                                        <button onclick="addCart('<%=item.booklist[i]._id%>','<%= currentUser %>')" class="btn btn-block btn-outline-primary-2"><i
+                                        <button onclick="addtocart('<%= item.booklist[i]._id %>')" class="btn btn-block btn-outline-primary-2"><i
                                                 class="icon-cart-plus"></i>Add to Cart</button>
                                          <%}%>       
                                     </td>
@@ -85,5 +85,33 @@
             </main><!-- End .main -->
 
             </main>
+
+
+            <script>
+                 const addtocart =  function(id,user) {
+                console.log("add to cart");
+                fetch('/home/cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        bookId: id
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the result of the request here
+                    console.log(data);
+                    // Redirect to the home page
+                    window.location.href = '/home/account/wishlist';
+                })
+                .catch((error) => {
+                    // Handle error here
+                    console.error('Error:', error);
+                });
+            };
+
+            </script>
 
             <%- include('../user/layouts/footer.ejs') %>

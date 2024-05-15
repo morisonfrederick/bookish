@@ -1,7 +1,7 @@
 const Books = require("../../models/bookModel")
 const Order = require("../../models/orderModel")
 const cart = require("../../models/cartModel")
-let userAddress = require("../../models/addressModel")
+let Address = require("../../models/addressModel")
 const { v4: uuidv4 } = require('uuid');
 const user = require("../../models/userModel");
 const Coupon = require("../../models/coupenModel")
@@ -40,106 +40,93 @@ const viewOrders =async function(req,res){
 const postCheckoutOrder = async function(req,res){
     try{
         let id = req.session.userid
+        let currentUser = await user.findOne({_id:id})
         let userCart = await cart.findOne({ user_id: id }).populate('products.product')
+        // total amount calculation 
         let totalPrice = 0;
+        
         userCart.products.forEach(item => {
             totalPrice += item.product.price * item.quantity;
         });
-        console.log(totalPrice);
+        // console.log(totalPrice);
         let {email,phone,address,address1,address2,address3,country,city,county,pin,paymentType,couponCode} = await req.body
+        console.log("default address is :",address);
         console.log(paymentType);
-        let coupon = null
 
+        // coupon validation 
+        let coupon = null
         if(couponCode){
             coupon  = await Coupon.findOne({couponCode: couponCode})
             console.log(couponCode);
 
         }
-        let discountedPrice = totalPrice
+        let discountedPrice = totalPrice;
+        req.session.discountedPrice = discountedPrice
         if(coupon && totalPrice > coupon.minimumSpend){
             discountedPrice -= coupon.discount
         }
         console.log(1,discountedPrice)
         console.log(2,totalPrice);
 
-        if(address=="newAddress"){
-            console.log("new address");
-            let data = {
-                user_id : id,
-                contact : {
-                    email:email,
-                    phone:phone
-                },
-                address : {
-                    address1:address1 ,
-                    address2:address2,
-                    address3:address3,
-                    country:country,
-                    city:city,
-                    county:county,
-                    pin:pin,
-                    
-                },
-                paymentType: paymentType,
-                products: userCart.products.map(product => ({
-                    product: product.product._id,
-                    quantity: product.quantity,
-                    name: product.name,
-                    price: product.price
-                })),
-                orderStatus : "Placed",
-                totalPrice : discountedPrice,
-                orderNumber: uuidv4(),
-                coupon: coupon
-                    
-            }
-            console.log(data);
-            req.session.data = data;
-    
-            if(paymentType=="cod"){
-                console.log("going to save");
-                const order = new Order(data);
-                await order.save();
-                await cart.deleteOne({user_id:id})
+        // address and contact management 
 
-                console.log(order);
+        let userAddress = {}
+        let userContact = {}
+
+        if(address=="newAddress"){
+            userAddress = {
+                user_id : id,
+                address1:address1 ,
+                address2:address2,
+                address3:address3,
+                country:country,
+                city:city,
+                county:county,
+                pin:pin,
+                
+            };
+            await new Address(userAddress)
+            await Address.save()
+            userContact = {
+                email:email,
+                phone:phone
             }
-    
-            console.log(Order.length);
-            
-            // res.render("orders",{order: data})
-            res.redirect("/home/account/orders")
+
         }
         else{
-            console.log("default address");
-            let currentUser = await user.findOne({_id:id})
-            console.log(address);
-            let selectedAddress = await userAddress.findOne({_id:address})
-            let data = {
-                user_id : id,
-                contact : {
-                    email:currentUser.email,
-                    phone:currentUser.phone
-                },
-                address : selectedAddress
-                ,
-                paymentType: paymentType,
-                products: userCart.products.map(product => ({
-                    product: product.product._id,
-                    quantity: product.quantity,
-                    name: product.name,
-                    price: product.price
-                })),
-                orderStatus : "Placed",
-                totalPrice : discountedPrice,
-                orderNumber: uuidv4(),
-                coupon: coupon
-                    
-            }  
-            console.log(data);
-            req.session.data = data;
-    
-            if(paymentType=="cod"){
+            userAddress = await Address.findOne({_id:address})
+            userContact = {
+                email:currentUser.email,
+                phone:currentUser.phone
+            }
+            console.log("user contact details",userContact);
+        }
+        
+
+        // user order data management 
+        let data = {
+            user_id : id,
+            contact : userContact,
+            address : userAddress,
+            paymentType: paymentType,
+            products: userCart.products.map(product => ({
+                product: product.product._id,
+                quantity: product.quantity,
+                name: product.name,
+                price: product.price
+            })),
+            orderStatus : "Placed",
+            totalPrice : discountedPrice,
+            orderNumber: uuidv4(),
+            coupon: coupon
+                
+        }
+        req.session.data = data; // saving data on session for later usage in payment gateway
+
+
+        // payment management based on type  of payment 
+        switch(paymentType){
+            case "cod":
                 console.log("going to save");
                 const order = new Order(data);
                 await order.save();
@@ -149,64 +136,60 @@ const postCheckoutOrder = async function(req,res){
                 console.log(Order.length);
                 let orderData = await order.populate("products.product")
                 // console.log(orderData);
-                res.render("user/orderStatus",{selcetedOrder:orderData,currentUser,success})
-            }
-            else if(paymentType == "paypal"){
-                    // paypal integration 
-                    try {
-                        let items = data.products.map(product => ({
-                            name: product.name,  // Assuming product name is available
-                            sku: product.product,    // Using product ID as SKU
-                            price: product.price.toFixed(2),  // Assuming price is a number
-                            currency: "USD",
-                            quantity: product.quantity
-                        }));
-                        console.log("items data to pass to paypal : ",items);
-                        let amountTotal = discountedPrice.toFixed(2);
-                        console.log("total amount pass to paypal: ",amountTotal);
-        
-                        const create_payment_json = {
-                            "intent": "sale",
-                            "payer": {
-                                "payment_method": "paypal"
-                            },
-                            "redirect_urls": {
-                                "return_url": "http://localhost:3000/home/pay-success",
-                                "cancel_url": "http://localhost:3000/home/pay-cancel"
-                            },
-                            "transactions": [{
-                                "item_list": {
-                                    "items": items
-                                },
-                                "amount": {
-                                    "currency": "USD",
-                                    "total": amountTotal
-                                },
-                                "description": "Hat for the best team ever"
-                            }]
-                        };
-                
-                        paypal.payment.create(create_payment_json, function (error, payment) {
-                            if (error) {
-                                throw error;
-                            } else {
-                                for(let i = 0;i < payment.links.length;i++){
-                                  if(payment.links[i].rel === 'approval_url'){
-                                    res.redirect(payment.links[i].href);
-                                  }
-                                }
-                            }
-                          });
-                
-                    } catch (error) {
-                        console.log(error.message);
-                    }
-            }
+                res.render("user/orderStatus",{selcetedOrder:orderData,currentUser,success});
+                break;
+            case "paypal":
+                try {
+                    let items = data.products.map(product => ({
+                        name: product.name,  // Assuming product name is available
+                        sku: product.product,    // Using product ID as SKU
+                        price: product.price.toFixed(2),  // Assuming price is a number
+                        currency: "USD",
+                        quantity: product.quantity
+                    }));
+                    console.log("items data to pass to paypal : ",items);
+                    let amountTotal = discountedPrice.toFixed(2);
+                    console.log("total amount pass to paypal: ",amountTotal);
     
+                    const create_payment_json = {
+                        "intent": "sale",
+                        "payer": {
+                            "payment_method": "paypal"
+                        },
+                        "redirect_urls": {
+                            "return_url": "http://localhost:3000/home/pay-success",
+                            "cancel_url": "http://localhost:3000/home/pay-cancel"
+                        },
+                        "transactions": [{
+                            "item_list": {
+                                "items": items
+                            },
+                            "amount": {
+                                "currency": "USD",
+                                "total": amountTotal
+                            },
+                            "description": "Hat for the best team ever"
+                        }]
+                    };
             
-        }     
-        }
-        
+                    paypal.payment.create(create_payment_json, function (error, payment) {
+                        if (error) {
+                            throw error;
+                        } else {
+                            for(let i = 0;i < payment.links.length;i++){
+                              if(payment.links[i].rel === 'approval_url'){
+                                res.redirect(payment.links[i].href);
+                              }
+                            }
+                        }
+                      });
+                      
+                    break;
+                } catch (error) {
+                    console.log(error.message);
+                }
+        }      
+    }         
     catch(err){
         console.log(err)
     }
@@ -215,7 +198,8 @@ const postCheckoutOrder = async function(req,res){
 const paymentSuccess = async function(req,res){
         const payerId = req.query.PayerID;
         const paymentId = req.query.paymentId;
-        const {data} = req.session
+        const {data,discountedPrice} = req.session
+        console.log(data,discountedPrice);
         let amountTotal = discountedPrice.toFixed(2);
         console.log("user order details : ",amountTotal);
         let id = req.session.userid
@@ -359,7 +343,7 @@ const applyCoupon = async function(req, res) {
             case "apply":
                 let coupon = await Coupon.findOne({ couponCode: userCode }).lean();
                 let totalPrice = calculateTotalPrice(userCart);
-                if (coupon) {
+                if (coupon && coupon.minimumSpend<totalPrice) {
                     let totalPrice = calculateTotalPrice(userCart);
                     let discountedPrice = totalPrice - coupon.discount;
                     let data = {
