@@ -43,8 +43,12 @@ const bookSchema = mongoose.Schema({
     },
     rating:{
         type: Number,
-    }
-
+    },
+    offerApplied: {
+        type: Boolean,
+        default: false
+    },
+    
 
 })
 // Assuming you have already connected to your MongoDB database

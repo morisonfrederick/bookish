@@ -43,9 +43,7 @@ const postCheckoutOrder = async function(req,res){
         let currentUser = await user.findOne({_id:id})
         let userCart = await cart.findOne({ user_id: id }).populate('products.product')
         // total amount calculation 
-        let totalPrice = 0;
-        let discount = 0;
-        
+        let totalPrice = 0;        
         userCart.products.forEach(item => {
             totalPrice += item.product.price * item.quantity;
         });
@@ -274,6 +272,18 @@ const viewOrdersDetails =async function(req,res){
     res.render("userOrderDetails",{order: userOrders,currentUser})
 }
 
+
+const cancellSingleProduct = async function(req,res){
+    try{
+        let orderId = req.params.id;
+        let productsId = req.body.productsId;
+        let id = req.session.userid
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+
 const cancelIndividualOrder = async function(req, res) {
     try {
         let orderId = req.params.id;
@@ -284,7 +294,7 @@ const cancelIndividualOrder = async function(req, res) {
         // Get the cancelled product details
         let cancelledProduct = await Order.findOne(
             { _id: orderId, 'products._id': productsId },
-            // projuct the first matched product
+            { 'products.$': 1 }// projuct the first matched product
         );
         console.log("cancelled price: ",cancelledProduct);
         console.log("000",cancelledProduct.products[0]);
@@ -293,7 +303,7 @@ const cancelIndividualOrder = async function(req, res) {
             return res.status(404).json({ message: 'Product not found in order' });
         }
 
-        // Calculate the price of the cancelled item
+        // Calculate the price of the cancelled item      
         let cancelledPrice = cancelledProduct.products[0].price * cancelledProduct.products[0].quantity;
         console.log("cancelled price: ",cancelledPrice);
 

@@ -13,12 +13,13 @@
 
                             <div class="d-flex justify-content-between">
                                 <h4 class="card-title">
-                                    <p class=""></p>Coupon Management
+                                    <p class=""></p>Offer Management
                                 </h4>
-                                <a href="/admin/coupon/add"
+                               
+                                <a href="/admin/offer/add"
                                                                                                                                                                                                                                                                                                class="btn btn-outline-success d-flex align-items-center">&nbsp<b>+
                                     </b> &nbsp Add
-                                    Coupon</a>
+                                    Offer</a>
                             </div>
                             <hr class="white-line my-4">
                             <div class="mb-5 ">
@@ -34,55 +35,54 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Coupon Code</th>
+                                            <th> Offer Code</th>
                                             <th> Discount Amount </th>
                                             <th> validFrom </th>
                                             <th> validTo </th>
-                                            <th> Minimum Spend</th>
-                                            <th> Maximum users</th>
+                                            <th> Category</th>
+                                            <th> Book</th>
                                             <th> Edit</th>
                                             <th> Remove</th>
-                                            
 
                                         </tr>
                                     </thead>
                                     <tbody>
                                         
-                                        <%for(i=0;i<Coupons.length;i++){%>
+                                        <%for(i=0;i<offer.length;i++){%>
                                                     <tr>
                                                         <!-- list -->
                                                         <td class="text-uppercase">
                                                             
                                                             
-                                                                <%= Coupons[i].couponCode %>
+                                                                <%= offer[i].offerCode %>
                                                            
                                                         </td>
                                                         <td>
-                                                            <%=Coupons[i].discount%>
+                                                            <%=offer[i].discount%>
                                                         </td>
                                                         <td>
-                                                            <%= Coupons[i].startDate.toLocaleDateString() %>
+                                                            <%= offer[i].startDate.toLocaleDateString() %>
 
                                                         </td>
                                                         <td>
-                                                            <%= Coupons[i].endDate.toLocaleDateString() %>
+                                                            <%= offer[i].endDate.toLocaleDateString() %>
                                                         </td>
 
                                                         <td>
-                                                            <%=Coupons[i].minimumSpend%>
+                                                            <%=offer[i].category%>
                                                         </td>
                                                         <td>
-                                                            <%=Coupons[i].maxUsers%>
+                                                            <%=offer[i].book%>
                                                         </td>
                                                         <td>
 
-                                                            <a type="button" class="btn btn-inverse-info" href="/admin/coupon/edit?id=<%= Coupons[i]._id%>">
+                                                            <a type="button" class="btn btn-inverse-info" href="/admin/offer/edit?id=<%= offer[i]._id%>">
                                                                 Edit
                                                             </a>
                                                         </td>
                                                         <td>
 
-                                                            <button type="button" class="btn btn-inverse-danger"   data-bs-target="#mod<%= Coupons[i]._id %>" data-bs-toggle="modal"
+                                                            <button type="button" class="btn btn-inverse-danger"   data-bs-target="#mod<%= offer[i]._id %>" data-bs-toggle="modal"
                                                                                                                                                                                                                                                                                                                            data-bs-target="#mod">
                                                                 remove
                                                             </button>
@@ -93,7 +93,7 @@
 
 
                                                     <!-- model -->
-                                                    <div class="modal fade" id="mod<%=Coupons[i]._id %>" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                                    <div class="modal fade" id="mod<%=offer[i]._id %>" tabindex="-1" aria-labelledby="exampleModalLabel"
                                                                                                                                                                                                                                                                                                                    aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             <div class="modal-content">
@@ -103,7 +103,7 @@
                                                                     <p class="modal-title "> <b
                                                                                                                                                                                                                                                                                                                                        class="mdi mdi-comment-alert text-warning"></b>
                                                                         Are you sure you want to
-                                                                        delete this Coupon</p>
+                                                                        delete this Offer</p>
                                                                     <button type="button" class=" btn mdi mdi-close" data-bs-dismiss="modal"
                                                                                                                                                                                                                                                                                                                                    aria-label="Close"></button>
                                                                 </div>
@@ -116,15 +116,13 @@
                                                                             <div class="col-md-12">
                                                                                 <div class="card-body mx-auto">
                                                                                     <h2 class="card-title text-center ">
-                                                                                        <%= Coupons[i].code %>
+                                                                                        <%= offer[i].offerCode %>
                                                                                     </h2>
-                                                                                    
-                                                                                    %>
-                                                                                    </p>
-                                                                                    <p class="card-text">Discount Amount: <%=Coupons[i].discount%></p>
+                                                                                  
+                                                                                    <p class="card-text">Discount Amount: <%=offer[i].discount%></p>
 
-                                                                                    <p class="card-text">Discount Amount: <%=Coupons[i].discount%></p>
-                                                                                    <p class="card-text"> Expiring on <%= Coupons[i].endDate.toLocaleDateString() %></p>
+                                                                                    <p class="card-text">Discount Amount: <%=offer[i].discount%></p>
+                                                                                    <p class="card-text"> Expiring on <%= offer[i].endDate.toLocaleDateString() %></p>
 
                                                                                 </div>
                                                                             </div>
@@ -135,7 +133,7 @@
                                                                         <button type="button" class="btn btn-outline-light"
                                                                         data-bs-dismiss="modal">Not
                                                                             Now</button>
-                                                                        <a type="button" href="/admin/coupon/delete?id=<%= Coupons[i]._id%>"
+                                                                        <a type="button" href="/admin/offer/delete?id=<%= offer[i]._id%>"
                                                                         class="btn btn-inverse-danger">Delete
                                                                             Now</a>
                                                                     </div>

@@ -231,7 +231,12 @@
                             <div class="product-body">
                                 <h3 class="product-title"><a href="/product?id=<%= products[i]._id %>"><%= products[i].product_name %></a></h3>
                                 <div class="product-price">
-                                    ₹<%= products[i].price %>
+                                    <% if(products[i].offerApplied) { %>
+                                        <span class="original-price"><del>₹ <%= products[i].price %>  </del></span>
+                                        <span class="discounted-price"> ₹ <%= products[i].discount %></span>
+                                    <% } else { %>
+                                        ₹ <%= products[i].price %>
+                                    <% } %>
                                 </div>
                             </div>
                             <div class="product-action">

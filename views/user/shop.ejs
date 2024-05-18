@@ -89,8 +89,8 @@
                                                     </h3><!-- End .product-title -->
                                                     <div class="product-price">
                                                         <% if(products[i].offerApplied) { %>
-                                                            <span class="original-price">₹ <%= products[i].price %></span>
-                                                            <span class="discounted-price">₹ <%= products[i].discountedPrice %></span>
+                                                            <span class="original-price"><del>₹ <%= products[i].price %>  </del></span>
+                                                            <span class="discounted-price"> ₹ <%= products[i].discount %></span>
                                                         <% } else { %>
                                                             ₹ <%= products[i].price %>
                                                         <% } %>

@@ -1,0 +1,171 @@
+<%- include('../admin/layouts/header.ejs') %>
+    <div class="main-panel">
+        <div class="content-wrapper">
+            
+
+
+
+
+            <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Add New Offer</h4>
+                        <!-- <p class="card-description"> Basic form elements </p> -->
+                        <form class="forms-sample " action="/admin/offer/add" method="post" >
+
+                            <div class="form-group  row">
+                                <div class="col-6  text-light">
+                                    <label for="exampleInputName1">Offer Code</label>
+                                    <input type="text" class="form-control  text-light" name="code" id="exampleInputName1" placeholder="code" onkeyup="this.value = this.value.toUpperCase();" required >
+                                </div>
+                                <div class="col-6">
+                                    <label for="exampleInputName1">Discount Amount</label>
+                                    <input type="number" class="form-control text-light"  name="discount" placeholder="price" required>
+                                </div>
+
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 d-flex ">
+                                    <div class="d-flex  mt-4 ">
+                                        <p class="mdi mdi-calendar-multiple-check " style="font-size: 2.1rem;"></p>
+
+                                    </div>
+                                    <div class="form-group row mx-2 w-100" >
+                                        <div class="col-sm-12 ">
+                                            <label for="start-date" class="col-sm-22 col-form-label">Valid Date
+                                                From</label>
+                                            <input type="date"  id="start-date" class="form-control text-light" name="start" placeholder="Select Starting Date" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6  d-flex ">
+                                    <div class="d-flex  mt-4 ">
+                                        <p class="mdi mdi-calendar-multiple-check " style="font-size: 2.1rem;"></p>
+
+                                    </div>
+                                    <div class="form-group row mx-2 w-100" >
+                                        <div class="col-sm-12  ">
+                                            <label for="end-date" class="col-sm-22 col-form-label">Valid Date To</label>
+                                            <input type="date"  id="end-date" class="form-control text-light" name="end" placeholder="Select Expiring Date" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <label class="col-sm-3 col-form-label">Category</label>
+                                            <select name="category" class="form-control text-light" required>
+                                              <option value="null" disabled selected>No Category Selected</option>
+                                              <% for( let i = 0; i < categories.length; i++ ) { %>
+                                                <option value="<%= categories[i].categoryName %>"><%= categories[i].categoryName %></option>
+                                              <% } %>
+                                            </select>                                    
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <label class="col-sm-3 col-form-label">Book</label>
+                                            <select name="book" class="form-control text-light" required>
+                                              <option value="null" disabled selected>No Book selected</option>
+                                              <% for( let i = 0; i < books.length; i++ ) { %>
+                                                <option value="<%= books[i].name %>"><%= books[i].name %></option>
+                                              <% } %>
+                                            </select> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-2">
+                                <label for="exampleTextarea1">Description</label>
+                                <textarea name="description" class="form-control text-light" id="exampleTextarea1" rows="4" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-lg btn-primary mr-2 mt-5">Add Offer</button>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+            
+
+
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+            <div class="content-wrapper ">
+                <div id="FormAlert" data-aos="fade-down" class="alert alert-danger col-md-3 col-8 mx-auto fixed-top "
+                style="display: none;  top:30px; border-radius: 7px; opacity: 0.9; " role="alert">
+                <h6 class="alert-heading text-center">Please provide only valid data.</h6>
+                <hr>
+                <span class="row "><i class="fa-sharp fa-light fa-circle-xmark fa-shake" style="color: #ff0505; font-size: 18px;"></i> &nbsp;&nbsp;&nbsp; <p id="ValidErrMess"></p></span>
+                 
+            </div>
+
+            <%if(codeErr==1){%>
+                <div class="content-wrapper ">
+                    <div id="CodeAlert" data-aos="fade-down" class="alert alert-danger col-md-3 col-8 mx-auto fixed-top "
+                    style="  top:30px; border-radius: 7px; opacity: 0.9; " role="alert">
+                    <h6 class="alert-heading text-center">Code Not available</h6>
+                    <hr>
+                    <span class="row "> &nbsp;&nbsp;&nbsp; <p id="ValidErrMess">This coupon code isn't available, it's already been used</p></span>
+                     
+                </div>
+                <script>
+                      setTimeout(function () {
+                        $("#CodeAlert").fadeOut();
+                      }, 5000);
+                </script>
+            <%}%>
+        </footer>
+        <!-- partial -->
+        
+
+        
+    </div>
+    <script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+
+    startDateInput.addEventListener('change', function () {
+        if (startDateInput.value) {
+            const startDate = new Date(startDateInput.value);
+            const minEndDate = new Date(startDate);
+            minEndDate.setDate(minEndDate.getDate() + 1);
+            endDateInput.min = minEndDate.toISOString().split('T')[0];
+        } else {
+            endDateInput.min = '';
+        }
+    });
+
+    endDateInput.addEventListener('change', function () {
+        if (endDateInput.value) {
+            const endDate = new Date(endDateInput.value);
+            const maxStartDate = new Date(endDate);
+            maxStartDate.setDate(maxStartDate.getDate() - 1);
+            startDateInput.max = maxStartDate.toISOString().split('T')[0];
+        } else {
+            startDateInput.max = '';
+        }
+    });
+});
+
+        
+
+    </script>
+      
+
+
+
+
+    <%- include('../admin/layouts/footer.ejs') %>

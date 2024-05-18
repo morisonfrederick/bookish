@@ -9,7 +9,7 @@ const auth = require("../middlewares/auth")
 const orderController = require("../controller/adminController/orderController")
 const couponController = require("../controller/adminController/coupenController")
 const salesReportController = require("../controller/adminController/salesReportController")
-
+const offerController = require("../controller/adminController/offerController")
 
 
 router.use(express.json());
@@ -74,6 +74,13 @@ router.get("/coupon/edit",couponController.editCouponLoad)
 router.get("/sales",salesReportController.saleReportLoad)
 router.get("/sales/excel-report",salesReportController.excelSheet)
 
+// admin offer module 
+router.get("/offer/add",offerController.addOfferLoad)
+router.get("/offer",offerController.offerLoad);
+router.post("/offer/add",offerController.addOffer);
+router.put("/offer/edit/:id",offerController.editOffer)
+router.get("/offer/edit",offerController.editOfferLoad)
+router.get("/offer/delete",offerController.deleteOffer)
 
 
 

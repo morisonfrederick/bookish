@@ -67,6 +67,7 @@ const editCouponLoad = async function(req,res){
 const editCoupon = async function(req,res){
     try{
         let id = req.params.id
+        console.log(id);
         let {code,discount,start,end,minimum,totalUsers,description} = req.body
 
         let data = {
