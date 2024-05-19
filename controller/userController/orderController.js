@@ -281,16 +281,16 @@ const viewOrdersDetails =async function(req,res){
 }
 
 
-const cancellSingleProduct = async function(req,res){
-    try{
-        let orderId = req.params.id;
-        let productsId = req.body.productsId;
-        let id = req.session.userid
-    }
-    catch(err){
-        console.log(err);
-    }
-}
+// const cancellSingleProduct = async function(req,res){
+//     try{
+//         let orderId = req.params.id;
+//         let productsId = req.body.productsId;
+//         let id = req.session.userid
+//     }
+//     catch(err){
+//         console.log(err);
+//     }
+// }
 
 const cancelIndividualOrder = async function(req, res) {
     try {
@@ -333,8 +333,8 @@ const cancelIndividualOrder = async function(req, res) {
             { _id: orderId },
             { totalPrice: totalPrice }
         );
-
-        let wallet = await Wallet.findOne({userid: id})
+        if(cancelledProduct.paymentType!= "cod"){
+            let wallet = await Wallet.findOne({userid: id})
         let balance = cancelledPrice 
         console.log("balance",balance);
         if(!wallet){
@@ -352,6 +352,8 @@ const cancelIndividualOrder = async function(req, res) {
             wallet.balance += balance
             await wallet.save()
         }
+        }
+        
 
         // Send a response back to the client with updated order details
         res.status(200).json({ message: 'Order item cancelled successfully', totalPrice: totalPrice });

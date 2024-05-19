@@ -35,7 +35,7 @@
             
                         <tbody>
                           <% selectedOrder.products.forEach(book => { %>
-                            <% if (book.individulOrderStatus!="Cancel") { %>
+                           
                               <tr>
                                 <td onclick="orderDetails('<%=selectedOrder._id %>')"><%= selectedOrder.orderNumber %></td>
                                 <td><%= selectedOrder.createdAt.toLocaleDateString('en-US', { 
@@ -51,7 +51,7 @@
                                 <td><%= selectedOrder.totalPrice %></td>
                                 <td><%= book.individulOrderStatus %></td>
                               </tr>
-                            <% } %>
+                            
                           
                           
                           
