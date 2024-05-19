@@ -7,7 +7,8 @@ const user = require("../../models/userModel");
 const Coupon = require("../../models/coupenModel")
 const paypal = require('paypal-rest-sdk');
 require("dotenv").config()
-const Wallet = require("../../models/walletModel")
+const Wallet = require("../../models/walletModel");
+const { name } = require("ejs");
 
 const { PAYPAL_MODE, PAYPAL_CLIENT_KEY, PAYPAL_SECRET_KEY } = process.env;
 
@@ -363,7 +364,70 @@ const cancelIndividualOrder = async function(req, res) {
     }
 }
 
+const returnProduct = async function(req,res){
+    try{
+        let id = req.session.userid
+        let{ orderId,productId} = req.body
+        console.log(orderId,productId);
 
+        // Get the returned product details
+        let returnedProduct = await Order.findOne(
+            { _id: orderId, 'products._id': productId },
+            { 'products.$': 1 }// projuct the first matched product
+        );
+
+        if (!returnedProduct) {
+            return res.status(404).json({ message: 'Product not found in order' });
+        }
+
+         // Calculate the price of the cancelled item      
+         let cancelledPrice = returnedProduct.products[0].price * returnedProduct.products[0].quantity;
+         console.log("cancelled price: ",cancelledPrice);
+
+        // remove the priduct from the order list 
+        await Order.updateOne(
+            { _id: orderId },
+            { $pull: { products: { _id: productId } } }
+        );
+
+         // Recalculate the total price after return
+         let updatedOrder = await Order.findOne({ _id: orderId }).populate('products.product');
+         let totalPrice = 0;
+         updatedOrder.products.forEach(item => {
+             totalPrice += item.product.price * item.quantity;
+         });
+
+          // Update the order's total price
+        await Order.updateOne(
+            { _id: orderId },
+            { totalPrice: totalPrice }
+        );
+
+        // wallet management 
+        let wallet = await Wallet.findOne({userid: id})
+        let balance = cancelledPrice 
+        console.log("balance",balance);
+        if(!wallet){
+            let userWallet = new Wallet({
+                userid: id,
+                balance: balance,
+                history: [{
+                    amount:cancelledPrice,
+                    method: "Refund "
+                }]
+            })
+            await userWallet.save()
+        }
+        else{
+            wallet.balance += balance
+            await wallet.save()
+        }
+        res.json({message: "order return successfully"})
+    }
+    catch(err){
+        console.log(err);
+    }
+}
 
 const applyCoupon = async function(req, res) {
     try {
@@ -449,5 +513,6 @@ module.exports = {
     cancelIndividualOrder,
     applyCoupon,
     paymentSuccess,
-    failurePayment
+    failurePayment,
+    returnProduct
 }

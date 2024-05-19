@@ -123,6 +123,7 @@ router.post("/cart/orders",auth.userLogin,orderController.postCheckoutOrder)
 router.patch("/account/orders/:id",auth.userLogin,orderController.cancelOrder)
 router.get("/account/orders/details/:id",auth.userLogin,orderController.viewOrdersDetails)
 router.patch("/account/orders/details/:id",auth.userLogin,orderController.cancelIndividualOrder)
+router.patch("/account/orders/return/:id",auth.userLogin,orderController.returnProduct)
 
 
 

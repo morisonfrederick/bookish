@@ -36,7 +36,7 @@ const orderDetailsView = async function(req,res){
         let id = req.params.id
         console.log(id);
         let userOrder = await Order.findOne({_id:id}).populate("products.product")
-        console.log(userOrder.products[0]._id);
+        
         res.render("admin/orderManagment",{data: userOrder,total:150,layout:"admin/adminLayout"})
     }
     catch(err){

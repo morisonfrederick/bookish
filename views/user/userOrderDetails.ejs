@@ -41,7 +41,14 @@
                             <td><%= book.quantity %></td>
                             <td><%= book.quantity * book.product.price %></td>
                             <td><%= book.individulOrderStatus %></td>
-                            <td><button onclick="if(confirm('Are you sure you want to cancel this order')) cancelOrder('<%= order._id %>','<%= book._id %>')">Cancel Order</button></td>
+                            <% if (book.individulOrderStatus=="Delivered") { %>
+                              <td><button onclick="if(confirm('Are you sure you want to return this product')) returnOrder('<%= order._id %>','<%= book._id %>')">Return Product</button></td>
+                            
+                              <% } else { %>
+                                <td><button onclick="if(confirm('Are you sure you want to cancel this order')) cancelOrder('<%= order._id %>','<%= book._id %>')">Cancel Order</button></td>
+
+                              <% } %>
+
             
             
                           </tr>
@@ -70,10 +77,10 @@
                             <td><%= order.address.city  %></td>
                             <td><%= order.address.pin  %></td>
                           </tr>
-                          <tr>
+                          <!-- <tr>
                             <td colspan="4"><button onclick="if(confirm('Are you sure to cancel this order?')) cancelOrder('<%= order._id %>')">Cancel All Orders</button></td>
                             
-                          </tr>
+                          </tr> -->
                           
                           
                         </tbody>
@@ -111,6 +118,18 @@
           console.log(err);
       }
 
+  }
+  async function returnOrder(orderId,productId){
+    const response =  await fetch("/home/account/orders/return/"+orderId,{
+      method: "PATCH",
+      headers: {
+        "Content-type" : "Application/json"
+      },
+      body: JSON.stringify({orderId,productId})
+    })
+    const data = await response.json()
+    console.log(data)
+    window.location.reload()
   }
     
 </script>          
