@@ -265,11 +265,19 @@ const viewOrdersDetails =async function(req,res){
     let id = await req.params.id
     let currentUser = req.session.userid
     let userOrders = await Order.findOne({_id: id }).populate('products.product');
+    let couponDetails = ""
+    if(userOrders.coupon){
+         couponName = await Coupon.findOne({_id:userOrders.coupon},)
+         couponDetails = couponName.discount
+    }
+    else {
+        couponDetails = "No coupon applied"
+    }
     
     // console.log(userOrders);
     console.log("total orders ",userOrders.length);
 
-    res.render("userOrderDetails",{order: userOrders,currentUser})
+    res.render("userOrderDetails",{order: userOrders,currentUser,couponDetails})
 }
 
 
