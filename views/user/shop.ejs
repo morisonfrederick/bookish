@@ -214,26 +214,19 @@
                                             <div class="filter-items">
                                                 <div class="filter-item">
                                                     <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" onclick="selectPrice(5,10)" id="C500">
-                                                        <label class="custom-control-label" for="C500">&euro;5-&euro;10</label>
+                                                        <input type="checkbox" class="custom-control-input" onclick="sortPrice('ascending')" id="ascending">
+                                                        <label class="custom-control-label" for="ascending">low to high</label>
                                                     </div><!-- End .custom-checkbox -->
                                                 </div><!-- End .filter-item -->
 
                                                 <div class="filter-item">
                                                     <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" onclick="selectPrice(10,15)" id="C1000">
-                                                        <label class="custom-control-label" for="C1000">&euro;10-&euro;15</label>
+                                                        <input type="checkbox" class="custom-control-input" onclick="sortPrice('descending')" id="C1000">
+                                                        <label class="custom-control-label" for="C1000">high to low</label>
                                                     </div><!-- End .custom-checkbox -->
                                                 </div><!-- End .filter-item -->
 
-                                                <div class="filter-item">
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" onclick="selectPrice(2000,5000)" id="C2000">
-                                                        <label class="custom-control-label" for="C2000">&euro;15-&euro;20</label>
-                                                    </div><!-- End .custom-checkbox -->
-                                                </div><!-- End .filter-item -->
-
-                                                <button class=" mt-1 filtterClear"  onclick="priceClear()">clear</button>
+                                                <button class=" mt-1 filtterClear"  onclick="clearAll()">clear</button>
 
 
 
@@ -259,10 +252,64 @@
 
         <script>
             let selectedCategoryItems = "";
-            let selectedGender = "";
-            let selectedMinPrice = "";
-            let selectedMaxPrice = "";
+            let priceSort = "";
+
+            function selectCategory(data) {
+                const temp = document.getElementById(data);
+
+                if (!temp.checked) {
+                    // Deselecting a category
+                    const checkedArray = selectedCategoryItems.split(",").filter(item => item !== data);
+                    selectedCategoryItems = checkedArray.join(',');
+                } else {
+                    // Selecting a category
+                    selectedCategoryItems = selectedCategoryItems ? selectedCategoryItems + "," + data : data;
+                }
+                // Update the URL
+                updateURL();
+            }
+
+            function updateURL() {
+                const url = new URL(window.location.href);
+                url.searchParams.set('category', encodeURIComponent(selectedCategoryItems));
+                url.searchParams.set('sort', priceSort);
+                window.history.pushState(null, '', url);
+                location.reload();
+            }
+
+            function sortPrice(order) {
+                alert(order)
+                priceSort = order;
+                updateURL();
+            }
+
+            window.onload = function () {
+                const queryString = window.location.search;
+                const urlSearchParams = new URLSearchParams(queryString);
+                
+                selectedCategoryItems = urlSearchParams.get('category') ? decodeURIComponent(urlSearchParams.get('category')) : "";
+                priceSort = urlSearchParams.get('sort') || "";
+
+                const checkedCategoryItems = selectedCategoryItems.split(",");
+                for (let i = 0; i < checkedCategoryItems.length; i++) {
+                    if (checkedCategoryItems[i]) {
+                        document.getElementById(checkedCategoryItems[i]).checked = true;
+                    }
+                }
+            };
+            function clearAll() {
+                alert("clear function called")
+                selectedCategoryItems = "";
+                priceSort = "";
+                const url = new URL(window.location.href);
+                url.searchParams.delete('category');
+                url.searchParams.delete('sort');
+                window.history.pushState(null, '', url);
+                location.reload();
+            }
+
             
+            // add to cart function 
             const addtocart =  function(id,user) {
                 console.log("add to cart");
                 fetch('/home/cart', {
@@ -287,78 +334,6 @@
                 });
             };
 
-            function selectCategory(data) {
-                const temp = document.getElementById(data);
-        
-                if (!temp.checked) {
-                    // Deselecting a category
-                    const checkedArray = selectedCategoryItems.split(",").filter(item => item !== data);
-                    selectedCategoryItems = checkedArray.join(',');
-                } else {
-                    // Selecting a category
-                    selectedCategoryItems = selectedCategoryItems ? selectedCategoryItems + "," + data : data;
-                }
-                // Update the URL
-                updateURL();
-            }
-        
-            function updateURL() {
-                if(selectedMinPrice==null){
-                    selectedMinPrice=""
-                    selectedMaxPrice=""
-                }
-                const url = new URL(window.location.href);
-                url.searchParams.set('category', encodeURIComponent(selectedCategoryItems));
-                url.searchParams.set('minPrice', selectedMinPrice);
-                url.searchParams.set('maxPrice', selectedMaxPrice);
-                window.history.pushState(null, '', url);
-                location.reload();
-            }
-            
-            function selectPrice(minPrice, maxPrice) {
-                selectedMinPrice=minPrice
-                selectedMaxPrice=maxPrice
-                updateURL();
-            }
-
-            
-            
-            function priceClear(){
-                selectedMinPrice = "";
-                selectedMaxPrice = "";
-                updateURL();
-            }
-
-            window.onload = function () {
-                const queryString = window.location.search;
-                const urlSearchParams = new URLSearchParams(queryString);
-                const categorySelected = urlSearchParams.get('frame_shape');
-                selectedCategoryItems = categorySelected ? decodeURIComponent(categorySelected) : "";
-        
-                const genderSelected = urlSearchParams.get('gender');
-                selectedGender = genderSelected || "";
-
-                const minSelected = urlSearchParams.get('minPrice');
-                const maxSelected = urlSearchParams.get('maxPrice');
-                selectedMinPrice = minSelected !== "" ? minSelected :"" ;
-                selectedMaxPrice = maxSelected !== "" ? maxSelected :""
-                // alert(selectedMinPrice)
-                if(minSelected !== "" && maxSelected !== "" ){
-                    // alert(`C${selectedMinPrice}`)
-                    document.getElementById(`C${selectedMinPrice}`).checked =true
-                }
-                if(genderSelected!=""){
-                    // alert(genderSelected)
-                    document.getElementById(selectedGender).checked =true
-                }
-        
-                const checkedCategoryItems = selectedCategoryItems.split(",");
-                for (let i = 0; i < checkedCategoryItems.length; i++) {
-                    document.getElementById(checkedCategoryItems[i]).checked = true;
-                }
-        
-                // Handle gender selection here (e.g., selectGender('men') or selectGender('women')).
-            };
         </script>
         
         

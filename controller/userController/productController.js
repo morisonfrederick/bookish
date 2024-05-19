@@ -12,7 +12,8 @@ const productView = async (req, res, next) => {
     let page = parseInt(req.query.page) || 1;
     let pageSize = 6;
     let skip = (page - 1) * pageSize;
-    let sort = req.query.sort || 'asc';
+    let sortDirection = req.query.sort == "ascending"?1:-1;
+    console.log("sort :",sortDirection);
     let totalBooks = await book.countDocuments()||5
     let totalPage = totalBooks<1 ? 1:totalBooks%2 +1
     let search = req.query.key || "";
@@ -27,16 +28,17 @@ const productView = async (req, res, next) => {
     }
     if(req.query.category){
         query.category = req.query.category
-    }if (req.query.minPrice && req.query.maxPrice) {
-        const minPrice = parseInt(req.query.minPrice);
-        const maxPrice = parseInt(req.query.maxPrice);
-        query.price = { $gte: minPrice, $lte: maxPrice };
-      }
+    }
+    // if (req.query.minPrice && req.query.maxPrice) {
+    //     const minPrice = parseInt(req.query.minPrice);
+    //     const maxPrice = parseInt(req.query.maxPrice);
+    //     query.price = { $gte: minPrice, $lte: maxPrice };
+    //   }
     
 
     console.log(query);
 
-    let books = await book.find(query).skip(skip).limit(pageSize);
+let books = await book.find(query).skip(skip).limit(pageSize).sort({price:sortDirection});
     if(books.length>0){
         // console.log(books);
         console.log("yes");
