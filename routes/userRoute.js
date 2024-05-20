@@ -139,11 +139,11 @@ router.get("/image",auth.userLogin,profileController.viewImage)
 
 // routes to manage user wishlist 
 
-router.get("/account/wishlist",wishlistController.wishlistLoad)
-router.post("/account/wishlist",wishlistController.addWishlist)
-router.delete("/account/wishlist",wishlistController.removeWishlist)
+router.get("/account/wishlist",auth.userLogin,wishlistController.wishlistLoad)
+router.post("/account/wishlist",auth.userLogin,wishlistController.addWishlist)
+router.delete("/account/wishlist",auth.userLogin,wishlistController.removeWishlist)
 
-router.get("/check",wishlistController.checkLoad)
+// router.get("/check",wishlistController.checkLoad)
 
 
 // routes to manage paypal 
@@ -154,6 +154,6 @@ router.get("/pay-cancel",orderController.failurePayment)
 
 
 // routes for wallet 
-router.get("/account/wallet",walletController.walletLoad)
+router.get("/account/wallet",auth.userLogin,walletController.walletLoad)
 
 module.exports = router;

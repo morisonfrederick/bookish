@@ -1,7 +1,7 @@
 <%- include('../user/layouts/header.ejs') %>
     <%- include('../user/layouts/navbar.ejs') %>
         <main class="main">
-            <div class="page-header text-center" style="background-image: url('user/images/page-header-bg.jpg')">
+            <div class="page-header text-center" style="background-image: url('/user/images/background.png')">
                 <div class="container">
                     <h1 class="page-title text-white"><i class="fa-thin fa-wallet"></i> My Wallet</h1>
                 </div><!-- End .container -->
@@ -9,7 +9,7 @@
             <nav aria-label="breadcrumb" class="breadcrumb-nav">
                 <div class="container">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/home">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Wallet</li>
                     </ol>
                 </div><!-- End .container -->
@@ -42,7 +42,7 @@
                                 </div>
 
                                 <div class="col-7 d-flex  align-items-end">
-                                    <h4 class="text-light pb-1">Wallet Balace</h4>
+                                    <h4 class="text-light pb-1">Wallet Balance</h4>
                                 </div>
                                 <div class="col-5 d-flex  align-items-end">
                                     <h2 class="text-white">₹ <%= wallet.balance%></h2>

@@ -22,19 +22,46 @@ const addCoupon = async function(req,res){
     console.log(6,"totalUsers",totalUsers);
     console.log(7,"description",description);
 
+    const checking = await Coupon.findOne({couponCode:code})
+    if(checking){
+        res.render("admin/addcoupon",{codeErr:1})
+    }
+    else{
+        let data ={
+            couponCode:code,
+            discount:discount,
+            startDate: start,
+            endDate:end,
+            minimumSpend:minimum,
+            maxUsers:totalUsers,
+            description:description
+        }
+    
+        let updatedCoupon = new Coupon({
+            couponCode:code,
+            discount:discount,
+            startDate: start,
+            endDate:end,
+            minimumSpend:minimum,
+            maxUsers:totalUsers,
+            description:description
+        })
+        await updatedCoupon.save()
+        console.log(updatedCoupon)
+        req.flash("success","Coupon added successfully")
+        res.redirect("/admin/coupon")
+    }
 
-    let updatedCoupon = new Coupon({
-        couponCode:code,
-        discount:discount,
-        startDate: start,
-        endDate:end,
-        minimumSpend:minimum,
-        maxUsers:totalUsers,
-        description:description
-    })
-    await updatedCoupon.save()
-    console.log(updatedCoupon)
-    res.redirect("/admin/coupon")
+    
+}
+
+
+const validateCoupon =async function(data){
+    const checking = await Coupon.findOne({couponCode:data.couponCode})
+    if(checking){
+        let response = "error1"
+        return response
+    }
 }
 
 const deleteCoupon = async function(req,res){
@@ -70,7 +97,13 @@ const editCoupon = async function(req,res){
         console.log(id);
         let {code,discount,start,end,minimum,totalUsers,description} = req.body
 
-        let data = {
+        const checking = await Coupon.findOne({couponCode:code})
+        if(checking){
+            req.flash("success","Coupon with same name exist")
+            res.redirect("/admin/coupon")
+        }
+        else{
+            let data = {
                 couponCode:code,
                 discount:discount,
                 startDate: start,
@@ -78,10 +111,13 @@ const editCoupon = async function(req,res){
                 minimumSpend:minimum,
                 maxUsers:totalUsers,
                 description:description
+            }
+            await Coupon.updateOne({_id:id},{$set:data})
+            req.flash("success","Coupon edited successfully")
+            res.redirect("/admin/coupon")
         }
-        await Coupon.updateOne({_id:id},{$set:data})
-        req.flash("success","Coupon edited successfully")
-        res.redirect("/admin/coupon")
+
+        
     }
     catch(err){
         console.log(err);

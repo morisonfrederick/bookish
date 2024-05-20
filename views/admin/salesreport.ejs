@@ -99,11 +99,11 @@
                         <h3>Total Profit :<%= sales.totalSales%>
                         </h3>
                     </div>
-                    <div class=" col-3 d-flex flex-row ">
-                        <form class="d-flex flex-row" action="/admin/sales-report" method="get">
+                    <div class=" col-3 d-flex flex-column ">
+                        <form class="d-flex flex-column" action="/admin/sales" method="get">
                         <h2 class="mdi mdi-calendar-clock"></h2>
-                        <input type="text" autocomplete="off" id="start-date" class="form-control text-light m-1 " name="start" placeholder="From"  required>
-                        <input type="text" autocomplete="off" id="end-date" class="form-control text-light m-1 " name="end" placeholder="To" required>
+                        <input type="date" autocomplete="off" id="start-date" class="form-control text-light m-1 " name="start" placeholder="From"  required>
+                        <input type="date" autocomplete="off" id="end-date" class="form-control text-light m-1 " name="end" placeholder="To" required>
                         <button type="submit" class="btn btn-inverse-primary m-2">Filter</button>
                         </form>
                     </div>
@@ -216,90 +216,30 @@
         </div>
     </div>
     <script>
-        function SoledProduct(){
-        //    alert("called 2nd")
-        }
+        // function SoledProduct(){
+        // //    alert("called 2nd")
+        // }
 
 
-        function runLoad(){
-            SalesPortfolio("week")
-            SoledProduct()
-        }
+        // function runLoad(){
+        //     SalesPortfolio("week")
+        //     SoledProduct()
+        // }
             
 
-        window.onload = runLoad
-         function SalesPortfolio(data){
-            $.ajax({
-                    url:"/admin/sales-report/portfolio",
-                    method:"POST",
-                    data:{date:data},
-                    success:(response)=>{
-                        portfolioDataInsert(response,data)
+        // window.onload = runLoad
+        //  function SalesPortfolio(data){
+        //     $.ajax({
+        //             url:"/admin/sales-report/portfolio",
+        //             method:"POST",
+        //             data:{date:data},
+        //             success:(response)=>{
+        //                 portfolioDataInsert(response,data)
                         
-                    }
-                })
-            }
+        //             }
+        //         })
+        //     }
 
-            function portfolioDataInsert(data,chartType){
-            //  console.log(data.data[0].date);
-             let week7=data.data[6].date, week6=data.data[5].date, week5=data.data[4].date, week4=data.data[3].date, 
-                 week3=data.data[2].date, week2=data.data[1].date, week1=data.data[0].date
-             let data7=data.data[6].sales, data6=data.data[5].sales, data5=data.data[4].sales,
-                     data4=data.data[3].sales, data3=data.data[2].sales, data2=data.data[1].sales, data1=data.data[0].sales
-
-
-             var areaData = {
-                labels: [week7, week6, week5, week4, week3, week2, week1,],
-                datasets: [{
-                    label: `${chartType} Chart`,
-                    data: [data7, data6, data5, data4, data3, data2, data1],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1,
-                    fill: true,
-                }]
-            };
-
-            var areaOptions = {
-                plugins: {
-                    filler: {
-                        propagate: true
-                    }
-                },
-                scales: {
-                    yAxes: [{
-                        gridLines: {
-                            color: "rgba(204, 204, 204, 0.1)"
-                        }
-                    }],
-                    xAxes: [{
-                        gridLines: {
-                            color: "rgba(204, 204, 204, 0.1)"
-                        }
-                    }]
-                }
-            };
-            var areaChartCanvas = document.getElementById("areaChart").getContext("2d");
-            var areaChart = new Chart(areaChartCanvas, {
-                type: 'line',
-                data: areaData,
-                options: areaOptions
-            });
-            }
-
-            
 
     </script>
 

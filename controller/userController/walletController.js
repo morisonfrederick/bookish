@@ -8,9 +8,9 @@ const walletLoad = async function(req,res){
         let userData = await User.findOne({_id:id})
         let wallet = await Wallet.findOne({userid:id})
         if(!wallet){
-            res.render("wallet",{currentUser:0,userData,wallet:0,history:0})
+            res.render("wallet",{currentUser:userData,userData,wallet:0,history:0})
         }
-        res.render("wallet",{currentUser:0,userData,wallet,history:0})
+        res.render("wallet",{currentUser:userData,userData,wallet,history:0})
     }
     catch(err){
         console.log(err);

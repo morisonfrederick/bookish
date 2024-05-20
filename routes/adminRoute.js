@@ -62,12 +62,12 @@ router.put("/order/details/:id",auth.adminLogin,orderController.changeIndividual
 router.post("/order",auth.adminLogin,orderController.filterOrders)
 
 // admin coupon management 
-router.get("/coupon",couponController.couponLoad)
-router.get("/coupon/add",couponController.couponAddLoad)
-router.post("/coupon/add",couponController.addCoupon)
-router.get("/coupon/delete",couponController.deleteCoupon)
-router.put("/coupon/edit/:id",couponController.editCoupon)
-router.get("/coupon/edit",couponController.editCouponLoad)
+router.get("/coupon",auth.adminLogin,couponController.couponLoad)
+router.get("/coupon/add",auth.adminLogin,couponController.couponAddLoad)
+router.post("/coupon/add",auth.adminLogin,couponController.addCoupon)
+router.get("/coupon/delete",auth.adminLogin,couponController.deleteCoupon)
+router.put("/coupon/edit/:id",auth.adminLogin,couponController.editCoupon)
+router.get("/coupon/edit",auth.adminLogin,couponController.editCouponLoad)
 
 
 // admin sales report page 
@@ -75,12 +75,12 @@ router.get("/sales",salesReportController.saleReportLoad)
 router.get("/sales/excel-report",salesReportController.excelSheet)
 
 // admin offer module 
-router.get("/offer/add",offerController.addOfferLoad)
-router.get("/offer",offerController.offerLoad);
-router.post("/offer/add",offerController.addOffer);
-router.put("/offer/edit/:id",offerController.editOffer)
-router.get("/offer/edit",offerController.editOfferLoad)
-router.get("/offer/delete",offerController.deleteOffer)
+router.get("/offer/add",auth.adminLogin,offerController.addOfferLoad)
+router.get("/offer",auth.adminLogin,offerController.offerLoad);
+router.post("/offer/add",auth.adminLogin,offerController.addOffer);
+router.put("/offer/edit/:id",auth.adminLogin,offerController.editOffer)
+router.get("/offer/edit",auth.adminLogin,offerController.editOfferLoad)
+router.get("/offer/delete",auth.adminLogin,offerController.deleteOffer)
 
 
 

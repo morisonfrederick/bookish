@@ -5,13 +5,32 @@ const ExcelJS = require("exceljs")
 
 
 const saleReportLoad = async function(req,res){
-    let salesReport =await createSalesReport()
-    let products = await mostSellingProducts()
-    console.log("most selling products",products);
+  try{
+    let {start,end} = req.query
+    if(!start || !end){
+      let salesReport =await createSalesReport()
+      let products = await mostSellingProducts()
+      console.log("most selling products",products);
 
-    console.log("second",salesReport);
+      console.log("second",salesReport);
+      
+      res.render("salesReport",{Mproducts:0,sales:0, salesReport,products})
+    }
+    else{
+      console.log(start,end);
+      let salesReport =await createSalesReport(start,end)
+      let products = await mostSellingProducts()
+      console.log("most selling products",products);
+
+      console.log("second",salesReport);
+      
+      res.render("salesReport",{Mproducts:0,sales:0, salesReport,products})
+    }
+  }
+  catch(err){
+    console.log(err);
+  }
     
-    res.render("salesReport",{Mproducts:0,sales:0, salesReport,products})
 }
 
 // const createSalesReport = async function(){
@@ -39,9 +58,14 @@ const saleReportLoad = async function(req,res){
 //     return salesReport
 // }
 
-const createSalesReport = async function(){
+const createSalesReport = async function(startDate = new Date(new Date().getFullYear(), 0, 1), endDate = new Date()){
   try{
     let products = await Order.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) }
+        }
+      },
       {
         $unwind: "$products"
       },

@@ -35,7 +35,7 @@
                                         <div class="col-sm-12 ">
                                             <label for="start-date" class="col-sm-22 col-form-label">Valid Date
                                                 From</label>
-                                                <input type="text" value="<%= coupon.startDate.toLocaleDateString() %>" autocomplete="off" id="start-date" class="form-control text-light" name="start" placeholder="Select Starting Date" required>
+                                                <input type="text" value="<%= coupon.startDate.toISOString().slice(0,10) %>" autocomplete="off" id="start-date" class="form-control text-light" name="start" placeholder="Select Starting Date" required>
                                         </div>
                                     </div>
                                 </div>
