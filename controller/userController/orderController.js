@@ -334,6 +334,8 @@ const cancelIndividualOrder = async function(req, res) {
             { _id: orderId },
             { totalPrice: totalPrice }
         );
+
+        // user wallet management 
         if(cancelledProduct.paymentType!= "cod"){
             let wallet = await Wallet.findOne({userid: id})
         let balance = cancelledPrice 
@@ -344,13 +346,21 @@ const cancelIndividualOrder = async function(req, res) {
                 balance: balance,
                 history: [{
                     amount:cancelledPrice,
-                    method: "Refund "
+                    method: "Refund ",
+                    paymentType: "Paypal"
                 }]
             })
             await userWallet.save()
         }
         else{
             wallet.balance += balance
+            let newHistory = {
+                amount: balance,
+                method: "Refund",
+                paymentType: "Paypal"
+            }
+            wallet.history.push(newHistory)
+
             await wallet.save()
         }
         }

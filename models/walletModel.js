@@ -19,6 +19,10 @@ const walletSchema = mongoose.Schema({
                 type: String,
                 require: true
             },
+            paymentType: {
+                type: String,
+                require: true
+            },
             createdAt: {
                 type: Date,
                 default: Date.now

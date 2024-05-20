@@ -74,35 +74,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+                                    <p><%  %></p>
                                     <%for(i=history.length-1;i>=0;i--){%>
-                                        <% 
-                                         // Assuming dateObject is a JavaScript Date object containing your date
-                                         var dateObject = history[i].transactionDate; // Replace this with your date
-
-                                         // Define months for formatting
-                                         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-                                         // Get date components
-                                         var day = dateObject.getDate();
-                                         var month = months[dateObject.getMonth()];
-                                         var year = dateObject.getFullYear();
-                                         var hours = dateObject.getHours();
-                                         var minutes = dateObject.getMinutes();
-                                         var ampm = hours >= 12 ? 'PM' : 'AM';
-                                         hours = hours % 12;
-                                         hours = hours ? hours : 12; // Handle midnight (0:00) as 12 AM
-                                         var minutesFormatted = minutes < 10 ? '0' + minutes : minutes;
-
-                                         var formattedDate = day + ' ' + month + ' ' + year + ', ' + hours + ':' + minutesFormatted + ampm;
-                                         %> 
+                                        
                                         
                                 </tr>
-                                    <td> <%=history[i].purpose%></td>
-                                    <td style="font-weight: 500;">₹ <%=history[i].totalAmount%></td>
-                                    <td><%= history[i].paymentMethod== "Cash on Delivery" ? "COD" : history[i].paymentMethod%></td>
+                                    <td> <%=history[i].method%></td>
+                                    <td style="font-weight: 500;">&euro; <%=history[i].amount%></td>
+                                    <td><%= history[i].paymentType %></td>
                                     
-                                    <td><%=formattedDate %></td>
+                                    <td><%=history[i].createdAt.toISOString().slice(0,10) %></td>
                                     <td  >
                                         
                                         <p class="btn-success text-center" style="border-radius: 0.4rem;">success</p>
