@@ -216,29 +216,11 @@
         </div>
     </div>
     <script>
-        // function SoledProduct(){
-        // //    alert("called 2nd")
-        // }
-
-
-        // function runLoad(){
-        //     SalesPortfolio("week")
-        //     SoledProduct()
-        // }
-            
-
-        // window.onload = runLoad
-        //  function SalesPortfolio(data){
-        //     $.ajax({
-        //             url:"/admin/sales-report/portfolio",
-        //             method:"POST",
-        //             data:{date:data},
-        //             success:(response)=>{
-        //                 portfolioDataInsert(response,data)
-                        
-        //             }
-        //         })
-        //     }
+        document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('start-date').setAttribute('max', today);
+        document.getElementById('end-date').setAttribute('max', today);
+    });
 
 
     </script>
