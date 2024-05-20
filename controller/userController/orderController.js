@@ -296,37 +296,38 @@ const viewOrdersDetails =async function(req,res){
 const cancelIndividualOrder = async function(req, res) {
     try {
         let orderId = req.params.id;
-        let newStatus = "Cancel";
         let productsId = req.body.productsId;
-        let id = req.session.userid
+        let id = req.session.userid;
 
         // Get the cancelled product details
         let cancelledProduct = await Order.findOne(
             { _id: orderId, 'products._id': productsId },
-            { 'products.$': 1 }// projuct the first matched product
+            { 'products.$': 1 } // project the first matched product
         );
-        console.log("cancelled price: ",cancelledProduct);
-        console.log("000",cancelledProduct.products[0]);
+        console.log("cancelled price: ", cancelledProduct);
+        console.log("000", cancelledProduct.products[0]);
 
         if (!cancelledProduct) {
             return res.status(404).json({ message: 'Product not found in order' });
         }
 
-        // Calculate the price of the cancelled item      
+        // Calculate the price of the cancelled item
         let cancelledPrice = cancelledProduct.products[0].price * cancelledProduct.products[0].quantity;
-        console.log("cancelled price: ",cancelledPrice);
+        console.log("cancelled price: ", cancelledPrice);
 
-        // Update the order to cancel the product
+        // Update the status of the product to "Cancelled"
         await Order.updateOne(
-            { _id: orderId },
-            { $pull: { products: { _id: productsId } } }
+            { _id: orderId, 'products._id': productsId },
+            { $set: { 'products.$.individulOrderStatus': 'Cancelled' } }
         );
 
         // Recalculate the total price after cancellation
         let updatedOrder = await Order.findOne({ _id: orderId }).populate('products.product');
         let totalPrice = 0;
         updatedOrder.products.forEach(item => {
-            totalPrice += item.product.price * item.quantity;
+            if (item.status !== 'Cancelled') {
+                totalPrice += item.product.price * item.quantity;
+            }
         });
 
         // Update the order's total price
@@ -335,36 +336,33 @@ const cancelIndividualOrder = async function(req, res) {
             { totalPrice: totalPrice }
         );
 
-        // user wallet management 
-        if(cancelledProduct.paymentType!= "cod"){
-            let wallet = await Wallet.findOne({userid: id})
-        let balance = cancelledPrice 
-        console.log("balance",balance);
-        if(!wallet){
-            let userWallet = new Wallet({
-                userid: id,
-                balance: balance,
-                history: [{
-                    amount:cancelledPrice,
-                    method: "Refund ",
+        // User wallet management
+        if (cancelledProduct.paymentType != "cod") {
+            let wallet = await Wallet.findOne({ userid: id });
+            let balance = cancelledPrice;
+            console.log("balance", balance);
+            if (!wallet) {
+                let userWallet = new Wallet({
+                    userid: id,
+                    balance: balance,
+                    history: [{
+                        amount: cancelledPrice,
+                        method: "Refund",
+                        paymentType: "Paypal"
+                    }]
+                });
+                await userWallet.save();
+            } else {
+                wallet.balance += balance;
+                let newHistory = {
+                    amount: balance,
+                    method: "Refund",
                     paymentType: "Paypal"
-                }]
-            })
-            await userWallet.save()
-        }
-        else{
-            wallet.balance += balance
-            let newHistory = {
-                amount: balance,
-                method: "Refund",
-                paymentType: "Paypal"
+                };
+                wallet.history.push(newHistory);
+                await wallet.save();
             }
-            wallet.history.push(newHistory)
-
-            await wallet.save()
         }
-        }
-        
 
         // Send a response back to the client with updated order details
         res.status(200).json({ message: 'Order item cancelled successfully', totalPrice: totalPrice });
@@ -372,7 +370,8 @@ const cancelIndividualOrder = async function(req, res) {
         console.log(err);
         res.status(500).json({ message: 'Error cancelling order item' });
     }
-}
+};
+
 
 const returnProduct = async function(req,res){
     try{

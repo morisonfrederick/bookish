@@ -85,7 +85,7 @@
                                                         <button 
                                                             class="btn btn-inverse-danger p-3"><select class="form-select" id="<%= product._id %>" aria-label="Default select example" onchange="changeStatusConfirm('<%= product._id %>','<%=data._id %>')">
                                                                 <option  value="Placed" <%= product.individulOrderStatus == "Placed"? "selected" :" " %> >Placed</option>
-                                                                <option value="Cancel" <%= product.individulOrderStatus == "Cancel"? "selected" :" " %>>Cancel</option>
+                                                                <option value="Cancel" <%= product.individulOrderStatus == "Cancelled"? "selected" :" " %>>Cancel</option>
                                                                 <option value="Confirmed" <%= product.individulOrderStatus == "Confirmed"? "selected" :" " %>>Confirmed</option>
                                                                 <option value="Delivered" <%= product.individulOrderStatus == "Delivered"? "selected" :" " %>>Delivered</option>
                                                               </select></button>

@@ -43,7 +43,8 @@
                             <td><%= book.individulOrderStatus %></td>
                             <% if (book.individulOrderStatus=="Delivered") { %>
                               <td><button onclick="if(confirm('Are you sure you want to return this product')) returnOrder('<%= order._id %>','<%= book._id %>')">Return Product</button></td>
-                            
+                            <% } else if (book.individulOrderStatus=="Cancelled") { %>
+
                               <% } else { %>
                                 <td><button onclick="if(confirm('Are you sure you want to cancel this order')) cancelOrder('<%= order._id %>','<%= book._id %>')">Cancel Order</button></td>
 
