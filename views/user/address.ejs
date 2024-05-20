@@ -66,7 +66,7 @@
                         </div>
 
                         <!-- model for edit address  -->
-                        <!-- address adding model  -->
+                        
 
                         <div class="modal fade" id="editModal<%=address[i]._id%>" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
@@ -76,63 +76,42 @@
                                         <button type="button" class=" btn-dark " data-bs-dismiss="modal"
                                             aria-label="Close">x</button>
                                     </div>
-                                    <form action="/profile/user_address/edit" method="post" onsubmit="return validateUserAddressFormUpdate()">
+                                    <form action="/home/account/address/edit/<%= address[i]._id %>?_method=PUT" method="post" >
                                         <div class="modal-body p-4">
                                             <div class="mb-1">
-                                                <label for="Countryedit"
-                                                    class="form-label m-0">Country/Region
-                                                </label>
-                                                <input type="text" class="form-control address-input"
-                                                    id="Countryedit" name="country" value="<%=address[i].country%>" >
+                                                <label for="Countryadd" class="form-label m-0">Address line one</label>
+                                                <input type="text" class="form-control address-input" id="Countryadd" name="address1" value="<%=address[i].address1%>">
                                             </div>
                                             <div class="mb-1">
-                                                <label for="fullNameedit" class="form-label m-0">Full name
-                                                    (First and Last
-                                                    name)
-                                                </label>
-                                                <input type="text" class="form-control address-input"
-                                                    id="fullNameedit" value="<%=address[i].fullName%>" name="fullName"  >
+                                                <label for="fullNameadd" class="form-label m-0">Address line two</label>
+                                                <input type="text" class="form-control address-input" id="fullNameadd" name="address2" value="<%=address[i].address2%>">
                                             </div>
                                             <div class="mb-1">
-                                                <label for="mobileNumberedit" class="form-label m-0">Mobile
-                                                    number
-                                                </label>
-                                                <input type="number" class="form-control address-input"
-                                                    id="mobileNumberedit" value="<%=address[i].mobileNumber%>"  name="mobileNumber" >
+                                                <label for="mobileNumberadd" class="form-label m-0">Address line three</label>
+                                                <input type="text" class="form-control address-input" id="mobileNumberadd" name="address3" value="<%=address[i].address3%>">
                                             </div>
-                                            
                                             <div class="mb-1">
-                                                <label for="cityedit" class="form-label m-0">Area,
-                                                    Street, Sector,
-                                                    Village
-                                                </label>
-                                                <input type="text" class="form-control address-input"
-                                                    id="cityedit" value="<%=address[i].city%>" name="city" >
+                                                <label for="cityadd" class="form-label m-0">Country</label>
+                                                <input type="text" class="form-control address-input" id="cityadd" name="country" value="<%=address[i].country%>">
                                             </div>
-
+                                            <div class="mb-1">
+                                                <label for="cityadd" class="form-label m-0">City</label>
+                                                <input type="text" class="form-control address-input" id="cityadd" name="city" value="<%=address[i].city%>">
+                                            </div>
                                             <div class=" row ">
                                                 <div class=" col-6">
-                                                    <label for="stateedit" class="form-label m-0">State
-                                                    </label>
-                                                    <input type="text" class="form-control address-input"
-                                                        id="stateedit" name="state" value="<%=address[i].state%>" >
+                                                    <label for="stateadd" class="form-label m-0">County</label>
+                                                    <input type="text" class="form-control address-input" id="stateadd" name="county" value="<%=address[i].county%>">
                                                 </div>
                                                 <div class=" col-6">
-                                                    <label for="pincodeedit" class="form-label m-0">Pincode
-                                                    </label>
-                                                    <input type="number" value="<%=address[i].pincode%>" class="form-control address-input"
-                                                        id="pincodeedit" name="pincode" >
+                                                    <label for="pincodeadd" class="form-label m-0">Pin</label>
+                                                    <input type="number" class="form-control address-input" id="pincodeadd" name="pin" value="<%=address[i].pin%>">
                                                 </div>
-                                                <input value="<%=address[i]._id%>" class="form-control address-input"
-                                                        id="exampleFormControlInput1" name="adressId" hidden required>
                                             </div>
-
                                         </div>
                                         <div class="modal-footer">
-                                            <a class="btn btn-outline-primary-2" style="border-radius: 7px;"
-                                                data-bs-dismiss="modal">Close</a>
-                                            <button type="submit" class="btn btn-outline-primary-2"
-                                                style="border-radius: 7px; background: #000; color: #fff;">Update</button>
+                                            <a class="btn btn-outline-primary-2" style="border-radius: 7px;" data-bs-dismiss="modal">Close</a>
+                                            <button type="submit" class="btn btn-outline-primary-2" style="border-radius: 7px; background: #000; color: #fff;">Edit  now</button>
                                         </div>
                                     </form>
                                 </div>

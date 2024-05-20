@@ -43,7 +43,7 @@ let books = await book.find(query).skip(skip).limit(pageSize).sort({price:sortDi
         // console.log(books);
         console.log("yes");
         let categories = await category.find();
-        res.render("user/shop", { products: books,categories, curentPage: page, totalPage ,currentUser});
+        res.render("user/shop", { products: books,categories, curentPage: page, totalPage ,currentUser,sort:sortDirection});
     }
     else{
         console.log("no");
