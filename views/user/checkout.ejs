@@ -19,7 +19,15 @@
                     </ol>
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
-
+            <div class="mb-5 ">
+                <ul class="navbar-nav w-100">
+                    <li class="nav-item w-100">
+                        <% if (success && success.length>0) { %>
+                            <div id="flashMessage" class="alert alert-success"><%= success %></div>
+                        <% } %>
+                    </li>
+                </ul>
+            </div>
             <div class="page-content ">
                 <div class="cart mb-5">
                     <div class="container">
@@ -258,6 +266,14 @@
 
 
         <script>
+
+            setTimeout(function() {
+                const flashMessage = document.getElementById('flashMessage')
+                if (flashMessage) {
+                    flashMessage.style.display = 'none';
+                }
+            }, 3000);
+
             function showAddress(){
             console.log("show");
             let card = document.getElementById("addressToggle")

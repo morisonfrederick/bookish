@@ -18,7 +18,7 @@ const viewCheckout = async function(req,res){
             userCart.products.forEach(item => {
                 totalPrice += item.product.price * item.quantity;
             });
-            res.render("checkout",{address:userAddress,currentUser,cart: userCart,total:totalPrice})
+            res.render("checkout",{address:userAddress,currentUser,cart: userCart,total:totalPrice,success:req.flash("success")})
         }
         else{
             res.render("checkout",{address:userAddress,currentUser,cart: null,total:null})

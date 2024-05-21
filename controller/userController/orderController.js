@@ -134,17 +134,25 @@ const postCheckoutOrder = async function(req,res){
         // payment management based on type  of payment 
         switch(paymentType){
             case "cod":
-                console.log("going to save");
-                const order = new Order(data);
-                await order.save();
-                await cart.deleteOne({user_id:id})
-                let success = 1
-                // console.log(order);
-                console.log(Order.length);
-                let orderData = await order.populate("products.product")
-                // console.log(orderData);
-                res.render("user/orderStatus",{selcetedOrder:orderData,currentUser,success});
-                break;
+                if(totalPrice<200){
+                    console.log("going to save");
+                    const order = new Order(data);
+                    await order.save();
+                    await cart.deleteOne({user_id:id})
+                    let success = 1
+                    // console.log(order);
+                    console.log(Order.length);
+                    let orderData = await order.populate("products.product")
+                    // console.log(orderData);
+                    res.render("user/orderStatus",{selcetedOrder:orderData,currentUser,success});
+                    break;
+                }
+                else{
+                    req.flash("success","Cannot order on COD above 300 euro")
+                    res.redirect("/home/cart/checkout")
+                    break;
+                }
+                
             case "paypal":
                 try {
                     let items = data.products.map(product => ({
@@ -526,66 +534,7 @@ function calculateTotalPrice(userCart) {
     return totalPrice;
 }
 
-// const invoiceDownload = async function(req,res){
-//     try{
-        
-//         console.log("invoice downloading");
-//         console.log(`${req.protocol}://${req.get("host")}`+"/home/invoice");
-//         console.log(`${path.join(__dirname,"../../public/files")}`);
-        
-//         const browser = await puppeteer.launch();
-//         const page = await browser.newPage();
 
-//         await page.goto(`${req.protocol}://${req.get("host")}`+"/home/invoice",{
-//             waitUntil: "networkidle2"
-//         })
-       
-//         await page.setViewport({width:1680,height:1050})
-//         const todayDate = new Date()
-//         const pdfn = await page.pdf({
-//                     path: `${path.join(__dirname,"../../public/files",todayDate.getTime()+".pdf")}`,
-//                     format: "A4",
-//                     printBackground: true,
-//                     });
-
-//         await browser.close();
-//         console.log(pdfn.length);
-
-//         const pdfUrl = path.join(__dirname,"../../public/files",todayDate.getTime()+".pdf")
-//         console.log(pdfUrl);
-        
-//         res.set({
-//             "Content-Type": "application/pdf",
-//             "Content-Length": pdfn.length
-//         })
-//         res.sendFile(pdfUrl)
-     
-
-        
-//     }
-//     catch(err){
-//         console.log(err);
-//     }
-
-
-// }
-
-
-
-
-// const invoice = async function(req,res){
-//     const invoiceData = {
-//         sender: { name: 'Company Name', address: '1234 Street', email: 'company@example.com', phone: '123-456-7890' },
-//         receiver: { name: 'Client Name', address: '5678 Avenue', email: 'client@example.com', phone: '098-765-4321' },
-//         invoice: { number: 'INV-001', date: '2024-05-21', dueDate: '2024-06-21', notes: 'Thank you for your business!', subtotal: 500, tax: 50, total: 550 },
-//         items: [
-//             { description: 'Service 1', quantity: 1, unitPrice: 300, total: 300 },
-//             { description: 'Service 2', quantity: 2, unitPrice: 100, total: 200 }
-//         ]
-//     };
-
-//     res.render('invoice', invoiceData);
-// }
 
 
 const getInvoice = async (req, res) => {
