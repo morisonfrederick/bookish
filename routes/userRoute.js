@@ -11,7 +11,8 @@ const orderController = require("../controller/userController/orderController")
 const productController = require("../controller/userController/productController")
 const upload = require("../middlewares/multer");
 const wishlistController = require("../controller/userController/wishlistController")
-const walletController = require("../controller/userController/walletController")
+const walletController = require("../controller/userController/walletController");
+const { invoice } = require("paypal-rest-sdk");
 
 
 
@@ -155,5 +156,12 @@ router.get("/pay-cancel",orderController.failurePayment)
 
 // routes for wallet 
 router.get("/account/wallet",auth.userLogin,walletController.walletLoad)
+
+// routes to dowload invoice
+
+
+// checking
+
+router.get("/invoice/:id",orderController.getInvoice)
 
 module.exports = router;

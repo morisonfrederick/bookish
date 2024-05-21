@@ -9,6 +9,13 @@ const paypal = require('paypal-rest-sdk');
 require("dotenv").config()
 const Wallet = require("../../models/walletModel");
 const { name } = require("ejs");
+// const easyinvoice = require("easyinvoice")
+const puppeteer = require("puppeteer")
+const path = require("path");
+const { log } = require("console");
+const fs = require('fs');
+
+const createInvoice= require("../../util/createInvoice")
 
 const { PAYPAL_MODE, PAYPAL_CLIENT_KEY, PAYPAL_SECRET_KEY } = process.env;
 
@@ -274,6 +281,27 @@ const viewOrdersDetails =async function(req,res){
     else {
         couponDetails = "No coupon applied"
     }
+
+    // invoice management
+    let userdetails = userOrders.address
+        let orderNumber = userOrders.orderNumber
+        let date = userOrders.createdAt.toLocaleDateString()
+        let userProducts = []
+        userOrders.products.forEach((item)=>{
+            if(item.individulOrderStatus=="Placed"){
+                let items = {
+                    quantity: item.quantity,
+                    description: item.product.name,
+                    price: item.price
+                }
+                userProducts.push(items)
+            }
+        })
+        console.log("product list for invoice: ",userProducts);
+
+        // console.log(data);
+
+
     
     // console.log(userOrders);
     console.log("total orders ",userOrders.length);
@@ -282,16 +310,6 @@ const viewOrdersDetails =async function(req,res){
 }
 
 
-// const cancellSingleProduct = async function(req,res){
-//     try{
-//         let orderId = req.params.id;
-//         let productsId = req.body.productsId;
-//         let id = req.session.userid
-//     }
-//     catch(err){
-//         console.log(err);
-//     }
-// }
 
 const cancelIndividualOrder = async function(req, res) {
     try {
@@ -325,7 +343,7 @@ const cancelIndividualOrder = async function(req, res) {
         let updatedOrder = await Order.findOne({ _id: orderId }).populate('products.product');
         let totalPrice = 0;
         updatedOrder.products.forEach(item => {
-            if (item.status !== 'Cancelled') {
+            if (item.individulOrderStatus !== 'Cancelled') {
                 totalPrice += item.product.price * item.quantity;
             }
         });
@@ -508,6 +526,118 @@ function calculateTotalPrice(userCart) {
     return totalPrice;
 }
 
+// const invoiceDownload = async function(req,res){
+//     try{
+        
+//         console.log("invoice downloading");
+//         console.log(`${req.protocol}://${req.get("host")}`+"/home/invoice");
+//         console.log(`${path.join(__dirname,"../../public/files")}`);
+        
+//         const browser = await puppeteer.launch();
+//         const page = await browser.newPage();
+
+//         await page.goto(`${req.protocol}://${req.get("host")}`+"/home/invoice",{
+//             waitUntil: "networkidle2"
+//         })
+       
+//         await page.setViewport({width:1680,height:1050})
+//         const todayDate = new Date()
+//         const pdfn = await page.pdf({
+//                     path: `${path.join(__dirname,"../../public/files",todayDate.getTime()+".pdf")}`,
+//                     format: "A4",
+//                     printBackground: true,
+//                     });
+
+//         await browser.close();
+//         console.log(pdfn.length);
+
+//         const pdfUrl = path.join(__dirname,"../../public/files",todayDate.getTime()+".pdf")
+//         console.log(pdfUrl);
+        
+//         res.set({
+//             "Content-Type": "application/pdf",
+//             "Content-Length": pdfn.length
+//         })
+//         res.sendFile(pdfUrl)
+     
+
+        
+//     }
+//     catch(err){
+//         console.log(err);
+//     }
+
+
+// }
+
+
+
+
+// const invoice = async function(req,res){
+//     const invoiceData = {
+//         sender: { name: 'Company Name', address: '1234 Street', email: 'company@example.com', phone: '123-456-7890' },
+//         receiver: { name: 'Client Name', address: '5678 Avenue', email: 'client@example.com', phone: '098-765-4321' },
+//         invoice: { number: 'INV-001', date: '2024-05-21', dueDate: '2024-06-21', notes: 'Thank you for your business!', subtotal: 500, tax: 50, total: 550 },
+//         items: [
+//             { description: 'Service 1', quantity: 1, unitPrice: 300, total: 300 },
+//             { description: 'Service 2', quantity: 2, unitPrice: 100, total: 200 }
+//         ]
+//     };
+
+//     res.render('invoice', invoiceData);
+// }
+
+
+const getInvoice = async (req, res) => {
+    console.log("invoice preparing");
+    try {
+        let currentUser = await user.findOne({_id:req.session.userid}) 
+        let {id} = req.params;
+        let order = await Order.findOne({_id:id}).populate("products.product")
+        let customer = await Order.find({_id:id}).populate("user_id")
+
+        let address = order.address.address1+" "+order.address.address2+" "+ order.address.pin
+        let total = 0
+        let items = []
+        order.products.forEach((item)=>{
+            if(item.individulOrderStatus!="Cancelled"){
+                let details = {
+                    description: item.product.name,
+                    quantity: item.quantity,
+                    price: item.product.price
+                }
+                total+= item.quantity * item.product.price
+                items.push(details)
+            }
+           
+            
+        })
+        console.log("total : ",total);
+        console.log("items: ",items);
+        const invoice = {
+            invoiceNumber: order.orderNumber,
+            createdAt: order.createdAt.toISOString(), // ISO 8601 format
+            dueDate: '2024-06-21T00:00:00Z', // ISO 8601 format
+            customerName: currentUser.firstname,
+            customerAddress: address,
+            items: items,
+            total: total
+        };
+
+        const todayDate = new Date();
+        const timestamp = todayDate.getTime(); // Unique timestamp
+
+        const invoicePath = path.join(__dirname, "../../public/files", `invoice_${timestamp}.pdf`);
+        console.log(`Invoice path: ${invoicePath}`);
+        
+        await createInvoice(invoice, invoicePath);
+
+        res.download(invoicePath, 'invoice.pdf'); // Trigger download
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 
 
@@ -523,5 +653,6 @@ module.exports = {
     applyCoupon,
     paymentSuccess,
     failurePayment,
-    returnProduct
+    returnProduct,
+    getInvoice
 }

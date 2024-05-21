@@ -78,6 +78,10 @@
                             <td><%= order.address.city  %></td>
                             <td><%= order.address.pin  %></td>
                           </tr>
+                          <tr>
+                            <th>Download Invoice</th>
+                            <td><a href="/home/invoice/<%= order._id %>"><button class="rounded " >Download</button></a></td>
+                          </tr>
                           <!-- <tr>
                             <td colspan="4"><button onclick="if(confirm('Are you sure to cancel this order?')) cancelOrder('<%= order._id %>')">Cancel All Orders</button></td>
                             
@@ -91,6 +95,7 @@
 
 
         </main>
+
 
         
         
@@ -132,6 +137,8 @@
     console.log(data)
     window.location.reload()
   }
+
+  
     
 </script>          
 
