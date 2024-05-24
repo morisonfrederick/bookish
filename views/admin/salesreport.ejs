@@ -50,42 +50,28 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Most sold products</h4>
-                            <!-- <canvas id="barChart" style="height:230px"></canvas>
+                            <canvas id="myChart" style="height:230px"></canvas>
                             <div style="display: none;">
-                                <%if(products!==0){%>
-                                <input id="product1" value="<%=products[0].productName %>">
-                                <input id="product12" value="<%=products[0].totalQuantity %>">
+                                <%if(Mproducts!==0){%>
+                                <input id="product1" value="<%=Mproducts[0].productData[0].product_name %>">
+                                <input id="product12" value="<%=Mproducts[0].count %>">
 
-                                <input id="product2" value="<%=products[1].productName %>">
-                                <input id="product22" value="<%=products[1].totalQuantity  %>">
+                                <input id="product2" value="<%=Mproducts[1].productData[0].product_name %>">
+                                <input id="product22" value="<%=Mproducts[1].count %>">
 
-                                <input id="product3" value="<%=products[2].productName %>">
-                                <input id="product32" value="<%=products[2].totalQuantity  %>">
+                                <input id="product3" value="<%=Mproducts[2].productData[0].product_name %>">
+                                <input id="product32" value="<%=Mproducts[2].count %>">
 
-                                <input id="product4" value="<%=products[3].productName %>">
-                                <input id="product42" value="<%=products[3].totalQuantity  %>">
+                                <input id="product4" value="<%=Mproducts[3].productData[0].product_name %>">
+                                <input id="product42" value="<%=Mproducts[3].count %>">
 
-                                <input id="product5" value="<%=products[0].productName %>">
-                                <input id="product52" value="<%=products[0].totalQuantity  %>">
+                                <input id="product5" value="<%=Mproducts[4].productData[0].product_name %>">
+                                <input id="product52" value="<%=Mproducts[4].count %>">
 
-                                <input id="product6" value="<%=products[2].productName %>">
-                                <input id="product62" value="<%=products[2].totalQuantity  %>">
+                                <input id="product6" value="<%=Mproducts[5].productData[0].product_name %>">
+                                <input id="product62" value="<%=Mproducts[5].count %>">
                                 <%}%>
 
-                            </div> -->
-                            <div class="table">
-                                <table class="table-responsive">
-                                    <tr>
-                                        <th>Product Name</th>
-                                        <th>Total Sale</th>
-                                    </tr>
-                                    <% products.forEach(product => { %>
-                                     <tr>
-                                        <td><%=product.productName %></td>
-                                        <td><%=product.totalQuantity %></td>
-                                     </tr>
-                                    <% }) %>
-                                </table>
                             </div>
 
                         </div>
@@ -118,22 +104,12 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Sold Stocks</h4>
-                            <%if(sales!==0){%>
-                            <%for(i=0;i<sales.totalStockSold.length;i++){%>
+                            
                             <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
-                                <div class="text-md-center text-xl-left">
-                                    <h6 class="mb-1"><%=sales.totalStockSold[i].name%> </h6>
-                                    <p class="text-muted mb-0">Frame Shape : <%=sales.totalStockSold[i].shape%></p>
-                                </div>
-                                <div
-                                                                                                                                                                                                                                                                                               class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
-                                    <h6 class="font-weight-bold mb-0"> <%=sales.totalStockSold[i].quantity%> Stock</h6>
-                                </div>
+                                
+                               
                             </div>
-                            <%}%>
-                            <%}else{%>
-                                <h6 class="text-center text-light mt-5">No Stock Solid</h6>
-                            <%}%>
+                            
 
                         </div>
                     </div>
@@ -200,6 +176,9 @@
                     </div>
                 </div>
             </div>
+            <div class="text-md-center text-xl-left">
+                <!-- <canvas id="myChart" style="width:100%;max-width:300px"></canvas> -->
+            </div>
 
 
 
@@ -215,6 +194,11 @@
 
         </div>
     </div>
+        <div style="display: none;">
+            <input id="xValues" type="text" value="<%=xValues  %>">
+            <input type="text" value="<%= yValues %>" id="yValues">
+            <input id="barColors" type="text" value="<%= barColors  %>">
+        </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
         const today = new Date().toISOString().split('T')[0];
@@ -223,6 +207,39 @@
     });
 
 
+
+    const categories = document.getElementById("xValues").value.split(",")
+  const sold = document.getElementById("yValues").value.split(",")
+    const color = document.getElementById("barColors").value.split(",")
+    // alert(typeof(one))
+    // let ans1 = one.split(",")
+    // let ans2 = two.split(",")
+    
+    // alert(typeof(three))
+
+
+
+    
+// const yValues = two
+// const barColors = three
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: categories,
+    datasets: [{
+      backgroundColor: color,
+      data: sold
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "World Wine Production 2018"
+    }
+  }
+});
     </script>
 
     <script>

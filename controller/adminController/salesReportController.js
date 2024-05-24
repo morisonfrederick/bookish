@@ -1,6 +1,7 @@
 const Order = require("../../models/orderModel")
 const Books = require("../../models/bookModel")
 const ExcelJS = require("exceljs")
+const Category = require("../../models/categoryModel")
 
 
 
@@ -10,11 +11,39 @@ const saleReportLoad = async function(req,res){
     if(!start || !end){
       let salesReport =await createSalesReport()
       let products = await mostSellingProducts()
+
+      let yValues = []
+      let xValues = []
+      let barColors=  []
+
+      function getRandomColor() {
+        let letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+
+      let books = await getTotalBooksSoldByCategory()
+      books.forEach((item)=>{
+        let sold = item.totalSold
+        let soldCategory = item.category;
+        yValues.push(sold)
+        xValues.push(soldCategory)
+        barColors.push(getRandomColor())
+
+      })
+     
+      console.log(barColors);
+      console.log(yValues);
+      console.log(xValues);
+
       console.log("most selling products",products);
 
       console.log("second",salesReport);
       
-      res.render("salesReport",{Mproducts:0,sales:0, salesReport,products})
+      res.render("salesReport",{Mproducts:0,sales:0, salesReport,products,xValues,yValues,barColors})
     }
     else{
       console.log(start,end);
@@ -188,6 +217,51 @@ const excelSheet = async function(req,res){
     res.end();
   });
 }
+
+const getTotalBooksSoldByCategory = async () => {
+  try {
+      const result = await Order.aggregate([
+          {
+              // Unwind the products array to get individual product documents
+              $unwind: "$products"
+          },
+          {
+              // Lookup to join with the book collection
+              $lookup: {
+                  from: "books",
+                  localField: "products.product",
+                  foreignField: "_id",
+                  as: "bookInfo"
+              }
+          },
+          {
+              // Unwind the bookInfo array to get individual book documents
+              $unwind: "$bookInfo"
+          },
+          {
+              // Group by category and sum the quantities
+              $group: {
+                  _id: "$bookInfo.category",
+                  totalSold: { $sum: "$products.quantity" }
+              }
+          },
+          {
+              // Project the result to a more readable format
+              $project: {
+                  category: "$_id",
+                  totalSold: 1,
+                  _id: 0
+              }
+          }
+      ]);
+
+      console.log(result);
+      return result;
+  } catch (error) {
+      console.error("Error fetching total books sold by category:", error);
+      throw error;
+  }
+};
 
 
 
