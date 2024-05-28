@@ -5,62 +5,71 @@ const Category = require("../../models/categoryModel")
 
 
 
-const saleReportLoad = async function(req,res){
-  try{
-    let {start,end} = req.query
-    if(!start || !end){
-      let salesReport =await createSalesReport()
-      let products = await mostSellingProducts()
+const saleReportLoad = async function(req, res) {
+  try {
+    const { start, end } = req.query;
 
-      let yValues = []
-      let xValues = []
-      let barColors=  []
-
-      function getRandomColor() {
-        let letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-          color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
+    // Helper function to generate random colors
+    const getRandomColor = () => {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
       }
+      return color;
+    };
 
-      let books = await getTotalBooksSoldByCategory()
-      books.forEach((item)=>{
-        let sold = item.totalSold
-        let soldCategory = item.category;
-        yValues.push(sold)
-        xValues.push(soldCategory)
-        barColors.push(getRandomColor())
+    // Initialize common variables
+    let yValues = [];
+    let xValues = [];
+    let barColors = [];
+    let xValue = [];
+    let yValue = [];
+    let salesReport;
+    let products;
+    let books;
 
-      })
-     
-      console.log(barColors);
-      console.log(yValues);
-      console.log(xValues);
-
-      console.log("most selling products",products);
-
-      console.log("second",salesReport);
-      
-      res.render("salesReport",{Mproducts:0,sales:0, salesReport,products,xValues,yValues,barColors})
+    // Generate sales report and product data based on presence of start and end dates
+    if (!start || !end) {
+      salesReport = await createSalesReport();
+      products = await mostSellingProducts();
+      books = await getTotalBooksSoldByCategory();
+    } else {
+      salesReport = await createSalesReport(start, end);
+      products = await mostSellingProducts();
+      books = await getTotalBooksSoldByCategory(start, end);
     }
-    else{
-      console.log(start,end);
-      let salesReport =await createSalesReport(start,end)
-      let products = await mostSellingProducts()
-      console.log("most selling products",products);
 
-      console.log("second",salesReport);
-      
-      res.render("salesReport",{Mproducts:0,sales:0, salesReport,products})
-    }
-  }
-  catch(err){
+    // Process product data
+    products.forEach(product => {
+      xValue.push(product.productName);
+      yValue.push(product.totalQuantity);
+    });
+
+    // Process book data
+    books.forEach(item => {
+      yValues.push(item.totalSold);
+      xValues.push(item.category);
+      barColors.push(getRandomColor());
+    });
+
+    // Render the sales report view with the gathered data
+    res.render("salesReport", {
+      Mproducts: 0,
+      sales: 0,
+      salesReport,
+      products,
+      xValues,
+      yValues,
+      barColors,
+      xValue,
+      yValue
+    });
+  } catch (err) {
     console.log(err);
   }
-    
-}
+};
+
 
 // const createSalesReport = async function(){
 //     let totalOrders = await Order.find()
@@ -139,49 +148,63 @@ const createSalesReport = async function(startDate = new Date(new Date().getFull
   
 }
 
-const mostSellingProducts = async function(){
-    let products = await Order.aggregate([
-        {
-          $unwind: "$products", // Unwind the products array
+const mostSellingProducts = async function(startDate = new Date(new Date().getFullYear(), 0, 1), endDate = new Date()){
+  let products = await Order.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) }
+        }
+      },
+      {
+        $unwind: "$products", // Unwind the products array
+      },
+      {
+        $group: {
+          _id: "$products.product", // Group by product ID
+          totalQuantity: { $sum: "$products.quantity" }, // Calculate total quantity sold
+          totalPrice: { $sum: { $multiply: ["$products.price", "$products.quantity"] } }, // Calculate total sales value per product
         },
-        {
-          $group: {
-            _id: "$products.product", // Group by product ID
-            totalQuantity: { $sum: "$products.quantity" }, // Calculate total quantity sold
-            totalPrice: { $sum: { $multiply: ["$products.price", "$products.quantity"] } }, // Calculate total sales value per product
-          },
+      },
+      {
+        $lookup: {
+          from: "books", // Assuming "books" is the collection name for products
+          localField: "_id",
+          foreignField: "_id",
+          as: "productData", // Store product details in "productData" field
         },
-        {
-          $lookup: {
-            from: "books", // Assuming "books" is the collection name for products
-            localField: "_id",
-            foreignField: "_id",
-            as: "productData", // Store product details in "productData" field
-          },
+      },
+      {
+        $addFields: {
+          productName: { $arrayElemAt: ["$productData.name", 0] }, // Get the product name from productData array
         },
-        {
-          $addFields: {
-            productName: { $arrayElemAt: ["$productData.name", 0] }, // Get the product name from productData array
-          },
-        },
-        {
-          $project: {
-            _id: 0, // Exclude the _id field if not needed
-            totalQuantity: 1,
-            totalPrice: 1,
-            productName: 1,
+      },
+      {
+        $project: {
+          _id: 0, // Exclude the _id field if not needed
+          totalQuantity: 1,
+          totalPrice: 1,
+          productName: 1,
 
-          },
         },
-        {
-          $sort: { totalQuantity: -1 }, // Sort by total quantity sold in descending order
-        },
-        {
-          $limit: 4, // Limit to the top 6 products
-        },
-      ])
-      return products
+      },
+      {
+        $sort: { totalQuantity: -1 }, // Sort by total quantity sold in descending order
+      },
+      {
+        $limit: 4, // Limit to the top 4 products
+      },
+    ]).exec(); // Ensure execution and return promise
+    // console.log(products); // Log the results
+    return products
 }
+
+// Call the function and log the output
+mostSellingProducts().then(result => {
+console.log("Most Selling Products:", result);
+}).catch(err => {
+console.error("Error:", err);
+});
+
 
 const excelSheet = async function(req,res){
   let salesReport =await createSalesReport()
@@ -218,9 +241,14 @@ const excelSheet = async function(req,res){
   });
 }
 
-const getTotalBooksSoldByCategory = async () => {
+const getTotalBooksSoldByCategory = async (startDate = new Date(new Date().getFullYear(), 0, 1), endDate = new Date()) => {
   try {
       const result = await Order.aggregate([
+          {
+            $match: {
+              createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) }
+            }
+          },
           {
               // Unwind the products array to get individual product documents
               $unwind: "$products"
@@ -255,7 +283,7 @@ const getTotalBooksSoldByCategory = async () => {
           }
       ]);
 
-      console.log(result);
+      // console.log(result);
       return result;
   } catch (error) {
       console.error("Error fetching total books sold by category:", error);

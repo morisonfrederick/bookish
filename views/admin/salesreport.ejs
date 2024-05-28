@@ -49,31 +49,9 @@
                 <div class="col-lg-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Most sold products</h4>
+                            <h4 class="card-title">Best selling Category</h4>
                             <canvas id="myChart" style="height:230px"></canvas>
-                            <div style="display: none;">
-                                <%if(Mproducts!==0){%>
-                                <input id="product1" value="<%=Mproducts[0].productData[0].product_name %>">
-                                <input id="product12" value="<%=Mproducts[0].count %>">
-
-                                <input id="product2" value="<%=Mproducts[1].productData[0].product_name %>">
-                                <input id="product22" value="<%=Mproducts[1].count %>">
-
-                                <input id="product3" value="<%=Mproducts[2].productData[0].product_name %>">
-                                <input id="product32" value="<%=Mproducts[2].count %>">
-
-                                <input id="product4" value="<%=Mproducts[3].productData[0].product_name %>">
-                                <input id="product42" value="<%=Mproducts[3].count %>">
-
-                                <input id="product5" value="<%=Mproducts[4].productData[0].product_name %>">
-                                <input id="product52" value="<%=Mproducts[4].count %>">
-
-                                <input id="product6" value="<%=Mproducts[5].productData[0].product_name %>">
-                                <input id="product62" value="<%=Mproducts[5].count %>">
-                                <%}%>
-
-                            </div>
-
+                           
                         </div>
                     </div>
                 </div>
@@ -97,6 +75,36 @@
 
                 </div>
             </div>
+
+            <div class="row mt-4">
+                <!-- best selling product top 10 -->
+                <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Best selling Product</h4>
+                            <canvas id="myChart2" style="height:230px"></canvas>
+                            <div style="display: none;">
+                            <input type="text" id="xValue" value="<%= xValue  %> ">
+                            <input type="text" id="yValue" value="<%=  yValue  %>">
+                            
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- best selling category top 10  -->
+                <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Most sold products</h4>
+                            <canvas id="myChart" style="height:230px"></canvas>
+                            
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
 
 
             <div class="row">
@@ -209,8 +217,13 @@
 
 
     const categories = document.getElementById("xValues").value.split(",")
-  const sold = document.getElementById("yValues").value.split(",")
+    const sold = document.getElementById("yValues").value.split(",")
     const color = document.getElementById("barColors").value.split(",")
+
+    const Book = document.getElementById("xValue").value.split(",")
+    const sale = document.getElementById("yValue").value.split(",")
+    alert(Book)
+
     // alert(typeof(one))
     // let ans1 = one.split(",")
     // let ans2 = two.split(",")
@@ -236,10 +249,28 @@ new Chart("myChart", {
     legend: {display: false},
     title: {
       display: true,
-      text: "World Wine Production 2018"
+      text: "Products sold"
     }
   }
 });
+// Chart two 
+    new Chart("myChart2", {
+    type: "bar",
+    data: {
+        labels: Book,
+        datasets: [{
+        backgroundColor: color,
+        data: sale
+        }]
+    },
+    options: {
+        legend: {display: false},
+        title: {
+        display: true,
+        text: "Products sold"
+        }
+    }
+    });
     </script>
 
     <script>

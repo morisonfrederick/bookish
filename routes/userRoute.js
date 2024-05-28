@@ -13,6 +13,7 @@ const upload = require("../middlewares/multer");
 const wishlistController = require("../controller/userController/wishlistController")
 const walletController = require("../controller/userController/walletController");
 const { invoice } = require("paypal-rest-sdk");
+const verifyWebhook = require("../middlewares/webhook")
 
 
 
@@ -32,7 +33,7 @@ router.get("/signup",userController.viewRegister)
 
 router.post("/signup",userController.registerUser)
 
-router.get("/login",userController.viewLogin)
+router.get("/login",auth.NoUserLigin,userController.viewLogin)
 router.post("/login",userController.postLogin)
 
 // Auth 
@@ -121,6 +122,7 @@ router.post("/cart/checkout",auth.userLogin,orderController.applyCoupon)
 
 router.get("/account/orders",auth.userLogin,orderController.viewOrders)
 router.post("/cart/orders",auth.userLogin,orderController.postCheckoutOrder)
+router.get("/cart/orders/repayment/:id",auth.userLogin,orderController.repayment)
 router.patch("/account/orders/:id",auth.userLogin,orderController.cancelOrder)
 router.get("/account/orders/details/:id",auth.userLogin,orderController.viewOrdersDetails)
 router.patch("/account/orders/details/:id",auth.userLogin,orderController.cancelIndividualOrder)
@@ -159,9 +161,10 @@ router.get("/account/wallet",auth.userLogin,walletController.walletLoad)
 
 // routes to dowload invoice
 
-
-// checking
-
 router.get("/invoice/:id",orderController.getInvoice)
+
+// paypal webhook
+
+router.get("/paypal/webhook",verifyWebhook,orderController.paypalWebhook)
 
 module.exports = router;

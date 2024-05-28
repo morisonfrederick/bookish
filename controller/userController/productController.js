@@ -1,58 +1,68 @@
 const express = require("express");
 const user = require("../../models/userModel");
 const book = require("../../models/bookModel");
-const category = require("../../models/categoryModel");
+const Category = require("../../models/categoryModel");
 // const { options } = require("../../routes/userRoute");
 
 
 // user products viewing page
 const productView = async (req, res, next) => {
-    let id = req.session.userid
-    let currentUser = await user.findOne({_id:id})||null
-    let page = parseInt(req.query.page) || 1;
-    let pageSize = 6;
-    let skip = (page - 1) * pageSize;
-    let sortDirection = req.query.sort == "ascending"?1:-1;
-    console.log("sort :",sortDirection);
-    let totalBooks = await book.countDocuments()||5
-    let totalPage = totalBooks<1 ? 1:totalBooks%2 +1
-    let search = req.query.key || "";
-    console.log(totalPage);
-    console.log("search",search);
-    console.log(req.query.category);
-    let query = {}
+    try {
+        let id = req.session.userid;
+        let currentUser = await user.findOne({ _id: id }) || null;
+        let page = parseInt(req.query.page) || 1;
+        let pageSize = 6;
+        let skip = (page - 1) * pageSize;
 
-        // Modify your query to use $text operator
-    if (search !== "") {
-        query.$text = { $search: search };
-    }
-    if(req.query.category){
-        query.category = req.query.category
-    }
-    // if (req.query.minPrice && req.query.maxPrice) {
-    //     const minPrice = parseInt(req.query.minPrice);
-    //     const maxPrice = parseInt(req.query.maxPrice);
-    //     query.price = { $gte: minPrice, $lte: maxPrice };
-    //   }
-    
+        // Handle different sort parameter formats
+        let sortDirection = req.query.sort;
+        if (sortDirection === "ascending" || sortDirection === "1") {
+            sortDirection = 1;
+        } else if (sortDirection === "descending" || sortDirection === "-1") {
+            sortDirection = -1;
+        } else {
+            sortDirection = -1; // Default sort direction
+        }
 
-    console.log(query);
+        let search = req.query.key || "";
+        let category = req.query.category || "";
 
-let books = await book.find(query).skip(skip).limit(pageSize).sort({price:sortDirection});
-    if(books.length>0){
-        // console.log(books);
-        console.log("yes");
-        let categories = await category.find();
-        res.render("user/shop", { products: books,categories, curentPage: page, totalPage ,currentUser,sort:sortDirection});
-    }
-    else{
-        console.log("no");
+        // Construct the query object
+        let query = {};
+        if (search) {
+            query.$text = { $search: search };
+        }
+        if (category) {
+            query.category = category;
+        }
 
-        let categories = await category.find();
-        res.render("user/shop", { products: books,categories, curentPage: page, totalPage,message:"No related book found" ,currentUser});
+        // Get the total number of books matching the query
+        let totalBooks = await book.countDocuments(query);
+        let totalPage = Math.ceil(totalBooks / pageSize);
+
+        // Get the books with pagination and sorting
+        let books = await book.find(query).skip(skip).limit(pageSize).sort({ price: sortDirection });
+
+        let categories = await Category.find();
+
+        // Render the page with books, categories, pagination, and current user
+        res.render("user/shop", {
+            products: books,
+            categories,
+            curentPage: page,
+            totalPage,
+            currentUser,
+            sort: sortDirection,
+            message: books.length === 0 ? "No related book found" : null
+        });
+
+    } catch (error) {
+        console.error(error);
+        next(error);
     }
-   
-}
+};
+
+
 
 
 

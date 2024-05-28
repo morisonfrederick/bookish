@@ -14,6 +14,19 @@ const userLogin = (req, res, next) => {
       console.log(error.message);
   } 
   };
+  const NoUserLigin = (req,res,next)=>{
+    try{
+      if(req.session.user){
+        res.redirect("/home")
+      }
+      else{
+        next()
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
   
   const adminLogin = (req, res, next) => {
     try{
@@ -45,7 +58,8 @@ const userLogin = (req, res, next) => {
   module.exports = {
     userLogin,
     adminLogin,
-    isnotAdmin
+    isnotAdmin,
+    NoUserLigin
     }
   
   

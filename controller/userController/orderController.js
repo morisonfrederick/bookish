@@ -226,7 +226,7 @@ const postCheckoutOrder = async function(req,res){
 const paymentSuccess = async function(req,res){
         const payerId = req.query.PayerID;
         const paymentId = req.query.paymentId;
-        const {data,amountTotal} = req.session
+        const {data,amountTotal,orderId} = req.session
         console.log(data,amountTotal);
         console.log("user order details : ",amountTotal);
         let id = req.session.userid
@@ -249,6 +249,7 @@ const paymentSuccess = async function(req,res){
           } else {
               console.log(JSON.stringify(payment));
               console.log("going to save");
+              if(data){
                 const order = new Order(data);
                 await order.save();
                 await cart.deleteOne({user_id:id})
@@ -256,17 +257,41 @@ const paymentSuccess = async function(req,res){
                 // console.log(order);
                 console.log(Order.length);
                 let orderData = await order.populate("products.product")
-                // console.log(orderData);
                 delete req.session.data
                 res.render("user/orderStatus",{selcetedOrder:orderData,currentUser,success})
+              }
+              else{
+                let order =await Order.findOne({_id:orderId})
+                order.products.forEach((product)=>{
+                    product.individulOrderStatus = "Placed"
+                })
+                await order.save()
+                let orderData = await order.populate("products.product")
+                delete req.session.orderId
+                let success = 1
+                res.render("user/orderStatus",{selcetedOrder:orderData,currentUser,success})
+
+              }
+                
+                // console.log(orderData);
+                delete req.session.data
               
           }
       });
     
 }
 const failurePayment = async function(req,res){
-    delete req.session.data
-    res.redirect("/home/cart/checkout")
+    console.log("======================order failed ===============");
+    const {userid,data} = req.session
+    const order = new Order(data);
+    order.products.forEach((product)=>{
+        product.individulOrderStatus = "Payment Pending"
+    })
+    await order.save();
+    console.log(order);
+    await cart.deleteOne({user_id:userid})
+    // delete req.session.data
+    res.redirect("/home/account/orders")
 }
 
 const cancelOrder = async function(req,res){
@@ -588,7 +613,95 @@ const getInvoice = async (req, res) => {
     }
 };
 
+const paypalWebhook = async function(req,res){
+    const eventType = req.body.event_type;
+    const resource = req.body.resource;
 
+    switch (eventType) {
+        case 'PAYMENT.SALE.DENIED':
+        case 'PAYMENT.SALE.REFUNDED':
+        case 'PAYMENT.SALE.REVERSED':
+            const orderId = resource.invoice_id; // Assuming you use invoice_id to store order id
+            // Handle failed payment (update order status, notify user, etc.)
+            console.log(`Payment failed for order ${orderId}`);
+            // Your logic here
+            break;
+        // Handle other event types as needed
+        default:
+            console.log(`Unhandled event type: ${eventType}`);
+    }
+
+    res.status(200).send('Webhook received');
+}
+
+const repayment = async function(req,res){
+    try{
+        let orderId = req.params.id
+        req.session.orderId = orderId
+        console.log("orderId: ",orderId);
+    
+        let order = await Order.findOne({_id:orderId})
+        console.log("re-payment==============",order);
+        let amountTotal = order.totalPrice.toFixed(2)
+        req.session.amountTotal = amountTotal
+        console.log(amountTotal);
+
+        if(order){      
+            let items = order.products.map(product => ({
+                name: product.name,
+                sku: product.product,
+                price: product.price.toFixed(2),
+                currency: "USD",
+                quantity: product.quantity
+            }));
+            
+            const create_payment_json = {
+                "intent": "sale",
+                "payer": {
+                    "payment_method": "paypal"
+                },
+                "redirect_urls": {
+                    "return_url": "http://localhost:3000/home/pay-success",
+                    "cancel_url": "http://localhost:3000/home/pay-cancel"
+                },
+                "transactions": [{
+                    "item_list": {
+                        "items": items
+                    },
+                    "amount": {
+                        "currency": "USD",
+                        "total": amountTotal
+                    },
+                    "description": "Hat for the best team ever"
+                }]
+            };
+        
+            paypal.payment.create(create_payment_json, function (error, payment) {
+                if (error) {
+                    throw error;
+                } else {
+                    for(let i = 0;i < payment.links.length;i++){
+                      if(payment.links[i].rel === 'approval_url'){
+                        res.redirect(payment.links[i].href);
+                      }
+                    }
+                }
+              });
+
+        }
+        else{
+            res.send("no order found")
+        }
+       
+    
+
+    }
+    catch(err){
+        console.log(err);
+    }
+
+    
+}
 
 
 
@@ -603,5 +716,7 @@ module.exports = {
     paymentSuccess,
     failurePayment,
     returnProduct,
-    getInvoice
+    getInvoice,
+    paypalWebhook,
+    repayment
 }

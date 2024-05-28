@@ -21,7 +21,7 @@ const viewCheckout = async function(req,res){
             res.render("checkout",{address:userAddress,currentUser,cart: userCart,total:totalPrice,success:req.flash("success")})
         }
         else{
-            res.render("checkout",{address:userAddress,currentUser,cart: null,total:null})
+            res.render("checkout",{address:userAddress,currentUser,cart: null,total:null,success:1})
         }
     }
     catch(err){
