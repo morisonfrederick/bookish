@@ -408,7 +408,7 @@ const cancelIndividualOrder = async function(req, res) {
                         balance: balance,
                         history: [{
                             amount: cancelledPrice,
-                            method: "Refund",
+                            method: "Credit",
                             paymentType: "Paypal"
                         }]
                     });
@@ -419,7 +419,7 @@ const cancelIndividualOrder = async function(req, res) {
                     wallet.balance += balance;
                     let newHistory = {
                         amount: balance,
-                        method: "Refund",
+                        method: "Credit",
                         paymentType: "Paypal"
                     };
                     wallet.history.push(newHistory);
