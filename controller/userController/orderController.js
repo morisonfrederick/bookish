@@ -18,6 +18,7 @@ const fs = require('fs');
 const WalletNumber = require("../../util/walletNumber")
 
 const createInvoice= require("../../util/createInvoice");
+const OrderNumber = require("../../util/orderNumber")
 
 const { PAYPAL_MODE, PAYPAL_CLIENT_KEY, PAYPAL_SECRET_KEY } = process.env;
 
@@ -126,7 +127,7 @@ const postCheckoutOrder = async function(req,res){
             })),
             orderStatus : "Placed",
             totalPrice : discountedPrice,
-            orderNumber: uuidv4(),
+            orderNumber: await OrderNumber(),
             coupon: coupon
                 
         }

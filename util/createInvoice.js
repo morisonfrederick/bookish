@@ -33,7 +33,6 @@ function createInvoice(invoice, outputPath) {
             doc.fontSize(12)
                 .text(`Invoice Number: ${invoice.invoiceNumber}`, { align: 'right' })
                 .text(`Invoice Date: ${new Date(invoice.createdAt).toLocaleDateString()}`, { align: 'right' })
-                .text(`Due Date: ${new Date(invoice.dueDate).toLocaleDateString()}`, { align: 'right' })
                 .moveDown();
 
             // Customer Information
