@@ -4,11 +4,14 @@
 
 
         <main class="main">
+            <!-- header with background image -->
             <div class="page-header text-center" style="background-image: url('/user/images/background.png')">
                 <div class="container">
                     <h1 class="page-title text-white">Checkout</h1>
-                </div><!-- End .container -->
-            </div><!-- End .page-header -->
+                </div>
+            </div>
+            
+            <!-- breadcrumb -->
             <nav aria-label="breadcrumb" class="breadcrumb-nav">
                 <div class="container">
                     <ol class="breadcrumb">
@@ -17,8 +20,9 @@
                         <li class="breadcrumb-item active" aria-current="page">Checkout</li>
 
                     </ol>
-                </div><!-- End .container -->
-            </nav><!-- End .breadcrumb-nav -->
+                </div>
+            </nav>
+            <!-- flash message container  -->
             <div class="mb-5 ">
                 <ul class="navbar-nav w-100">
                     <li class="nav-item w-100">
@@ -28,10 +32,14 @@
                     </li>
                 </ul>
             </div>
+
+            <!-- main page content  -->
             <div class="page-content ">
                 <div class="cart mb-5">
                     <div class="container">
                         <div class="row">
+
+                            <!-- left side contains address and payment selction  -->
                             <div class="col-lg-9 cart-item-box">
                                 <h5 class="text-dark mb-3">1.Shipping Address &nbsp;  </h5>
 
@@ -86,6 +94,8 @@
                                                 </div>
                                             </label>
                                                 <%}%>
+
+                            <!-- add new address section set to display none. can be made visible by calling showAddress() when clicking add new address -->
                                                 <div class="newAddress" id="addressToggle" style="display: none;">
                                                     <div class="mb-3" >
                                                     <label for="floatingInput">address line 1</label>
@@ -108,11 +118,12 @@
                                                         <input type="text" name="county" class="form-control"  placeholder="county" required>
                                                         <input type="number" name="pin" class="form-control"  placeholder="pin" required>
                                                     </div>
+                                                
                                                 </div>
 
 
                                                     <hr>
-
+                                                <!-- paypent selection COD/PAYPAL -->
                                                     <div class=" py-4  mt-2  "
                                                         style="border-radius: 10px; background: #F3F3F9;">
                                                         <div class="form-check d-flex align-items-center mx-4 ">
@@ -133,7 +144,9 @@
                                                     </div>
                                                     
 
-                            </div><!-- End .col-lg-9 -->
+                            </div>
+
+                            <!-- right side contains coupon and checkout options -->
                             <aside class="col-lg-3">
                                 <div class="summary summary-cart">
                                     
@@ -210,59 +223,6 @@
             </div><!-- End .page-content -->
         </main><!-- End .main -->
 
-        <!-- address adding model  -->
-
-
-
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content p-4">
-                    <div class="modal-header">
-                        <h5 class="" id="exampleModalLabel">Add New Address</h5>
-                        <button type="button" class=" btn-dark " data-bs-dismiss="modal" aria-label="Close">x</button>
-                    </div>
-                    <form action="/shippingaddress" method="post" onsubmit="return validateUserAddressForm()">
-                        <div class="modal-body p-4">
-                            <div class="mb-1">
-                                <label for="Countryadd" class="form-label m-0">Country/Region</label>
-                                <input type="text" class="form-control address-input" id="Countryadd" name="country">
-                            </div>
-                            <div class="mb-1">
-                                <label for="fullNameadd" class="form-label m-0">Full name (First and Last name)</label>
-                                <input type="text" class="form-control address-input" id="fullNameadd" name="fullName">
-                            </div>
-                            <div class="mb-1">
-                                <label for="mobileNumberadd" class="form-label m-0">Mobile number</label>
-                                <input type="number" class="form-control address-input" id="mobileNumberadd" name="mobileNumber">
-                            </div>
-                            <div class="mb-1">
-                                <label for="cityadd" class="form-label m-0">Area, Street, Sector, Village</label>
-                                <input type="text" class="form-control address-input" id="cityadd" name="city">
-                            </div>
-                            <div class=" row ">
-                                <div class=" col-6">
-                                    <label for="stateadd" class="form-label m-0">State</label>
-                                    <input type="text" class="form-control address-input" id="stateadd" name="state">
-                                </div>
-                                <div class=" col-6">
-                                    <label for="pincodeadd" class="form-label m-0">Pincode</label>
-                                    <input type="number" class="form-control address-input" id="pincodeadd" name="pincode">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <a class="btn btn-outline-primary-2" style="border-radius: 7px;"
-                                data-bs-dismiss="modal">Close</a>
-                            <button type="submit" class="btn btn-outline-primary-2"
-                                style="border-radius: 7px; background: #000; color: #fff;">Add
-                                now</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- model end -->
-
 
 
         <script>
@@ -275,15 +235,15 @@
             }, 3000);
 
             function showAddress(){
-            console.log("show");
-            let card = document.getElementById("addressToggle")
-            card.style.display = "block"
-            let inputs = card.getElementsByTagName('input');
-            // Loop through the inputs and set them as required
-            for(let i = 0; i < inputs.length; i++){
-                inputs[i].required = true;
+                console.log("show");
+                let card = document.getElementById("addressToggle")
+                card.style.display = "block"
+                let inputs = card.getElementsByTagName('input');
+                // Loop through the inputs and set them as required
+                for(let i = 0; i < inputs.length; i++){
+                    inputs[i].required = true;
+                }
             }
-        }
           
         function hideAddress(){
             console.log("hide");

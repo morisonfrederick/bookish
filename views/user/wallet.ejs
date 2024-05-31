@@ -16,6 +16,8 @@
             </nav><!-- End .breadcrumb-nav -->
 
             <div class="container my-5">
+                <% if (wallet) { %>
+                
                 <div class="col-12 row p-5">
 
                     <div class="col-lg-6 col-12">
@@ -24,15 +26,8 @@
                             <div class="card-body text-white m-5  col-12 row ">
                                 <div class="col-9 mt-3">
                                     <span class="text-uppercase"><%=userData.firstname%></span> 
-                                    <% function formatNumber(input) {
-                                        if (input && typeof input === 'string') {
-                                          return input.replace(/(\d{4})(?=\d)/g, '$1 ');
-                                        }
-                                        return input;
-                                      } 
-                                      var walletIdNumber = formatNumber(wallet._id)
-                                      %>
-                                    <h6 class=" text-white mt-0" style="font-size: 24px;"><span class=""><%=walletIdNumber%></span>
+                                    
+                                    <h6 class=" text-white mt-0" style="font-size: 24px;"><span class=""><%=wallet.walletNumber%></span>
                                     </h6>
 
                                 </div>
@@ -58,9 +53,10 @@
                         <div class="w-100 mt-2">
                             <p style="font-size: 22px;"><i class="fa-duotone fa-money-check-dollar-pen"></i> Transaction
                                 History</p>
+                            <p> wallet number is:<%= wallet.walletNumber  %></p>
                             <hr my-0>
                             <!-- table-wrapper-scroll-y my-custom-scrollbar -->
-                            <%if(history.length!=0){%>
+                            <%if(wallet.history.length!=0){%>
                         <div class="my-custom-scrollbar" style="max-height: 600px; overflow: auto;">
 
                             <table class="table " >
@@ -75,15 +71,15 @@
                                 </thead>
                                 <tbody>
                                     <p><%  %></p>
-                                    <%for(i=history.length-1;i>=0;i--){%>
+                                    <%for(i=wallet.history.length-1;i>=0;i--){%>
                                         
                                         
                                 </tr>
-                                    <td> <%=history[i].method%></td>
-                                    <td style="font-weight: 500;">&euro; <%=history[i].amount%></td>
-                                    <td><%= history[i].paymentType %></td>
+                                    <td> <%=wallet.history[i].method%></td>
+                                    <td style="font-weight: 500;">&euro; <%=wallet.history[i].amount%></td>
+                                    <td><%= wallet.history[i].paymentType %></td>
                                     
-                                    <td><%=history[i].createdAt.toISOString().slice(0,10) %></td>
+                                    <td><%=wallet.history[i].createdAt.toISOString().slice(0,10) %></td>
                                     <td  >
                                         
                                         <p class="btn-success text-center" style="border-radius: 0.4rem;">success</p>
@@ -104,6 +100,8 @@
                     </div>
 
                 </div>
+                 
+                <% } %>
 
             </div>
         </main>

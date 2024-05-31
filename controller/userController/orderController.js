@@ -15,7 +15,9 @@ const path = require("path");
 const { log } = require("console");
 const fs = require('fs');
 
-const createInvoice= require("../../util/createInvoice")
+const WalletNumber = require("../../util/walletNumber")
+
+const createInvoice= require("../../util/createInvoice");
 
 const { PAYPAL_MODE, PAYPAL_CLIENT_KEY, PAYPAL_SECRET_KEY } = process.env;
 
@@ -355,8 +357,8 @@ const cancelIndividualOrder = async function(req, res) {
             { _id: orderId, 'products._id': productsId },
             { 'products.$': 1 } // project the first matched product
         );
-        console.log("cancelled price: ", cancelledProduct);
-        console.log("000", cancelledProduct.products[0]);
+        // console.log("cancelled price: ", cancelledProduct);
+        // console.log("000", cancelledProduct.products[0]);
 
         if (!cancelledProduct) {
             return res.status(404).json({ message: 'Product not found in order' });
@@ -364,7 +366,7 @@ const cancelIndividualOrder = async function(req, res) {
 
         // Calculate the price of the cancelled item
         let cancelledPrice = cancelledProduct.products[0].price * cancelledProduct.products[0].quantity;
-        console.log("cancelled price: ", cancelledPrice);
+        // console.log("cancelled price: ", cancelledPrice);
 
         // Update the status of the product to "Cancelled"
         await Order.updateOne(
@@ -389,29 +391,42 @@ const cancelIndividualOrder = async function(req, res) {
 
         // User wallet management
         if (cancelledProduct.paymentType != "cod") {
-            let wallet = await Wallet.findOne({ userid: id });
-            let balance = cancelledPrice;
-            console.log("balance", balance);
-            if (!wallet) {
-                let userWallet = new Wallet({
-                    userid: id,
-                    balance: balance,
-                    history: [{
-                        amount: cancelledPrice,
+            console.log("wallet operation start");
+            try {
+                let wallet = await Wallet.findOne({ userid: id });
+                let balance = cancelledPrice;
+    
+                if (!wallet) {
+                    console.log("no wallet found. creating new wallet");
+                    let num = await WalletNumber();
+                    console.log("wallet number", num);
+                    
+                    let userWallet = new Wallet({
+                        userid: id,
+                        walletNumber: num,
+                        balance: balance,
+                        history: [{
+                            amount: cancelledPrice,
+                            method: "Refund",
+                            paymentType: "Paypal"
+                        }]
+                    });
+                    await userWallet.save();
+                    console.log("new wallet = ", userWallet);
+                } else {
+                    console.log("wallet exist");
+                    wallet.balance += balance;
+                    let newHistory = {
+                        amount: balance,
                         method: "Refund",
                         paymentType: "Paypal"
-                    }]
-                });
-                await userWallet.save();
-            } else {
-                wallet.balance += balance;
-                let newHistory = {
-                    amount: balance,
-                    method: "Refund",
-                    paymentType: "Paypal"
-                };
-                wallet.history.push(newHistory);
-                await wallet.save();
+                    };
+                    wallet.history.push(newHistory);
+                    await wallet.save();
+                    console.log("old wallet = ", wallet);
+                }
+            } catch (error) {
+                console.error("Error in wallet operation:", error);
             }
         }
 

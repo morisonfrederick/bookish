@@ -2,12 +2,14 @@ const express = require("express");
 const user = require("../../models/userModel");
 const book = require("../../models/bookModel");
 const Category = require("../../models/categoryModel");
+const number = require("../../util/walletNumber")
 // const { options } = require("../../routes/userRoute");
 
 
 // user products viewing page
 const productView = async (req, res, next) => {
     try {
+        
         let id = req.session.userid;
         let currentUser = await user.findOne({ _id: id }) || null;
         let page = parseInt(req.query.page) || 1;

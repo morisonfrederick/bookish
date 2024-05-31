@@ -200,7 +200,7 @@ const mostSellingProducts = async function(startDate = new Date(new Date().getFu
 
 // Call the function and log the output
 mostSellingProducts().then(result => {
-console.log("Most Selling Products:", result);
+// console.log("Most Selling Products:", result);
 }).catch(err => {
 console.error("Error:", err);
 });

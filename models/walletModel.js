@@ -5,6 +5,10 @@ const walletSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "user"
     },
+    walletNumber : {
+        type: Number,
+        require: true
+    },
     balance: {
         type:Number,
         default:0
