@@ -1,304 +1,202 @@
 <%- include('../admin/layouts/header.ejs') %>
-    <div class="main-panel">
-        <div class="content-wrapper">
-            <div class="row"></div>
-            <div class="row">
-
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-12 d-flex justify-content-between align-items-center">
+                <h2 class="text-light">Sales Analysis Report</h2>
+                <div>
+                    <p class="mx-auto mb-1">Filter Report :</p>
+                    <form class="d-flex align-items-center" action="/admin/sales" method="get">
+                        <div class="form-group mb-0">
+                            <input type="date" autocomplete="off" id="start-date" class="form-control text-light mr-2" name="start" placeholder="From" required>
+                        </div>
+                        <div class="form-group mb-0">
+                            <input type="date" autocomplete="off" id="end-date" class="form-control text-light mr-2" name="end" placeholder="To" required>
+                        </div>
+                        <button type="submit" class="btn btn-inverse-primary">Filter</button>
+                    </form>
+                </div>
             </div>
-            <h2 class="text-center text-light">Sales Analysis Report</h2>
-
-            <div class="row mt-4">
-                <div class="col-lg-6 grid-margin stretch-card">
-                    <div class="card">
-
-                        <div class="card-body">
-                            <h4 class="card-title">Sales Portfolio</h4>
-                            <div class="table-responsive" style="height: 250px;">
-                                <table class="table" >
+        </div>
+        <div class="row mt-4">
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Sales Portfolio</h4>
+                        <div class="table-responsive" style="height: 250px;">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Book name</th>
+                                        <th>Total Products Sold</th>
+                                        <th>Total Sales amount</th>
+                                        <th>Profit</th>
+                                    </tr>
+                                    <% salesReport.forEach(salesReport => { %>
+                                    <tr>
+                                        <td><%= salesReport.productName %></td>
+                                        <td><%= salesReport.totalQuantity %></td>
+                                        <td>&euro; <%= salesReport.totalPrice %></td>
+                                        <td>&euro; <%= salesReport.profit %></td>
+                                    </tr>
+                                    <% }) %>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="col-10 mt-3">
+                            <button onclick="SalesPortfolio('week')" class="btn btn-sm btn-outline-info">Weekly</button>
+                            <button onclick="SalesPortfolio('month')" class="btn btn-sm btn-outline-info">Monthly</button>
+                            <button onclick="SalesPortfolio('year')" class="btn btn-sm btn-outline-info">Yearly</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Best selling Category</h4>
+                        <canvas id="myChart" style="height:230px"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Best selling Product</h4>
+                        <canvas id="myChart2" style="height:230px"></canvas>
+                        <div style="display: none;">
+                            <input type="text" id="xValue" value="<%= xValue %> ">
+                            <input type="text" id="yValue" value="<%= yValue %>">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Most sold products</h4>
+                        <canvas id="myChart" style="height:230px"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Sold Stocks</h4>
+                        <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-row justify-content-between">
+                            <h4 class="card-title mb-1">Product wise profitability analysis</h4>
+                            <div class="dropdown mt-2">
+                                <button type="button" class="btn btn-inverse-info dropdown-toggle" id="dropdownMenuIconButton7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="mdi mdi-download"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuIconButton9">
+                                    <h6 class="dropdown-header">Download Report</h6>
+                                    <a class="dropdown-item text-white" id="excelDownload">Excel file</a>
+                                    <a class="dropdown-item text-white" id="pdfDownload">PDF File</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="table-responsive card">
+                                <% if(sales !== 0) { %>
+                                <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Book name  </th>
-                                            <th>Total Products Sold  </th>
-                                            <th>Total Sales amount</th>
+                                            <th></th>
+                                            <th>Product</th>
                                             <th>Profit</th>
                                         </tr>
-                                        <% salesReport.forEach(salesReport => { %>
-                                         
-                                        
-                                        <tr>
-                                            <td><%= salesReport.productName  %></td>
-                                            <td><%= salesReport.totalQuantity  %></td>
-                                            <td>&euro; <%= salesReport.totalPrice  %></td>
-                                            <td>&euro; <%= salesReport.profit  %></td>
-                                        </tr>
-                                        <% }) %>
                                     </thead>
+                                    <tbody>
+                                        <% for(i = 0; i < sales.productProfits.length; i++) { %>
+                                        <tr>
+                                            <td>
+                                                <img class="rounded product-img-preview" src="/products/images/<%= sales.productProfits[i].image %>" alt="image" />
+                                            </td>
+                                            <td><%= sales.productProfits[i].name %></td>
+                                            <td><%= sales.productProfits[i].profit %></td>
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
                                 </table>
-                            </div>
-                            <!-- <canvas id="areaChart" style="height: 250px;"></canvas> -->
-                            <div class="col-10 mt-3">
-                                <button onclick="SalesPortfolio('week')" class="btn btn-sm btn-outline-info">Weekly</button>
-                                <button onclick="SalesPortfolio('month')" class="btn btn-sm btn-outline-info">Monthly</button>
-                                <button onclick="SalesPortfolio('year')" class="btn btn-sm btn-outline-info">Yearly</button>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Best selling Category</h4>
-                            <canvas id="myChart" style="height:230px"></canvas>
-                           
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <p class="mx-auto">Filter Report :</p>
-                <div class="form-group row  col-12 w-100 d-flex justify-content-between">
-                    <div class="col-3 ">
-                        <h3>Total Profit :<%= sales.totalSales%>
-                        </h3>
-                    </div>
-                    <div class=" col-3 d-flex flex-column ">
-                        <form class="d-flex flex-column" action="/admin/sales" method="get">
-                        <h2 class="mdi mdi-calendar-clock"></h2>
-                        <input type="date" autocomplete="off" id="start-date" class="form-control text-light m-1 " name="start" placeholder="From"  required>
-                        <input type="date" autocomplete="off" id="end-date" class="form-control text-light m-1 " name="end" placeholder="To" required>
-                        <button type="submit" class="btn btn-inverse-primary m-2">Filter</button>
-                        </form>
-                    </div>
-                    
-
-                </div>
-            </div>
-
-            <div class="row mt-4">
-                <!-- best selling product top 10 -->
-                <div class="col-lg-6 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Best selling Product</h4>
-                            <canvas id="myChart2" style="height:230px"></canvas>
-                            <div style="display: none;">
-                            <input type="text" id="xValue" value="<%= xValue  %> ">
-                            <input type="text" id="yValue" value="<%=  yValue  %>">
-                            
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <!-- best selling category top 10  -->
-                <div class="col-lg-6 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Most sold products</h4>
-                            <canvas id="myChart" style="height:230px"></canvas>
-                            
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-
-
-            <div class="row">
-                <div class="col-md-4 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Sold Stocks</h4>
-                            
-                            <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
-                                
-                               
-                            </div>
-                            
-
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="col-md-8 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex flex-row justify-content-between">
-                                <h4 class="card-title mb-1">product wise profitability analysis</h4>
-                                <div class="dropdown mt-2">
-                                    <button type="button" class="btn btn-inverse-info dropdown-toggle" id="dropdownMenuIconButton7" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      <i class="mdi mdi-download"></i>
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuIconButton9" >
-                                      <h6 class="dropdown-header">Download Report</h6>
-                                      <a class="dropdown-item text-white" id="excelDownload" >Excel file</a>
-                                      <a class="dropdown-item text-white" id="pdfDownload"  >PDF File</a>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="table-responsive card">
-                                    <%if(sales!==0){%>
-
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>Product</th>
-                                                <th>Profit</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <%for(i=0;i<sales.productProfits.length;i++){%>
-                                                <tr>
-                                                    <!-- list -->
-                                                    <td>
-                                                        <img class="rounded product-img-preview" src="/products/images/<%= sales.productProfits[i].image %>"
-                                                                                                                                                                                                                                                                                                                       alt="image" />
-                                                    </td>
-                                                    <td>
-                                                        <%=sales.productProfits[i].name%>
-                                                    </td>
-                                                    <td>
-                                                        <%=sales.productProfits[i].profit%>
-                                                    </td>
-
-                                                </tr>
-                                                <%}%>
-                                                
-                                        </tbody>
-                                    </table>
-                                    <%}else{%>
-                                        <h6 class="text-center text-light mt-5">No Stock Profits</h6>
-                                    <%}%>
-
-                                </div>
+                                <% } else { %>
+                                <h6 class="text-center text-light mt-5">No Stock Profits</h6>
+                                <% } %>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="text-md-center text-xl-left">
-                <!-- <canvas id="myChart" style="width:100%;max-width:300px"></canvas> -->
-            </div>
-
-
-
-
-
-
-            <!-- <input type="text" autocomplete="off" id="start-date" class="form-control text-light" name="validFrom" placeholder="Select Starting Date"required>
-            <input type="text" autocomplete="off" id="end-date" class="form-control text-light" name="validTo" placeholder="Select Expiring Date" required> -->
-
-
-
-
-
         </div>
-    </div>
         <div style="display: none;">
-            <input id="xValues" type="text" value="<%=xValues  %>">
+            <input id="xValues" type="text" value="<%= xValues %>">
             <input type="text" value="<%= yValues %>" id="yValues">
-            <input id="barColors" type="text" value="<%= barColors  %>">
+            <input id="barColors" type="text" value="<%= barColors %>">
         </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('start-date').setAttribute('max', today);
-        document.getElementById('end-date').setAttribute('max', today);
-    });
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('start-date').setAttribute('max', today);
+                document.getElementById('end-date').setAttribute('max', today);
+            });
 
+            const categories = document.getElementById("xValues").value.split(",");
+            const sold = document.getElementById("yValues").value.split(",");
+            const color = document.getElementById("barColors").value.split(",");
 
+            const Book = document.getElementById("xValue").value.split(",");
+            const sale = document.getElementById("yValue").value.split(",");
 
-    const categories = document.getElementById("xValues").value.split(",")
-    const sold = document.getElementById("yValues").value.split(",")
-    const color = document.getElementById("barColors").value.split(",")
+            new Chart("myChart", {
+                type: "bar",
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        backgroundColor: color,
+                        data: sold
+                    }]
+                },
+                options: {
+                    legend: {display: false},
+                    title: {
+                        display: true,
+                        text: "Products sold"
+                    }
+                }
+            });
 
-    const Book = document.getElementById("xValue").value.split(",")
-    const sale = document.getElementById("yValue").value.split(",")
-    alert(Book)
+            new Chart("myChart2", {
+                type: "bar",
+                data: {
+                    labels: Book,
+                    datasets: [{
+                        backgroundColor: color,
+                        data: sale
+                    }]
+                },
+                options: {
+                    legend: {display: false},
+                    title: {
+                        display: true,
+                        text: "Products sold"
+                    }
+                }
+            });
 
-    // alert(typeof(one))
-    // let ans1 = one.split(",")
-    // let ans2 = two.split(",")
-    
-    // alert(typeof(three))
-
-
-
-    
-// const yValues = two
-// const barColors = three
-
-new Chart("myChart", {
-  type: "bar",
-  data: {
-    labels: categories,
-    datasets: [{
-      backgroundColor: color,
-      data: sold
-    }]
-  },
-  options: {
-    legend: {display: false},
-    title: {
-      display: true,
-      text: "Products sold"
-    }
-  }
-});
-// Chart two 
-    new Chart("myChart2", {
-    type: "bar",
-    data: {
-        labels: Book,
-        datasets: [{
-        backgroundColor: color,
-        data: sale
-        }]
-    },
-    options: {
-        legend: {display: false},
-        title: {
-        display: true,
-        text: "Products sold"
-        }
-    }
-    });
-    </script>
-
-    <script>
-        
-
-           
-
-
-          
-
-
-            // fileDownloadPathsettings();
             const excelDownload = document.getElementById("excelDownload");
-           
-              excelDownload.href = `/admin/sales/excel-report`;
-              
-
-
-       
-       
-
-
-        
-
-        
-
-    </script>
-    <%- include('../admin/layouts/footer.ejs') %>
-
-
-    
+            excelDownload.href = `/admin/sales/excel-report`;
+        </script>
+    </div>
+</div>
+<%- include('../admin/layouts/footer.ejs') %>

@@ -17,7 +17,7 @@ router.use(express.urlencoded({ extended: true }));
 
 // admin login page route 
 router.get("/login",auth.isnotAdmin, adminController.getAdmin);
-router.post("/",adminController.loginAdmin)
+router.post("/login",adminController.loginAdmin)
 
 // admin log out route 
 router.get("/signout",adminController.getSignOut)

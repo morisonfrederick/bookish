@@ -23,12 +23,12 @@ const isadmin = (req,res,next)=>{
 const getAdmin = function(req,res,next){
 
     res.render("admin/login",{layout:"admin/adminLayout",
-        adminloginErr: req.session.adminloginErr,
+    adminLoginErr: req.session.adminLoginErr,
       },
       (err, html) => {
         if (!err) {
           // Set adminloginErr to false after rendering
-          req.session.adminloginErr = false;
+          req.session.adminLoginErr = false;
 
           res.send(html); // Send the rendered HTML to the client
         } else {
@@ -52,8 +52,8 @@ const loginAdmin =async function(req,res,next){
         res.render("admin/dashbord",{layout:"admin/adminLayout",userOrders})
     }
     else{
-        req.session.adminloginErr = 1;
-        res.render("admin/login",{adminloginErr:1,layout:"admin/adminLayout"})
+        req.session.adminLoginErr = 1;
+        res.render("admin/login",{adminLoginErr:1,layout:"admin/adminLayout"})
     }
 }
     

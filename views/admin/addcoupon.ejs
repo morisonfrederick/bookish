@@ -24,30 +24,27 @@
                                 </div>
 
                             </div>
-                            
+                            <!-- date picker  -->
                             <div class="row">
                                 <div class="col-md-6 d-flex ">
-                                    <div class="d-flex  mt-4 ">
+                                    <div class="d-flex mt-4 ">
                                         <p class="mdi mdi-calendar-multiple-check " style="font-size: 2.1rem;"></p>
-
                                     </div>
-                                    <div class="form-group row mx-2 w-100" >
+                                    <div class="form-group row mx-2 w-100">
                                         <div class="col-sm-12 ">
-                                            <label for="start-date" class="col-sm-22 col-form-label">Valid Date
-                                                From</label>
-                                            <input type="text" autocomplete="off" id="start-date" class="form-control text-light" name="start" placeholder="Select Starting Date" required>
+                                            <label for="start-date" class="col-sm-22 col-form-label">Valid Date From</label>
+                                            <input type="date" autocomplete="off" id="start-date" class="form-control text-light" name="start" placeholder="Select Starting Date" required>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6  d-flex ">
-                                    <div class="d-flex  mt-4 ">
+                                    <div class="d-flex mt-4 ">
                                         <p class="mdi mdi-calendar-multiple-check " style="font-size: 2.1rem;"></p>
-
                                     </div>
-                                    <div class="form-group row mx-2 w-100" >
+                                    <div class="form-group row mx-2 w-100">
                                         <div class="col-sm-12  ">
                                             <label for="end-date" class="col-sm-22 col-form-label">Valid Date To</label>
-                                            <input type="text" autocomplete="off" id="end-date" class="form-control text-light" name="end" placeholder="Select Expiring Date" required>
+                                            <input type="date" autocomplete="off" id="end-date" class="form-control text-light" name="end" placeholder="Select Expiring Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -122,22 +119,18 @@
         
     </div>
     <script>
-
+        let startDate =  document.getElementById("start-date")
+        let endDate = document.getElementById("end-date")
         
-
-        $("#start-date").datepicker({
-            dateFormat: 'yy-mm-dd',
-            onSelect: function (selectedDate) {
-                var minDate = new Date(selectedDate);
-                minDate.setDate(minDate.getDate() + 1); // Set the minimum date for the end date picker to the next day
-                $("#end-date").datepicker("option", "minDate", minDate);
-            }
-        });
-
-        $("#end-date").datepicker({
-            dateFormat: 'yy-mm-dd'
-        });
-
+        startDate.setAttribute("min", new Date().toISOString().split('T')[0]);
+        
+        startDate.addEventListener("input",function(){
+            let startValue = startDate.value
+            let endDateObj = new Date(startValue)
+            endDateObj.setDate(endDateObj.getDate()+1)
+            endDate.setAttribute("min",endDateObj.toISOString().split("T")[0])
+        })
+        
         
 
     </script>

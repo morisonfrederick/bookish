@@ -1,59 +1,45 @@
 <%- include('../admin/layouts/header.ejs') %>
     <div class="main-panel">
         <div class="content-wrapper">
-
-
-
-            <% var dateFrom=new Date(offer.validFrom); %>
-            <% var dateTo=new Date(offer.validTo); %>
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Edit Coupon</h4>
-                        <p> hi<% offer.book %></p>
-                        <!-- <p class="card-description"> Basic form elements </p> -->
-                        <form class="forms-sample " action="/admin/offer/edit/<%=offer._id %>?_method=PUT" method="post" onsubmit="return validateCouponForm();">
-
-                            <div class="form-group  row">
-                                <div class="col-6  text-light">
+                        <h4 class="card-title">Edit Offer</h4>
+                        <form class="forms-sample" action="/admin/offer/edit/<%= offer._id %>?_method=PUT" method="post" onsubmit="return validateCouponForm();">
+                            <div class="form-group row">
+                                <div class="col-6 text-light">
                                     <label for="exampleInputName1">Offer Code</label>
-                                    <input type="text" class="form-control  text-light" name="code" id="exampleInputName1" value="<%=offer.offerCode %>" placeholder="<%=offer.offerCode %>" onkeyup="this.value = this.value.toUpperCase();" required>
+                                    <input type="text" class="form-control text-light" name="code" id="exampleInputName1" value="<%= offer.offerCode %>" placeholder="<%= offer.offerCode %>" onkeyup="this.value = this.value.toUpperCase();" required>
                                 </div>
-                                <!-- <div class="col-6"> -->
+                                <div class="col-6">
                                     <label for="exampleInputName1">Discount Amount</label>
-                                    <input type="number" class="form-control text-light" id="exampleInputName1" name="discount" placeholder="price" value="<%=offer.discount %>" required>
+                                    <input type="number" class="form-control text-light" id="exampleInputName1" name="discount" placeholder="price" value="<%= offer.discount %>" required>
                                 </div>
-
                             </div>
-                            
                             <div class="row">
-                                <div class="col-md-6 d-flex ">
-                                    <div class="d-flex  mt-4 ">
-                                        <p class="mdi mdi-calendar-multiple-check " style="font-size: 2.1rem;"></p>
-
+                                <div class="col-md-6 d-flex">
+                                    <div class="d-flex mt-4">
+                                        <p class="mdi mdi-calendar-multiple-check" style="font-size: 2.1rem;"></p>
                                     </div>
-                                    <div class="form-group row mx-2 w-100" >
-                                        <div class="col-sm-12 ">
-                                            <label for="start-date" class="col-sm-22 col-form-label">Valid Date
-                                                From</label>
-                                            <input type="date" value="<%= offer.startDate.toISOString().slice(0,10) %>"   id="start-date" class="form-control text-light" name="start" placeholder="Select Starting Date" required>
+                                    <div class="form-group row mx-2 w-100">
+                                        <div class="col-sm-12">
+                                            <label for="start-date" class="col-sm-22 col-form-label">Valid Date From</label>
+                                            <input type="date" value="<%= offer.startDate.toISOString().slice(0,10) %>" id="start-date" class="form-control text-light" name="start" placeholder="Select Starting Date" required>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6  d-flex ">
-                                    <div class="d-flex  mt-4 ">
-                                        <p class="mdi mdi-calendar-multiple-check " style="font-size: 2.1rem;"></p>
-
+                                <div class="col-md-6 d-flex">
+                                    <div class="d-flex mt-4">
+                                        <p class="mdi mdi-calendar-multiple-check" style="font-size: 2.1rem;"></p>
                                     </div>
-                                    <div class="form-group row mx-2 w-100" >
-                                        <div class="col-sm-12  ">
+                                    <div class="form-group row mx-2 w-100">
+                                        <div class="col-sm-12">
                                             <label for="end-date" class="col-sm-22 col-form-label">Valid Date To</label>
-                                            <input type="date" value="<%= offer.endDate.toISOString().slice(0,10) %>"  id="end-date" class="form-control text-light" name="end" placeholder="Select Expiring Date" required>
+                                            <input type="date" value="<%= offer.endDate.toISOString().slice(0,10) %>" id="end-date" class="form-control text-light" name="end" placeholder="Select Expiring Date" required>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group row">
@@ -62,9 +48,9 @@
                                             <select name="category" class="form-control text-light" required>
                                                 <option value="<%= offer.category %>" selected><%= offer.category %></option>
                                                 <% for( let i = 0; i < categories.length; i++ ) { %>
-                                                  <option value="<%= categories[i].categoryName %>"><%= categories[i].categoryName %></option>
+                                                    <option value="<%= categories[i].categoryName %>"><%= categories[i].categoryName %></option>
                                                 <% } %>
-                                              </select> 
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -73,49 +59,47 @@
                                         <div class="col-sm-12">
                                             <label class="col-sm-3 col-form-label">Book</label>
                                             <select name="book" class="form-control text-light" required>
-                                                <% if (offer.book =="undefined") { %>
+                                                <% if (offer.book === "undefined") { %>
                                                     <option value="null" disabled selected>No Book selected</option>
                                                 <% } else { %>
                                                     <option value="<%= offer.book %>" selected><%= offer.book %></option>
                                                 <% } %>
                                                 <% for( let i = 0; i < book.length; i++ ) { %>
-                                                  <option value="<%= book[i].name %>"><%= book[i].name %></option>
+                                                    <option value="<%= book[i].name %>"><%= book[i].name %></option>
                                                 <% } %>
-                                              </select> 
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group mt-2">
                                 <label for="exampleTextarea1">Description</label>
-                                <textarea name="description" class="form-control text-light" id="exampleTextarea1" rows="4" ><%=offer.description %></textarea>
+                                <textarea name="description" class="form-control text-light" id="exampleTextarea1" rows="4"><%= offer.description %></textarea>
                             </div>
-
                             <button type="submit" class="btn btn-lg btn-primary mr-2 mt-5">Update</button>
                         </form>
-
-
                     </div>
                 </div>
             </div>
-
-
         </div>
+
+
+    
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
-        <footer class="footer">
-            <div class="content-wrapper ">
-                <div id="FormAlert" data-aos="fade-down" class="alert alert-danger col-md-4 col-8 mx-auto fixed-top "
-                style="display: none;  top:30px; border-radius: 7px; opacity: 0.9; " role="alert">
-                <h6 class="alert-heading text-center">Please provide only valid data.</h6>
-                <hr>
-                <span class="row "><i class="fa-sharp fa-light fa-circle-xmark fa-shake" style="color: #ff0505; font-size: 18px;"></i> &nbsp;&nbsp;&nbsp; <p id="ValidErrMess"></p></span>
-                 
-            </div>
-        </footer>
-        <!-- partial -->
+    <footer class="footer">
+        <div class="content-wrapper ">
+            <div id="FormAlert" data-aos="fade-down" class="alert alert-danger col-md-4 col-8 mx-auto fixed-top "
+            style="display: none;  top:30px; border-radius: 7px; opacity: 0.9; " role="alert">
+            <h6 class="alert-heading text-center">Please provide only valid data.</h6>
+            <hr>
+            <span class="row "><i class="fa-sharp fa-light fa-circle-xmark fa-shake" style="color: #ff0505; font-size: 18px;"></i> &nbsp;&nbsp;&nbsp; <p id="ValidErrMess"></p></span>
+            </div>   
+        </div>
+    </footer>
     </div>
+        <!-- partial -->
+    
     <script>
 
 document.addEventListener('DOMContentLoaded', function () {

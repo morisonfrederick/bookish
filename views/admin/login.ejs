@@ -33,7 +33,7 @@
             <div class="card-body px-5 py-5">
               <h6 class=".text-danger"><%= locals.message || "" %></h6>
               <h3 class="card-title text-center mb-3 ">Admin Login</h3>
-              <form method="post" action="/admin">
+              <form method="post" action="/admin/login">
                 <div class="form-group">
                   <label>Email </label>
                   <input type="text" name="email" class="form-control p_input text-light" required>
@@ -57,7 +57,7 @@
     </div>
     <!-- page-body-wrapper ends -->
   </div>
-  <% if(adminloginErr){ %>
+  <% if(adminLoginErr){ %>
     <div id="myAlert" data-aos="fade-down"
       class="alert alert-secondary alert-dismissible fade show fs-6 fixed-top alt text-center text-danger" role="alert">
       <strong>Uh-oh!</strong> invalid User-Name or Password.
