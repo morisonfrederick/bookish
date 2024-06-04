@@ -4,6 +4,7 @@ const users = require("../../models/userModel")
 const books = require("../../models/bookModel")
 const admindata = require("../../models/adminModel")
 const Order = require("../../models/orderModel")
+const { order } = require("paypal-rest-sdk")
 
 
 
@@ -21,40 +22,57 @@ const isadmin = (req,res,next)=>{
 }
 
 const getAdmin = function(req,res,next){
+    try{
+        res.render("admin/login",{layout:"admin/adminLayout",
+        adminLoginErr: req.session.adminLoginErr,
+          },
+          (err, html) => {
+            if (!err) {
+              // Set adminloginErr to false after rendering
+              req.session.adminLoginErr = false;
+    
+              res.send(html); // Send the rendered HTML to the client
+            } else {
+              console.log(err.message);
+            }
+          })
+    }
+    catch(err){
+        console.log(err);
+    }
 
-    res.render("admin/login",{layout:"admin/adminLayout",
-    adminLoginErr: req.session.adminLoginErr,
-      },
-      (err, html) => {
-        if (!err) {
-          // Set adminloginErr to false after rendering
-          req.session.adminLoginErr = false;
 
-          res.send(html); // Send the rendered HTML to the client
-        } else {
-          console.log(err.message);
-        }
-      })
 }
 
 const loginAdmin =async function(req,res,next){
-    let data =await admindata.find()
-    console.log(data[0].email);
-    console.log(req.body.email);
-    if(req.body.email==data[0].email&&req.body.password==data[0].password){
+    try{
+        let data =await admindata.find()
+        console.log(data[0].email);
         console.log(req.body.email);
-        console.log(req.body.password);
-        req.session.isadmin = true;
-        req.session.adminloggedIn = true;
-        req.session.save()
-        console.log(req.session.isadmin);
-        let userOrders = await Order.find().populate("user_id");
-        res.render("admin/dashbord",{layout:"admin/adminLayout",userOrders})
+        if(req.body.email==data[0].email&&req.body.password==data[0].password){
+            console.log(req.body.email);
+            console.log(req.body.password);
+            req.session.isadmin = true;
+            req.session.adminloggedIn = true;
+            req.session.save()
+            console.log(req.session.isadmin);
+            let userOrders = await Order.find().populate("user_id");
+            let revenue = 0
+            userOrders.forEach(order => {
+                revenue += order.totalPrice
+            });
+            console.log(revenue);
+            res.render("admin/dashbord",{layout:"admin/adminLayout",userOrders,revenue})
+        }
+        else{
+            req.session.adminLoginErr = 1;
+            res.render("admin/login",{adminLoginErr:1,layout:"admin/adminLayout"})
+        }
     }
-    else{
-        req.session.adminLoginErr = 1;
-        res.render("admin/login",{adminLoginErr:1,layout:"admin/adminLayout"})
+    catch(err){
+        console.log(err);
     }
+    
 }
     
     
@@ -62,19 +80,36 @@ const loginAdmin =async function(req,res,next){
 //admin home page
 
 const getAdminHome =async function(req,res,next){
-    let userOrders = await Order.find().populate("user_id");
-    res.render("admin/dashbord",{layout:"admin/adminLayout",userOrders})
+    try{
+        let userOrders = await Order.find().populate("user_id");
+        let revenue = 0
+        userOrders.forEach(order => {
+            revenue += order.totalPrice
+        });
+        console.log(revenue);
+        res.render("admin/dashbord",{layout:"admin/adminLayout",userOrders,revenue})
+    }
+    catch(err){
+        console.log(err);
+    }
+
 }
 // user management page
 
 const  getusers =async function(req,res,next){
-    let page = parseInt(req.query.page) || 1
-    let pageSize = 6
-    let skip = (page-1)*pageSize
-    let data = await users.find().skip(skip).limit(pageSize)
-    let totalCount = await users.countDocuments()
-    let totalPages = Math.ceil(totalCount/pageSize)
-    res.render("users",{data,layout:"admin/adminLayout",page:page,totalPages})
+    try{
+        let page = parseInt(req.query.page) || 1
+        let pageSize = 6
+        let skip = (page-1)*pageSize
+        let data = await users.find().skip(skip).limit(pageSize)
+        let totalCount = await users.countDocuments()
+        let totalPages = Math.ceil(totalCount/pageSize)
+        res.render("users",{data,layout:"admin/adminLayout",page:page,totalPages})
+    }
+    catch(err){
+        console.log(err);
+    }
+
 }
 
 const blockUser = async function(req,res,next){

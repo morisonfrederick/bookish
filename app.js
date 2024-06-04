@@ -24,6 +24,8 @@ app.set("view engine", "ejs")
 app.set("views",[path.join(__dirname,"views"),path.join(__dirname,"views/admin"),path.join(__dirname,"views/user")])
 
 
+
+
 const oneDay = 1000*60*60*24
 app.use(
     session({
@@ -46,4 +48,7 @@ app.use(function (req, res, next) {
 
 app.use("/admin",adminRout)
 app.use("/home",userRoute)
+app.use((req, res, next) => {
+  res.status(404).render('404');
+});
 module.exports = app;
