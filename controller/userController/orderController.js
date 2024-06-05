@@ -579,7 +579,6 @@ function calculateTotalPrice(userCart) {
 
 
 const getInvoice = async (req, res) => {
-    console.log("invoice preparing");
     try {
         let currentUser = await user.findOne({_id:req.session.userid}) 
         let {id} = req.params;
@@ -602,8 +601,6 @@ const getInvoice = async (req, res) => {
            
             
         })
-        console.log("total : ",total);
-        console.log("items: ",items);
         const invoice = {
             invoiceNumber: order.orderNumber,
             createdAt: order.createdAt.toISOString(), // ISO 8601 format

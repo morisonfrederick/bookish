@@ -9,48 +9,43 @@ const couponAddLoad = async function(req,res){
     res.render("admin/addcoupon",{codeErr:0})
 }
 const addCoupon = async function(req,res){
-    console.log("add coupon");
-    let {code,discount,start,end,minimum,totalUsers,description} = req.body
-     // Validation
-    //  if (!code || !discount || !start || !end || !minimum || !totalUsers) {
-    //     return res.status(400).send("Missing required fields");
-    console.log(1,"code",code,);
-    console.log(2,"discount",discount);
-    console.log(3,"start",start);
-    console.log(4,"end",end);
-    console.log(5,"minimum",minimum);
-    console.log(6,"totalUsers",totalUsers);
-    console.log(7,"description",description);
-
-    const checking = await Coupon.findOne({couponCode:code})
-    if(checking){
-        res.render("admin/addcoupon",{codeErr:1})
-    }
-    else{
-        let data ={
-            couponCode:code,
-            discount:discount,
-            startDate: start,
-            endDate:end,
-            minimumSpend:minimum,
-            maxUsers:totalUsers,
-            description:description
+    try{
+        console.log("add coupon");
+        let {code,discount,start,end,minimum,totalUsers,description} = req.body
+        const checking = await Coupon.findOne({couponCode:code})
+        if(checking){
+            res.render("admin/addcoupon",{codeErr:1})
         }
-    
-        let updatedCoupon = new Coupon({
-            couponCode:code,
-            discount:discount,
-            startDate: start,
-            endDate:end,
-            minimumSpend:minimum,
-            maxUsers:totalUsers,
-            description:description
-        })
-        await updatedCoupon.save()
-        console.log(updatedCoupon)
-        req.flash("success","Coupon added successfully")
-        res.redirect("/admin/coupon")
+        else{
+            let data ={
+                couponCode:code,
+                discount:discount,
+                startDate: start,
+                endDate:end,
+                minimumSpend:minimum,
+                maxUsers:totalUsers,
+                description:description
+            }
+        
+            let updatedCoupon = new Coupon({
+                couponCode:code,
+                discount:discount,
+                startDate: start,
+                endDate:end,
+                minimumSpend:minimum,
+                maxUsers:totalUsers,
+                description:description
+            })
+            await updatedCoupon.save()
+            console.log(updatedCoupon)
+            req.flash("success","Coupon added successfully")
+            res.redirect("/admin/coupon")
+        }
     }
+    catch(err){
+        console.log(err);
+    }
+
 
     
 }

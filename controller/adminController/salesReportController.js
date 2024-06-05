@@ -71,30 +71,7 @@ const saleReportLoad = async function(req, res) {
 };
 
 
-// const createSalesReport = async function(){
-//     let totalOrders = await Order.find()
-//     let totalSale = 0
-//     let totalMoneyRecieved = 0
-    
 
-//     totalOrders.forEach(order => {
-//         order.products.forEach(product => {
-//             totalSale += product.quantity;
-//         });
-//     });
-//     totalOrders.forEach(order => {
-//         totalMoneyRecieved += order.totalPrice
-//     })
-//     console.log("first",totalSale);
-    
-//     let profit = totalMoneyRecieved * 0.2
-//     let salesReport = {
-//         totalSale,
-//         totalMoneyRecieved,
-//         profit
-//     }
-//     return salesReport
-// }
 
 const createSalesReport = async function(startDate = new Date(new Date().getFullYear(), 0, 1), endDate = new Date()){
   try{
@@ -207,38 +184,44 @@ console.error("Error:", err);
 
 
 const excelSheet = async function(req,res){
-  let salesReport =await createSalesReport()
-  const workbook = new ExcelJS.Workbook();
-  const sheet = workbook.addWorksheet('Sales report');
-  sheet.columns = [
-    { header: "Product Name", key: "productName", width: 25 },
-    { header: "Quantity", key: "quantity", width: 15 },
-    { header: "Price", key: "price", width: 15 },
-    { header: "Profit", key: "profit", width: 15 },
-  ];
-  salesReport.forEach((salesReport)=>{
-      sheet.addRow({
-      productName: salesReport.productName,
-      price : salesReport.totalPrice,
-      profit: salesReport.profit,
-      quantity: salesReport.totalQuantity
+  try{
+    let salesReport =await createSalesReport()
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Sales report');
+    sheet.columns = [
+      { header: "Product Name", key: "productName", width: 25 },
+      { header: "Quantity", key: "quantity", width: 15 },
+      { header: "Price", key: "price", width: 15 },
+      { header: "Profit", key: "profit", width: 15 },
+    ];
+    salesReport.forEach((salesReport)=>{
+        sheet.addRow({
+        productName: salesReport.productName,
+        price : salesReport.totalPrice,
+        profit: salesReport.profit,
+        quantity: salesReport.totalQuantity
+      })
     })
-  })
+    
   
+    // Stream the Excel file to the client as a response
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=sales_report.xlsx"
+    );
+  
+    workbook.xlsx.write(res).then(() => {
+      res.end();
+    });
+  }
+  catch(err){
+      console.log(err);
+  }
 
-  // Stream the Excel file to the client as a response
-  res.setHeader(
-    "Content-Type",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  );
-  res.setHeader(
-    "Content-Disposition",
-    "attachment; filename=sales_report.xlsx"
-  );
-
-  workbook.xlsx.write(res).then(() => {
-    res.end();
-  });
 }
 
 const getTotalBooksSoldByCategory = async (startDate = new Date(new Date().getFullYear(), 0, 1), endDate = new Date()) => {

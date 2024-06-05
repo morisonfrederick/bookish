@@ -11,7 +11,6 @@ const viewCart = async function(req, res) {
         let currentUser = await user.findOne({_id:id})||null
         // Find the user's cart and populate the product field
         let userCart = await cart.findOne({ user_id: id }).populate('products.product');
-        console.log(userCart);
         if(userCart){
             // console.log(userCart.products);
             // Calculate the total price
@@ -48,7 +47,6 @@ const viewCart = async function(req, res) {
 
 
 const postCart = async function(req, res) {
-    console.log("add to cart");
     try {
         const id = req.session.userid;
         const selectedBookId = req.body.bookId;
@@ -123,38 +121,36 @@ const deleteCart =async function(req,res){
 
 
 const changeQuantity = async function(req, res) {
-    console.log(111111111111111);
-    let id = req.session.userid;
-    let selectedBook = req.params.id;
-    console.log(selectedBook);
-    let qty = parseInt(req.body.quantity); // Convert the quantity to a number
-    // console.log(selectedBook);
-    console.log(qty);
-    let userCart = await cart.findOne({user_id: id});
-    let productInCart = userCart.products.find(product => product.product == selectedBook);
-
-    // Fetch the inventory for the selected book
-    let inventoryItem = await book.findOne({_id: selectedBook});
-    console.log("total books ",inventoryItem.stock);
-
-    if (qty == -1 && productInCart.quantity != 1){
-        console.log("decrease");
-        productInCart.quantity += qty;
-        inventoryItem.stock-=qty
-        await inventoryItem.save()
-
+    try{
+        let id = req.session.userid;
+        let selectedBook = req.params.id;
+        let qty = parseInt(req.body.quantity); // Convert the quantity to a number
+        let userCart = await cart.findOne({user_id: id});
+        let productInCart = userCart.products.find(product => product.product == selectedBook);
+    
+        // Fetch the inventory for the selected book
+        let inventoryItem = await book.findOne({_id: selectedBook});
+    
+        if (qty == -1 && productInCart.quantity != 1){
+            productInCart.quantity += qty;
+            inventoryItem.stock-=qty
+            await inventoryItem.save()
+    
+        }
+        else if (qty == 1 && productInCart.quantity < 10 &&inventoryItem.stock>1) {
+            productInCart.quantity += qty;
+            inventoryItem.stock-=qty
+            await inventoryItem.save()
+        }
+    
+        let updatedCart = await userCart.save();
+    
+        res.send(updatedCart);
     }
-    else if (qty == 1 && productInCart.quantity < 10 &&inventoryItem.stock>1) {
-        console.log("increase");
-        productInCart.quantity += qty;
-        inventoryItem.stock-=qty
-        await inventoryItem.save()
+    catch(err){
+        console.log(err);
     }
 
-    let updatedCart = await userCart.save();
-    console.log(productInCart.quantity);
-
-    res.send(updatedCart);
 }
 
 

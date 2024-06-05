@@ -7,27 +7,38 @@ const { check, validationResult } = require('express-validator');
 const book = require("../../models/bookModel")
 
 const viewProducts =async function(req,res,next){ 
-    console.log("view products"); 
-    let page = parseInt(req.query.page) || 1
-    let pageSize = 6
-    let skip = (page-1)*pageSize
-    let totalCount = await book.countDocuments()
-    let totalPages = Math.ceil(totalCount/pageSize)
-    let data = await books.find().skip(skip).limit(pageSize)
-    let categoryList = await category.find()
-    // console.log(data);
-    res.render("admin/products",{book:data,categories:categoryList,page:page,totalPages,layout:"admin/adminLayout"})
+    try{
+        let page = parseInt(req.query.page) || 1
+        let pageSize = 6
+        let skip = (page-1)*pageSize
+        let totalCount = await book.countDocuments()
+        let totalPages = Math.ceil(totalCount/pageSize)
+        let data = await books.find().skip(skip).limit(pageSize)
+        let categoryList = await category.find()
+        // console.log(data);
+        res.render("admin/products",{book:data,categories:categoryList,page:page,totalPages,layout:"admin/adminLayout"})
+    }
+    catch(err){
+        console.log(err);
+    }
+
 }
 
 
 
 const viewAddProducts = async function(req,res){
-    let page = parseInt(req.query.page) || 1
-    let pageSize = 6
-    let skip = (page-1)*pageSize
-    
-    let categoryList = await category.find()
-    res.render("admin/addProduct",{categories:categoryList,page:page,totalPages:5,layout:"admin/adminLayout"})
+    try{
+        let page = parseInt(req.query.page) || 1
+        let pageSize = 6
+        let skip = (page-1)*pageSize
+        
+        let categoryList = await category.find()
+        res.render("admin/addProduct",{categories:categoryList,page:page,totalPages:5,layout:"admin/adminLayout"})
+    }
+    catch(err){
+        console.log(err);
+    }
+
 }
 
 

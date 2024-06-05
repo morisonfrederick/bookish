@@ -62,34 +62,32 @@ const putCategory =async function(req,res,next){
 }
  
 const getEditCategory = async function(req,res,next){
-    console.log("getEditCategory");
-    let id =await req.params.id  
-    console.log(id);
-    let categories = await category.findOne({_id:id})
-    console.log(categories.categoryName);
-    res.render("categoryEdit",{categories:categories,layout:"admin/adminLayout"})
+    try{
+        console.log("getEditCategory");
+        let id =await req.params.id  
+        console.log(id);
+        let categories = await category.findOne({_id:id})
+        console.log(categories.categoryName);
+        res.render("categoryEdit",{categories:categories,layout:"admin/adminLayout"})
+    }
+    catch(err){
+        console.log(err);
+    }
+
 }
 const deleteCategory =async function(req,res,next){
-    let id =await req.params.id
-    await category.deleteOne({_id:id})
-    console.log("deleted");
-    res.redirect("/admin/category");
+    try{
+        let id =await req.params.id
+        await category.deleteOne({_id:id})
+        console.log("deleted");
+        res.redirect("/admin/category");
+    }
+    catch(err){
+        console.log(err);
+    }
+
 }
 
-// const toggleListedStatus = async function(req,res,next){
-//     console.log("block/unblock category");
-//     let id = await req.params.id
-//     console.log(id);
-//     const selectedCategory = await category.findOne({_id:id})
-//     console.log(selectedCategory);
-//     selectedCategory.isDeleted = !selectedCategory.isDeleted
-//     let data = await category.findOne({_id:id})
-//     console.log(data);
-//     await selectedCategory.save()
-//     let categories = await category.find()
-//     res.json({message:"category list updated", categories})
-
-// }
 const searchCategory = async (req, res) => {
     try {
       let categories = await category.find({

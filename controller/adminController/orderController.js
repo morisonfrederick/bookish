@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 
 
 const orderView = async function(req, res) {
+  try{
     // Get the status from the query parameters, if it exists
     let status = req.query.status;
   
@@ -18,20 +19,29 @@ const orderView = async function(req, res) {
       res.render("admin/orders", { data:userOrders ,layout:"admin/adminLayout"});
     }
   }
+  catch(err){
+      console.log(err);
+  }
+
+  }
   
 
 const changeOrderStatus =async function(req,res){
+  try{
     let orderId =await req.params.id
     let newStatus =await req.body.status
 
     await Order.updateOne({_id:orderId},{$set:{orderStatus:newStatus}})
 
     let changedStatus = await Order.findOne({_id:orderId})
-    console.log(changedStatus);
+  }
+  catch(err){
+      console.log(err);
+  }
+
 }
 
 const orderDetailsView = async function(req,res){
-  console.log("order detail view");
     try{
         let id = req.params.id
         console.log(id);
@@ -45,9 +55,8 @@ const orderDetailsView = async function(req,res){
     
 }
 const filterOrders = async function(req,res){
-    console.log("==========================================");
+  try{
     let {option} = req.body
-    console.log(option);
     let sortedList = await Order.find({orderStatus:option})
     console.log(sortedList);
     if(sortedList){
@@ -56,11 +65,15 @@ const filterOrders = async function(req,res){
     else{
         res.json({"message":"no order found"})
     }
+  }
+  catch(err){
+      console.log(err);
+  }
+
 }
 
 
 const changeIndividualOrderStatus = async function (req, res) {
-  console.log("change status");
     try {
       let orderId = req.params.id; 
       let newStatus = req.body.status; 
