@@ -12,6 +12,10 @@ const expressLayouts = require("express-ejs-layouts")
 const flash = require("connect-flash")
 
 
+// Output environment variables to console
+console.log('TWILIO_ACCOUNT_SID:', process.env.TWILIO_ACCOUNT_SID);
+console.log('TWILIO_AUTH_TOKEN:', process.env.TWILIO_AUTH_TOKEN);
+console.log('TWILIO_VERIFY_SID:', process.env.TWILIO_VERIFY_SID);
 
 mongoose.connect(process.env.DATABASE_URL)
 
