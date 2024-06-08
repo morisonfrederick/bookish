@@ -101,4 +101,5 @@ const orderSchema = mongoose.Schema({
     }
 })
 const Order =  mongoose.model("Order",orderSchema)
+Order.index({ createdAt: 1 });
 module.exports = Order;
