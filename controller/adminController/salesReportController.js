@@ -73,8 +73,8 @@ const saleReportLoad = async function(req, res) {
 
 
 
-const createSalesReport = async function(startDate = new Date(new Date().getFullYear(), 0, 1), endDate = new Date()){
-  try{
+const createSalesReport = async function(startDate = new Date(new Date().getFullYear(), 0, 1), endDate = new Date()) {
+  try {
     let products = await Order.aggregate([
       {
         $match: {
@@ -87,8 +87,8 @@ const createSalesReport = async function(startDate = new Date(new Date().getFull
       {
         $group: {
           _id: "$products.product",
-          totalQuantity: {$sum: "$products.quantity"},
-          totalPrice : {$sum: {$multiply: ["$products.price","$products.quantity"]}}
+          totalQuantity: { $sum: "$products.quantity" },
+          totalPrice: { $sum: { $multiply: ["$products.price", "$products.quantity"] } }
         }
       },
       {
@@ -97,13 +97,13 @@ const createSalesReport = async function(startDate = new Date(new Date().getFull
           localField: "_id",
           foreignField: "_id",
           as: "productData", // Store product details in "productData" field
-      }
+        }
       },
       {
         $addFields: {
           productName: { $arrayElemAt: ["$productData.name", 0] }, // Get the product name from productData array
           profit: { $multiply: ["$totalPrice", 0.2] }
-        },
+        }
       },
       {
         $project: {
@@ -112,75 +112,79 @@ const createSalesReport = async function(startDate = new Date(new Date().getFull
           totalPrice: 1,
           productName: 1,
           profit: 1,
-        },
-      },
-
+        }
+      }
     ])
-    return products
+    .option({ maxTimeMS: 60000 }); // Increase timeout to 60 seconds
 
+    return products;
+  } catch (err) {
+    console.error('Error generating sales report:', err);
+    throw new Error('Could not generate sales report. Please try again later.');
   }
-  catch(err){
-    console.log(err);
-  }
-  
 }
 
-const mostSellingProducts = async function(startDate = new Date(new Date().getFullYear(), 0, 1), endDate = new Date()){
-  let products = await Order.aggregate([
+
+const mostSellingProducts = async function(startDate = new Date(new Date().getFullYear(), 0, 1), endDate = new Date()) {
+  try {
+    let products = await Order.aggregate([
       {
         $match: {
           createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) }
         }
       },
       {
-        $unwind: "$products", // Unwind the products array
+        $unwind: "$products" // Unwind the products array
       },
       {
         $group: {
           _id: "$products.product", // Group by product ID
           totalQuantity: { $sum: "$products.quantity" }, // Calculate total quantity sold
-          totalPrice: { $sum: { $multiply: ["$products.price", "$products.quantity"] } }, // Calculate total sales value per product
-        },
+          totalPrice: { $sum: { $multiply: ["$products.price", "$products.quantity"] } } // Calculate total sales value per product
+        }
       },
       {
         $lookup: {
           from: "books", // Assuming "books" is the collection name for products
           localField: "_id",
           foreignField: "_id",
-          as: "productData", // Store product details in "productData" field
-        },
+          as: "productData" // Store product details in "productData" field
+        }
       },
       {
         $addFields: {
-          productName: { $arrayElemAt: ["$productData.name", 0] }, // Get the product name from productData array
-        },
+          productName: { $arrayElemAt: ["$productData.name", 0] } // Get the product name from productData array
+        }
       },
       {
         $project: {
           _id: 0, // Exclude the _id field if not needed
           totalQuantity: 1,
           totalPrice: 1,
-          productName: 1,
+          productName: 1
+        }
+      },
+      {
+        $sort: { totalQuantity: -1 } // Sort by total quantity sold in descending order
+      },
+      {
+        $limit: 4 // Limit to the top 4 products
+      }
+    ])
+    .option({ maxTimeMS: 60000 }) // Increase timeout to 60 seconds
+    .exec(); // Ensure execution and return promise
 
-        },
-      },
-      {
-        $sort: { totalQuantity: -1 }, // Sort by total quantity sold in descending order
-      },
-      {
-        $limit: 4, // Limit to the top 4 products
-      },
-    ]).exec(); // Ensure execution and return promise
-    // console.log(products); // Log the results
-    return products
+    return products;
+  } catch (err) {
+    console.error('Error fetching most selling products:', err);
+    throw new Error('Could not fetch most selling products. Please try again later.');
+  }
 }
 
-// Call the function and log the output
-mostSellingProducts().then(result => {
-// console.log("Most Selling Products:", result);
-}).catch(err => {
-console.error("Error:", err);
-});
+
+
+
+
 
 
 const excelSheet = async function(req,res){
