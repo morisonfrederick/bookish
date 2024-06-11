@@ -10,14 +10,42 @@ require("dotenv").config();
 const methodOverride = require("method-override")
 const expressLayouts = require("express-ejs-layouts")
 const flash = require("connect-flash")
-
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 // Output environment variables to console
 console.log('TWILIO_ACCOUNT_SID:', process.env.TWILIO_ACCOUNT_SID);
 console.log('TWILIO_AUTH_TOKEN:', process.env.TWILIO_AUTH_TOKEN);
 console.log('TWILIO_VERIFY_SID:', process.env.TWILIO_VERIFY_SID);
 
-mongoose.connect(process.env.DATABASE_URL)
+// mongoose.connect(process.env.DATABASE_URL)
+
+
+
+const uri = process.env.DATABASE_URL;
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+run().catch(console.dir);
+
 
 app.use(express.static(path.join(__dirname,"public")))
 // app.use(expressLayouts)
