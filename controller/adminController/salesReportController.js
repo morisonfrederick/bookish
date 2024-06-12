@@ -54,7 +54,7 @@ const saleReportLoad = async function(req, res) {
     });
 
     // Render the sales report view with the gathered data
-    res.render("salesReport", {
+    res.render("salesreport", {
       Mproducts: 0,
       sales: 0,
       salesReport,
