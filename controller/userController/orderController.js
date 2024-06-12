@@ -188,8 +188,8 @@ const postCheckoutOrder = async function(req,res){
                             "payment_method": "paypal"
                         },
                         "redirect_urls": {
-                            "return_url": "http://localhost:3000/home/pay-success",
-                            "cancel_url": "http://localhost:3000/home/pay-cancel"
+                            "return_url": "https://www.thebookish.online/home/pay-success",
+                            "cancel_url": "https://www.thebookish.online/home/pay-cancel"
                         },
                         "transactions": [{
                             "item_list": {
