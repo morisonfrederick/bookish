@@ -55,8 +55,111 @@
 
 ## 🚀 Getting Started Locally
 
-### Clone the repo
+### 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/bookish.git
+git clone https://github.com/frederickmorison/bookish.git
 cd bookish
+```
+
+### 2. 🛠️ Environment Variables Setup
+
+> Create a .env file in the server/ folder and add the following variables:
+
+- 🧁 Session Management
+```
+SECRET_KEY=your_session_secret
+```
+
+- 🧑‍💻 Admin Credentials
+```
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASS=your_admin_password
+```
+
+- 🛢️ Database
+```
+DATABASE_URL=your_mongodb_connection_url
+```
+
+- 📞 Twilio (for phone verification)
+```
+TWILIO_ACCOUNT_SID=your_twilio_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_VERIFY_SID=your_twilio_verify_sid
+```
+
+- 🔑 OAuth (Google login)
+```
+CLIENT_ID=your_google_client_id
+CLIENT_SECRET=your_google_client_secret
+```
+
+- 📬 Mailer ( Nodemailer )
+```
+MAILER_MAIL=your_email@example.com
+MAILER_PASS=your_email_password_or_app_password
+```
+
+### 3. Install dependencies
+```
+npm install
+```
+
+### 4. Run the development server
+```
+npm run start
+```
+## 📁 Folder Structure
+```
+└── 📁BOOKISH
+    └── 📁controller
+        └── 📁adminController
+            └── ...
+        └── 📁middlewares
+            └── ..
+        └── 📁userController
+            └── ...
+    └── 📁models
+        └── ...
+    └── 📁public
+        └── ....
+    └── 📁routes
+        └── adminRoute.js
+        └── userRoute.js
+    └── 📁screenshots
+        └── dashboard.png
+        └── home.png
+        └── product.png
+    └── 📁services
+        └── Paypal.js
+    └── 📁util
+        └── createInvoice.js
+        └── orderNumber.js
+        └── walletNumber.js
+    └── 📁views
+        └── 📁admin
+            └── ...
+            └── 📁layouts
+                └── ...
+            └── ...
+        └── 📁user
+            └── ....
+            └── 📁layouts
+                └── ...
+            └── ...
+    └── .gitignore
+    └── app.js
+    └── package-lock.json
+    └── package.json
+```
+
+## 📫 Contact
+If you like this project or want to collaborate, feel free to connect:
+
+LinkedIn: [www.linkedin.com/in/morisonf]
+
+GitHub: frederickmorison
+
+Email: [frederickmorison@gmail.com]
+
